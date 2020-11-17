@@ -6,7 +6,7 @@ export class NotesState {
 
 export const notesSlice = createSlice({
   name: 'notes reducer',
-  initialState: { ... new NotesState() },
+  initialState: { ...new NotesState() },
   reducers: {
     setFolderName: (state, { payload }: PayloadAction<string>) => {
       state.folderName = payload
