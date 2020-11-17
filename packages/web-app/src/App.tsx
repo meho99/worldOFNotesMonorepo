@@ -1,8 +1,9 @@
 import React from 'react'
+import Typography from '@material-ui/core/Typography'
 
 export const App = () => {
   return (
-    <div>Test</div>
+    <Typography variant='body1'>Test</Typography>
   )
 }
 App.displayName = 'AppComponent'
