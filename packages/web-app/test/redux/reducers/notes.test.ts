@@ -15,5 +15,3 @@ describe('notesReducer test', () => {
     } as NotesState)
   })
 })
-
-

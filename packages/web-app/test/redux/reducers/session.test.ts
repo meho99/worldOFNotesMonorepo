@@ -14,5 +14,3 @@ describe('sesionReducer test', () => {
     } as SessionState)
   })
 })
-
-
