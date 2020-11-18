@@ -5,7 +5,7 @@ export class SessionState {
 }
 
 const sessionSlice = createSlice({
-  name: 'session reducer',
+  name: 'session-reducer',
   initialState: { ...new SessionState() },
   reducers: {
     setUserId: (state, { payload }: PayloadAction<number>) => {
