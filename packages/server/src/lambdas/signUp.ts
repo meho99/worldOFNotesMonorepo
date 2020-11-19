@@ -1,0 +1,68 @@
+require('@babel/polyfill')
+
+import faunadb from 'faunadb'
+import { APIGatewayEvent, Context } from 'aws-lambda'
+
+import { createToken } from '../helpers/authentication'
+import { faunaDBClient } from '../helpers/fauna'
+import { createErrorResponse, createSuccessResponse } from '../helpers/responses'
+
+import { SignUpRequest, UserData } from '../types'
+
+const {
+  Login,
+  Match,
+  Index,
+  Create,
+  Collection
+} = faunadb.query
+
+export const handler = async (event: APIGatewayEvent, context: Context) => {
+  const { body, httpMethod } = event
+
+  try {
+    if (httpMethod === 'POST') {
+      const { email, password, name }: SignUpRequest = JSON.parse(body) || {}
+
+      if (!email || !password || !name) {
+        return createErrorResponse({
+          message: 'please enter all fields'
+        })
+      }
+
+      try {
+        const user = await faunaDBClient.query<{ secret: string }>(
+          Login(
+            Match(Index("user_by_email"), email),
+            { password },
+          )
+        )
+
+        if (user) {
+          return createErrorResponse({
+            message: 'User already exists'
+          })
+        }
+      } catch (e) { }
+
+      const { data } = await faunaDBClient.query<{ data: UserData }>(
+        Create(
+          Collection('Users'), {
+          credentials: { password },
+          data: { email, name },
+        }
+        )
+      )
+
+      const jwtToken = createToken(email)
+
+      return createSuccessResponse({
+        token: jwtToken,
+        name: data.name,
+        email: data.email
+      })
+    }
+  } catch (e) {
+    return createErrorResponse(e)
+  }
+}
