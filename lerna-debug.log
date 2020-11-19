@@ -1,9 +1,12 @@
 0 silly argv { _: [ 'add' ],
-0 silly argv   scope: '@notes/web-app',
-0 silly argv   globs: [ 'react-redux' ],
+0 silly argv   scope: '@won/server',
+0 silly argv   dev: true,
+0 silly argv   D: true,
+0 silly argv   globs: [],
 0 silly argv   lernaVersion: '3.22.1',
 0 silly argv   '$0': '/usr/local/bin/lerna',
-0 silly argv   pkg: '@types/' }
+0 silly argv   pkg: '@typees/jsonwebtoken' }
 1 notice cli v3.22.1
 2 verbose rootPath /home/michal/projects/react/notes
-3 error
+3 error Error: 404 Not Found - GET https://registry.npmjs.org/@typees%2fjsonwebtoken - Not found
+3 error     at res.buffer.catch.then.body (/home/michal/projects/react/notes/node_modules/@evocateur/npm-registry-fetch/check-response.js:104:15)
