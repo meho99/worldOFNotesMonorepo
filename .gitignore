@@ -2,3 +2,5 @@
 
 /.faunarc
 /.env
+# Local Netlify folder
+.netlify

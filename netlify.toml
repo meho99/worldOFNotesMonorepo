@@ -1,7 +1,7 @@
 [build]
   functions = "packages/server/build"
-  publish = "packages/app/build"
-  command = "npm run build"
+  publish = "packages/web-app/build"
+  command = "lerna run build"
 [build.environment]
   NODE_VERSION = "8.11.2"
   YARN_VERSION = "1.9.4"
