@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography'
 
 export const App = () => {
   useEffect(() => {
-    fetch('http://localhost:9000/signUp', {
+    fetch('.netlify/functions/login', {
       method: 'POST',
       body: JSON.stringify({
         email: 'pies2@test.test',
