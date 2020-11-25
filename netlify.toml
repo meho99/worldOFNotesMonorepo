@@ -1,3 +1,7 @@
+[dev]
+  framework = "#custom"
+  command = "npm run start-web"
+  targetPort = 3000
 [build]
   functions = "packages/server/build"
   publish = "packages/web-app/build"
