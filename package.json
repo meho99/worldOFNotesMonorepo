@@ -1,6 +1,9 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "start-web": "cd packages/web-app && npm start"
+  },
   "workspaces": {
     "packages": [
       "packages/*"
