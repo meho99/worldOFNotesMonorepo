@@ -45,7 +45,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
         }
       } catch (e) { }
 
-      const { data } = await faunaDBClient.query<{ data: UserData }>(
+      const { data, ref } = await faunaDBClient.query<{ data: UserData; ref: { id: number } }>(
         Create(
           Collection('Users'), {
           credentials: { password },
@@ -54,7 +54,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
         )
       )
 
-      const jwtToken = createToken(email)
+      const jwtToken = createToken(ref.id)
 
       return createSuccessResponse({
         token: jwtToken,

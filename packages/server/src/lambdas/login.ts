@@ -30,11 +30,11 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
         )
       )
 
-      const { data } = await faunaDBClient.query<{ data: UserData }>(
+      const { data, ref } = await faunaDBClient.query<{ data: UserData; ref: { id: number } }>(
         Get(instance)
       )
 
-      const jwtToken = createToken(email)
+      const jwtToken = createToken(ref.id)
 
       return createSuccessResponse({
         token: jwtToken,

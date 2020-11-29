@@ -5,9 +5,9 @@ import { findEnv } from './findEnv'
 
 dotenv.config({ path: findEnv() })
 
-export const createToken = (email: string) => {
+export const createToken = (id: number) => {
   const jwtToken = jwt.sign(
-    { email },
+    { id },
     process.env.JWT_SECRET,
     { expiresIn: 3600 }
   )
