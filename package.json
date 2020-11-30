@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "start-web": "cd packages/web-app && npm start"
+    "start-web": "cd packages/web-app && BROWSER=none npm start"
   },
   "workspaces": {
     "packages": [
