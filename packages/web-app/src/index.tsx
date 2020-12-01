@@ -2,11 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { createGenerateClassName, StylesProvider } from '@material-ui/core/styles'
+import { ConnectedRouter } from 'connected-react-router'
 
 import { store } from './redux'
 import { ThemeProvider } from './theme'
-
 import { App } from './App'
+import { historyProvider } from './redux/historyProvider'
 
 const generateClassName = createGenerateClassName({
   productionPrefix: 'won',
@@ -17,7 +18,9 @@ ReactDOM.render(
   <StylesProvider generateClassName={generateClassName} injectFirst>
     <ThemeProvider variant='dark'>
       <Provider store={store}>
-        <App />
+        <ConnectedRouter history={historyProvider}>
+          <App />
+        </ConnectedRouter>
       </Provider>
     </ThemeProvider>
   </StylesProvider>,

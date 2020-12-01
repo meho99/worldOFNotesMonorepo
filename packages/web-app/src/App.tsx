@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
 import Typography from '@material-ui/core/Typography'
+import { Route, Router } from 'react-router'
+import { LoginComponent } from './pages/login/LoginComponent'
 
 export const App = () => {
   useEffect(() => {
@@ -15,7 +17,7 @@ export const App = () => {
   }, [])
 
   return (
-    <Typography variant='body1'>Test</Typography>
+    <></>
   )
 }
 
