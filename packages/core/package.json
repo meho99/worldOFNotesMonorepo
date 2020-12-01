@@ -1,13 +1,15 @@
 {
   "name": "@won/core",
   "version": "0.0.0",
-  "main": "src/index.ts",
+  "main": "build/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/meho99/worldOFNotesMonorepo.git"
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
     "bundle": "webpack"
   },
   "bugs": {

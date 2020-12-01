@@ -7,7 +7,8 @@ import { createToken } from '../helpers/authentication'
 import { faunaDBClient } from '../helpers/fauna'
 import { createErrorResponse, createSuccessResponse } from '../helpers/responses'
 
-import { SignUpRequest, UserData } from '../types'
+import { SignUpRequest, UserModel } from '@won/core'
+import { FaunaQuery } from '../types'
 
 const {
   Login,
@@ -45,7 +46,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
         }
       } catch (e) { }
 
-      const { data, ref } = await faunaDBClient.query<{ data: UserData; ref: { id: number } }>(
+      const { data, ref } = await faunaDBClient.query<FaunaQuery<UserModel>>(
         Create(
           Collection('Users'), {
           credentials: { password },

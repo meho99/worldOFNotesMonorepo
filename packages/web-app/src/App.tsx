@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react'
 import Typography from '@material-ui/core/Typography'
 
-import { test } from '@won/core'
-
-console.log({ test })
-
 export const App = () => {
   useEffect(() => {
     fetch('.netlify/functions/folder?id=282658353591616005', {
