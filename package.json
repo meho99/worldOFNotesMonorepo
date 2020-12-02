@@ -2,7 +2,8 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "start-web": "cd packages/web-app && npm start"
+    "build-types": "lerna run watch-types",
+    "start-web": "npm run build-types && cd packages/web-app && BROWSER=none npm start"
   },
   "workspaces": {
     "packages": [
@@ -10,8 +11,7 @@
     ]
   },
   "devDependencies": {
-    "lerna": "^3.22.1",
-    "@testing-library/react": "^11.2.0"
-  },
-  "dependencies": {}
+    "@testing-library/react": "^11.2.0",
+    "lerna": "^3.22.1"
+  }
 }

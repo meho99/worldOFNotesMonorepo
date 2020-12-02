@@ -7,7 +7,9 @@ import { createToken } from '../helpers/authentication'
 import { faunaDBClient } from '../helpers/fauna'
 import { createErrorResponse, createSuccessResponse } from '../helpers/responses'
 
-import { SignUpRequest, UserData } from '../types'
+import { SignUpRequest, UserModel } from '@won/core'
+import { FaunaQuery } from '../types'
+import { SingUpResponse } from '@won/core/src'
 
 const {
   Login,
@@ -45,7 +47,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
         }
       } catch (e) { }
 
-      const { data, ref } = await faunaDBClient.query<{ data: UserData; ref: { id: number } }>(
+      const { data, ref } = await faunaDBClient.query<FaunaQuery<UserModel>>(
         Create(
           Collection('Users'), {
           credentials: { password },
@@ -56,11 +58,13 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
 
       const jwtToken = createToken(ref.id)
 
-      return createSuccessResponse({
+      const response: SingUpResponse = {
         token: jwtToken,
         name: data.name,
         email: data.email
-      })
+      }
+
+      return createSuccessResponse(response)
     }
   } catch (e) {
     return createErrorResponse(e)

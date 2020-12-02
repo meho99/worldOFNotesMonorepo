@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "rootDirs": [
+      "src"
+    ],
+    "outDir": "build",
+    "declaration": true
+  },
+  "include": [
+    "src",
+    "test"
+  ]
+}
