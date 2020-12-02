@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { blue, green, pink, red } from '@material-ui/core/colors'
+import { blue, green, red, yellow } from '@material-ui/core/colors'
 import { createMuiTheme, MuiThemeProvider, ThemeOptions, responsiveFontSizes } from '@material-ui/core'
 
 const themeConfiguration: ThemeOptions = {
@@ -9,6 +9,11 @@ const themeConfiguration: ThemeOptions = {
     fontSize: 16
   },
   overrides: {
+    MuiPaper: {
+      elevation4: {
+        boxShadow: 'none'
+      }
+    }
   }
 }
 
@@ -17,7 +22,7 @@ const lightTheme = responsiveFontSizes(
     ...themeConfiguration,
     palette: {
       primary: {
-        main: pink[100]
+        main: yellow[100]
       },
       secondary: {
         main: green[50]
@@ -45,8 +50,8 @@ type ThemeVariants = 'light' | 'dark'
 
 type ThemeProviderProps =
   Record<string, any> & {
-      variant: ThemeVariants;
-    }
+    variant: ThemeVariants;
+  }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ variant = 'light', children, ...rest }) => {
   const theme = variant === 'light'

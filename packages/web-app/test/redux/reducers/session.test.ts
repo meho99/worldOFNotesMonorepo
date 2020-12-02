@@ -10,7 +10,21 @@ describe('sesionReducer test', () => {
         sessionActions.setUserId(userId)
       )
     ).toEqual({
-      userId: userId
+      ...new SessionState(),
+      userId
+    } as SessionState)
+  })
+  it('setIsAuthenticated action test', () => {
+    const isAuthenticated = true
+
+    expect(
+      sessionReducer(
+        { ...new SessionState() },
+        sessionActions.setIsAuthenticated(isAuthenticated)
+      )
+    ).toEqual({
+      ...new SessionState(),
+      isAuthenticated
     } as SessionState)
   })
 })

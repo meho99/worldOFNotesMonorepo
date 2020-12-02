@@ -1,4 +1,5 @@
 export enum keyNames {
   Session = 'session',
-  Notes = 'notes'
-}
+  Notes = 'notes',
+  Router = 'router'
+} 

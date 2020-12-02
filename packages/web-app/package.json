@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "@reduxjs/toolkit": "^1.4.0",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.1.2",
@@ -11,11 +12,14 @@
     "@types/react": "^16.9.56",
     "@types/react-dom": "^16.9.9",
     "@types/react-redux": "^7.1.11",
+    "connected-react-router": "^6.8.0",
     "dotenv": "^8.2.0",
     "find-up": "^5.0.0",
+    "material-ui-icons": "^1.0.0-beta.36",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.0",
     "redux": "^4.0.5",
     "web-vitals": "^0.2.4"
@@ -59,8 +63,10 @@
   "devDependencies": {
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-react": "^7.12.5",
+    "@types/history": "^2.0.45",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.19.5",
+    "@types/react-router-dom": "^5.1.6",
     "babel-jest": "^24.9.0",
     "jest": "24.9.0",
     "jsdom": "^16.4.0",
