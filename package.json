@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build-types": "lerna run watch-types",
-    "start-web": "cd packages/web-app && BROWSER=none npm start && lerna run watch-types"
+    "start-web": "cd packages/web-app &&cross-env BROWSER=none npm start && lerna run watch-types"
   },
   "workspaces": {
     "packages": [
@@ -13,5 +13,8 @@
   "devDependencies": {
     "@testing-library/react": "^11.2.0",
     "lerna": "^3.22.1"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3"
   }
 }
