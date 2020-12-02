@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import Typography from '@material-ui/core/Typography'
-import { Route, Router } from 'react-router'
+import { Switch, Route } from 'react-router-dom'
 import { LoginComponent } from './pages/login/LoginComponent'
+import { HeaderComponent } from './layout/header/HeaderComponent'
 
 export const App = () => {
   useEffect(() => {
@@ -17,7 +17,12 @@ export const App = () => {
   }, [])
 
   return (
-    <></>
+    <>
+      <HeaderComponent />
+      <Switch>
+        <Route exact path='/login' component={LoginComponent} />
+      </Switch>
+    </>
   )
 }
 

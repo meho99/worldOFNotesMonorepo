@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export class SessionState {
-  userId: number = 0
+  userId: number = 0;
+  isAuthenticated: boolean = false
 }
 
 const sessionSlice = createSlice({
@@ -10,6 +11,9 @@ const sessionSlice = createSlice({
   reducers: {
     setUserId: (state, { payload }: PayloadAction<number>) => {
       state.userId = payload
+    },
+    setIsAuthenticated: (state, { payload }: PayloadAction<boolean>) => {
+      state.isAuthenticated = payload
     }
   }
 })
