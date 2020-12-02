@@ -1,15 +1,15 @@
 import { connectRouter } from 'connected-react-router'
 import { StateFromReducersMapObject } from 'redux'
 
-import { keyNames } from '../../consts'
-import { historyProvider } from '../historyProvider'
 import { notesReducer } from './notes'
 import { sessionReducer } from './session'
+import { historyProvider } from '../historyProvider'
+import { reducerNames } from '../../consts/reducerNames'
 
 export const rootReducer = {
-  [keyNames.Router]: connectRouter(historyProvider),
-  [keyNames.Notes]: notesReducer,
-  [keyNames.Session]: sessionReducer
+  [reducerNames.Router]: connectRouter(historyProvider),
+  [reducerNames.Notes]: notesReducer,
+  [reducerNames.Session]: sessionReducer
 }
 
 export type ReducerState = StateFromReducersMapObject<typeof rootReducer>

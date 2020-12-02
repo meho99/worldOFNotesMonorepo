@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { reducerNames } from '../../consts/reducerNames'
 
 export class SessionState {
   userId: number = 0;
@@ -6,7 +7,7 @@ export class SessionState {
 }
 
 const sessionSlice = createSlice({
-  name: 'session-reducer',
+  name: reducerNames.Session,
   initialState: { ...new SessionState() },
   reducers: {
     setUserId: (state, { payload }: PayloadAction<number>) => {
