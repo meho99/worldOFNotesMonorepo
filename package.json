@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build-types": "lerna run watch-types",
-    "start-web": "npm run build-types && cd packages/web-app && BROWSER=none npm start"
+    "start-web": "cd packages/web-app && BROWSER=none npm start && lerna run watch-types"
   },
   "workspaces": {
     "packages": [
