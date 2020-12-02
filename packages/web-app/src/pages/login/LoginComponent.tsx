@@ -4,7 +4,7 @@ export const LoginComponent = () => {
 
   return (
     <>
-      twoa stara zapierdala
+      test
     </>
   )
 }
