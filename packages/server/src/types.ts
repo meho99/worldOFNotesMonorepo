@@ -1,14 +1,14 @@
 import { Expr } from 'faunadb'
+import { FoldersModel } from '@won/core'
 
-export type UserData = Record<'email' | 'name', string>
+export type FaunaQuery <Data> = {
+  data: Data;
+  ref: { id: number };
+}
 
-export type SignUpRequest = Partial<UserData & {
-  password: string;
-}>
-
-export type LoginRequest = Pick<SignUpRequest, 'email' | 'password'>
+export type JwtContent = { id?: number }
 
 export type FoldersData =
-  Record<'description' | 'name', string> & {
+  FoldersModel & {
     user: Expr;
   }

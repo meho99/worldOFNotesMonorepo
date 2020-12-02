@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "downlevelIteration": true,
+    "target": "ES5",
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
+    "jsx": "react",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "exclude": [
+    "build",
+    "docs",
+    "node_modules",
+    //"test",
+    "scripts"
+  ]
+}

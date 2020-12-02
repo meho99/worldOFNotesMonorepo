@@ -1,14 +1,15 @@
 require('@babel/polyfill')
 
+import middy from 'middy'
 import dotenv from 'dotenv'
 import faunadb from 'faunadb'
-import jwt from 'jsonwebtoken'
 import { APIGatewayEvent, Context } from 'aws-lambda'
 
+import { FoldersData } from '../types'
 import { findEnv } from '../helpers/findEnv'
 import { faunaDBClient } from '../helpers/fauna'
-import { FoldersData } from '../types'
-import { createErrorResponse, createSuccessResponse, createUnauthorizedErrorResponse } from '../helpers/responses'
+import { authMiddleware } from '../middlewares/auth'
+import { createErrorResponse, createSuccessResponse } from '../helpers/responses'
 
 dotenv.config({ path: findEnv() })
 
@@ -25,22 +26,8 @@ const {
   Collection
 } = faunadb.query
 
-export const handler = async (event: APIGatewayEvent, context: Context) => {
-  const { httpMethod, headers, queryStringParameters } = event
-  const jwtToken = headers['authorization']
-
-  if (!jwtToken) {
-    return createUnauthorizedErrorResponse()
-  }
-
-  let decoded: { id?: number } = {}
-
-  try {
-    decoded = jwt.verify(jwtToken, process.env.JWT_SECRET) as { id?: number }
-  } catch (e) {
-    return createErrorResponse(e)
-  }
-
+const foldersHandler = async (event: APIGatewayEvent, context: Context) => {
+  const { httpMethod, queryStringParameters } = event
   try {
     if (httpMethod === 'GET') {
       const id = queryStringParameters.id
@@ -63,3 +50,6 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
     return createErrorResponse(e)
   }
 }
+
+export const handler = middy(foldersHandler)
+  .use(authMiddleware())
