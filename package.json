@@ -2,8 +2,8 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "build-types": "lerna run build:watch",
-    "start-web": "cd packages/web-app && BROWSER=none npm start && run build-types"
+    "build-types": "lerna run watch-types",
+    "start-web": "npm run build-types && cd packages/web-app && BROWSER=none npm start"
   },
   "workspaces": {
     "packages": [

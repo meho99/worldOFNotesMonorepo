@@ -6,6 +6,8 @@ export type FaunaQuery <Data> = {
   ref: { id: number };
 }
 
+export type JwtContent = { id?: number }
+
 export type FoldersData =
   FoldersModel & {
     user: Expr;

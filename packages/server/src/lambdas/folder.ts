@@ -28,7 +28,6 @@ const {
 
 const foldersHandler = async (event: APIGatewayEvent, context: Context) => {
   const { httpMethod, queryStringParameters } = event
-
   try {
     if (httpMethod === 'GET') {
       const id = queryStringParameters.id

@@ -9,6 +9,7 @@ import { createErrorResponse, createSuccessResponse } from '../helpers/responses
 
 import { createToken } from '../helpers/authentication'
 import { FaunaQuery } from '../types'
+import { LoginResponse } from '@won/core/src'
 
 const {
   Get,
@@ -37,11 +38,13 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
 
       const jwtToken = createToken(ref.id)
 
-      return createSuccessResponse({
+      const respose: LoginResponse = {
         token: jwtToken,
         name: data.name,
         email: data.email
-      })
+      }
+
+      return createSuccessResponse(respose)
     }
   } catch (e) {
     return createErrorResponse(e)

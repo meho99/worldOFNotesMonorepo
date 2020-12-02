@@ -27,7 +27,8 @@
     "build": "react-scripts build",
     "test": "jest",
     "test-update": "jest -u",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "check-types": "tsc --noEmit"
   },
   "eslintConfig": {
     "extends": [

@@ -9,7 +9,8 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
     "build": "tsc",
-    "build:watch": "tsc --watch",
+    "watch-types": "tsc --watch",
+    "check-types": "tsc --noEmit",
     "bundle": "webpack"
   },
   "bugs": {
