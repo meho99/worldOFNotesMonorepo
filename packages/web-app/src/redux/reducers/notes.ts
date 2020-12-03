@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { reducerNames } from '../../consts/reducerNames';
+import { ReducerNames } from '../../consts'
 
 export class NotesState {
   folderName: string = '';
 }
 
 export const notesSlice = createSlice({
-  name: reducerNames.Notes,
+  name: ReducerNames.Notes,
   initialState: { ...new NotesState() },
   reducers: {
     setFolderName: (state, { payload }: PayloadAction<string>) => {

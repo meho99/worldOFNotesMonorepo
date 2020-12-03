@@ -16,13 +16,13 @@ const generateClassName = createGenerateClassName({
 
 ReactDOM.render(
   <StylesProvider generateClassName={generateClassName} injectFirst>
-    <ThemeProvider variant='dark'>
-      <Provider store={store}>
+    <Provider store={store}>
+      <ThemeProvider>
         <ConnectedRouter history={historyProvider}>
           <App />
         </ConnectedRouter>
-      </Provider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </Provider>
   </StylesProvider>,
   document.getElementById('root')
 )

@@ -7,7 +7,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from '@material-ui/core/Switch'
 
 import { useStyles } from './Header.styles'
-import { useHeaderMenu } from './Header.hooks'
+import { useHeaderMenu, useMenuOptions } from './Header.hooks'
 
 export const HeaderMenu = () => {
   const classes = useStyles()
@@ -17,6 +17,12 @@ export const HeaderMenu = () => {
     handleClick,
     handleClose
   } = useHeaderMenu()
+
+  const {
+    isDarkTheme,
+    isAuthenticated,
+    handleChangeThemeVariant
+  } = useMenuOptions()
 
   return (
     <div>
@@ -42,16 +48,18 @@ export const HeaderMenu = () => {
           <FormControlLabel
             control={
               <Switch
-                // checked={state.checkedB}
-                // onChange={handleChange}
-                // name='checkedB'
-                color='primary'
+                checked={isDarkTheme}
+                onChange={handleChangeThemeVariant}
+                name='isDarkTheme'
+                color='secondary'
               />
             }
             label='Dark'
           />
         </MenuItem>
-        <MenuItem onClick={handleClose}>Log out</MenuItem>
+        {
+          isAuthenticated && <MenuItem onClick={handleClose}>Log out</MenuItem>
+        }
       </Menu>
     </div>
   )

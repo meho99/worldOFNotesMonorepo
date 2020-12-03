@@ -2,15 +2,15 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import { push } from 'connected-react-router'
 
 import { LoginRequest } from '@won/core'
-import { Urls } from '../../consts/urls'
-import { reducerNames } from '../../consts/reducerNames'
+import { Urls } from '../../consts'
+import { ReducerNames } from '../../consts'
 import { sessionActions } from '../reducers/session'
 
 import { authenticateUser } from '../../api/auth'
 import { loginUser } from '../../api/login'
 
 export const authenticateThunk = createAsyncThunk(
-  `${reducerNames.Session}/authenticateByToken`,
+  `${ReducerNames.Session}/authenticateByToken`,
   async (_, { dispatch }) => {
     try {
       dispatch(sessionActions.authenticate())
@@ -30,7 +30,7 @@ export const authenticateThunk = createAsyncThunk(
 )
 
 export const loginThunk = createAsyncThunk<void, LoginRequest>(
-  `${reducerNames.Session}/loginUser`,
+  `${ReducerNames.Session}/loginUser`,
   async (loginData, { dispatch }) => {
     try {
       dispatch(sessionActions.login())

@@ -2,6 +2,7 @@
 
 exports[`HeaderComponent test Snapshot test 1`] = `
 <div>
+   
   <header
     class="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary MuiPaper-elevation4"
   >
@@ -43,5 +44,6 @@ exports[`HeaderComponent test Snapshot test 1`] = `
       </div>
     </div>
   </header>
+   
 </div>
 `;

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
-import { Urls } from './consts/urls'
+import { Urls } from './consts'
 
 import { HeaderComponent } from './layout/header/HeaderComponent'
 

@@ -1,5 +1,6 @@
 import { UserModel } from '@won/core'
-import { FiniteStates } from '../../../src/consts/finiteStates'
+
+import { ThemeTypes, FiniteStates } from '../../../src/consts'
 import { sessionReducer, SessionState, sessionActions } from '../../../src/redux/reducers/session'
 
 describe('sesionReducer test', () => {
@@ -92,6 +93,21 @@ describe('sesionReducer test', () => {
       ...new SessionState(),
       token: testToken,
       loginStatus: FiniteStates.Success
+    } as SessionState)
+  })
+
+  it('changeThemeType action test', () => {
+    expect(
+      sessionReducer(
+        {
+          ...new SessionState(),
+          theme: ThemeTypes.Light
+        },
+        sessionActions.changeThemeType()
+      )
+    ).toEqual({
+      ...new SessionState(),
+      theme: ThemeTypes.Dark
     } as SessionState)
   })
 })

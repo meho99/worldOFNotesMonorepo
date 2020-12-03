@@ -1,8 +1,8 @@
 import { createSelector } from '@reduxjs/toolkit'
 
-import { reducerNames } from '../../consts/reducerNames'
+import { ReducerNames } from '../../consts'
 import { ReducerState } from '../reducers'
 
-const notesState = (state: ReducerState) => state[reducerNames.Notes]
+const notesState = (state: ReducerState) => state[ReducerNames.Notes]
 
 export const folderNameSelector = createSelector(notesState, state => state.folderName)
