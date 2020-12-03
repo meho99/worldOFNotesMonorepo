@@ -2,14 +2,13 @@ require('@babel/polyfill')
 
 import faunadb from 'faunadb'
 import { APIGatewayEvent, Context } from 'aws-lambda'
-import { LoginRequest, UserModel } from '@won/core'
 
-import { faunaDBClient } from '../helpers/fauna'
-import { createErrorResponse, createSuccessResponse } from '../helpers/responses'
+import { LoginRequest, UserModel, LoginResponse } from '@won/core'
 
-import { createToken } from '../helpers/authentication'
 import { FaunaQuery } from '../types'
-import { LoginResponse } from '@won/core/src'
+import { faunaDBClient } from '../helpers/fauna'
+import { createToken } from '../helpers/authentication'
+import { createErrorResponse, createSuccessResponse } from '../helpers/responses'
 
 const {
   Get,
@@ -40,6 +39,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
 
       const respose: LoginResponse = {
         token: jwtToken,
+        id: ref.id,
         name: data.name,
         email: data.email
       }

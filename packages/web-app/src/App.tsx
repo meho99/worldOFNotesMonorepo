@@ -1,26 +1,24 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Switch, Route } from 'react-router-dom'
-import { LoginComponent } from './pages/login/LoginComponent'
+import { Urls } from './consts/urls'
+
 import { HeaderComponent } from './layout/header/HeaderComponent'
 
-export const App = () => {
-  useEffect(() => {
-    fetch('.netlify/functions/folder?id=282658353591616005', {
-      method: 'GET',
-      headers: {
-        'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI4MjY1ODM1MzU5MTYxNjAwNSIsImlhdCI6MTYwNjkwOTk2MywiZXhwIjoxNjA2OTEzNTYzfQ.0uDY7VVxzxdpuYJcYLOvx0aFffcOHo_OoOY6KyZgMbE'
-      }
-    })
-      .then(data => data.json())
-      .then(data => console.log({ data }))
+import { LoginComponent } from './pages/login/LoginComponent'
+import { AuthenticatedPages } from './pages/AuthenticatedPages'
 
-  }, [])
+export const App = () => {
 
   return (
     <>
       <HeaderComponent />
       <Switch>
-        <Route exact path='/login' component={LoginComponent} />
+        <Route exact path={Urls.Login} component={LoginComponent} />
+        <Route exact path='*' render={() => (
+          <>
+            <AuthenticatedPages />
+          </>
+        )} />
       </Switch>
     </>
   )

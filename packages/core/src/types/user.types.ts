@@ -1,6 +1,9 @@
-export type UserModel = Record<'email' | 'name', string>
+export type UserModel = Record<'email' | 'name', string> & {
+  id: number;
+}
 
-export type SignUpRequest = Partial<UserModel & {
+export type SignUpRequest = Partial<
+  Pick<UserModel, 'email' | 'name'> & {
   password: string;
 }>
 
@@ -11,3 +14,5 @@ export type LoginResponse = UserModel & {
 }
 
 export type SingUpResponse = LoginResponse
+
+export type AuthResponse = UserModel

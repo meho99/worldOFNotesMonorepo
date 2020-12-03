@@ -60,6 +60,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
 
       const response: SingUpResponse = {
         token: jwtToken,
+        id: ref.id,
         name: data.name,
         email: data.email
       }
