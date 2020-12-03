@@ -1,21 +1,8 @@
 import { UserModel } from '@won/core'
+import { FiniteStates } from '../../../src/consts/finiteStates'
 import { sessionReducer, SessionState, sessionActions } from '../../../src/redux/reducers/session'
 
 describe('sesionReducer test', () => {
-  it('setIsAuthenticated action test', () => {
-    const isAuthenticated = true
-
-    expect(
-      sessionReducer(
-        { ...new SessionState() },
-        sessionActions.setIsAuthenticated(isAuthenticated)
-      )
-    ).toEqual({
-      ...new SessionState(),
-      isAuthenticated
-    } as SessionState)
-  })
-
   it('authenticate action test', () => {
     expect(
       sessionReducer(
@@ -24,7 +11,7 @@ describe('sesionReducer test', () => {
       )
     ).toEqual({
       ...new SessionState(),
-      isLoading: true
+      authenticatingStatus: FiniteStates.Loading
     } as SessionState)
   })
 
@@ -32,11 +19,11 @@ describe('sesionReducer test', () => {
     expect(
       sessionReducer(
         { ...new SessionState() },
-        sessionActions.authenticationError()
+        sessionActions.authenticateError()
       )
     ).toEqual({
       ...new SessionState(),
-      isLoading: false
+      authenticatingStatus: FiniteStates.Failure
     } as SessionState)
   })
 
@@ -52,17 +39,59 @@ describe('sesionReducer test', () => {
     expect(
       sessionReducer(
         {
-          ...new SessionState(),
-          isLoading: true
+          ...new SessionState()
         },
-        sessionActions.authenticationSuccess({ token: testToken, userData: testUserData })
+        sessionActions.authenticateSuccess({ token: testToken, userData: testUserData })
       )
     ).toEqual({
       ...new SessionState(),
       user: testUserData,
       token: testToken,
-      isAuthenticated: true,
-      isLoading: false
+      authenticatingStatus: FiniteStates.Success
+    } as SessionState)
+  })
+
+  it('login action test', () => {
+    expect(
+      sessionReducer(
+        {
+          ...new SessionState()
+        },
+        sessionActions.login()
+      )
+    ).toEqual({
+      ...new SessionState(),
+      loginStatus: FiniteStates.Loading
+    } as SessionState)
+  })
+
+  it('loginError action test', () => {
+    expect(
+      sessionReducer(
+        {
+          ...new SessionState()
+        },
+        sessionActions.loginError()
+      )
+    ).toEqual({
+      ...new SessionState(),
+      loginStatus: FiniteStates.Failure
+    } as SessionState)
+  })
+
+  it('loginSuccess action test', () => {
+    const testToken = 'testToken'
+    expect(
+      sessionReducer(
+        {
+          ...new SessionState()
+        },
+        sessionActions.loginSuccess({ token: testToken })
+      )
+    ).toEqual({
+      ...new SessionState(),
+      token: testToken,
+      loginStatus: FiniteStates.Success
     } as SessionState)
   })
 })
