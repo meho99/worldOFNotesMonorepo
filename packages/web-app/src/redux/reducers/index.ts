@@ -8,8 +8,8 @@ import { reducerNames } from '../../consts/reducerNames'
 
 export const rootReducer = {
   [reducerNames.Router]: connectRouter(historyProvider),
-  [reducerNames.Notes]: notesReducer,
-  [reducerNames.Session]: sessionReducer
+  [reducerNames.Session]: sessionReducer,
+  [reducerNames.Notes]: notesReducer
 }
 
 export type ReducerState = StateFromReducersMapObject<typeof rootReducer>
