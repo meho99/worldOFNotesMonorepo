@@ -11,3 +11,5 @@ export type LoginResponse = UserModel & {
 }
 
 export type SingUpResponse = LoginResponse
+
+export type AuthResponse = UserModel
