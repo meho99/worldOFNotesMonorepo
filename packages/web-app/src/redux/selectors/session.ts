@@ -1,11 +1,9 @@
 import { createSelector } from '@reduxjs/toolkit'
 
-import { FiniteStates } from '../../consts/finiteStates'
-import { reducerNames } from '../../consts/reducerNames'
-import { ThemeTypes } from '../../consts/themeTypes'
+import { ThemeTypes, ReducerNames, FiniteStates } from '../../consts'
 import { ReducerState } from '../reducers'
 
-const sessionState = (state: ReducerState) => state[reducerNames.Session]
+const sessionState = (state: ReducerState) => state[ReducerNames.Session]
 
 export const isDarkThemeSelector = createSelector(sessionState, state => state.theme === ThemeTypes.Dark)
 export const themeTypeSelector = createSelector(sessionState, state => state.theme) 

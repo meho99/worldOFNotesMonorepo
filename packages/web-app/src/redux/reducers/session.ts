@@ -1,9 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { UserModel } from '@won/core'
-import { FiniteStates } from '../../consts/finiteStates'
-import { reducerNames } from '../../consts/reducerNames'
-import { ThemeTypes } from '../../consts/themeTypes'
+import { ThemeTypes, ReducerNames, FiniteStates } from '../../consts'
 
 export class SessionState {
   token: string | null = localStorage.getItem('token');
@@ -16,7 +14,7 @@ export class SessionState {
 const initialState = { ...new SessionState() }
 
 const sessionSlice = createSlice({
-  name: reducerNames.Session,
+  name: ReducerNames.Session,
   initialState,
   reducers: {
     authenticate: (state) => {

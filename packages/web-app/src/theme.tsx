@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { createMuiTheme, MuiThemeProvider, ThemeOptions, responsiveFontSizes } from '@material-ui/core/styles'
 
 import { themeTypeSelector } from './redux/selectors/session'
-import { ThemeTypes } from './consts/themeTypes'
+import { ThemeTypes } from './consts'
 
 const colors = {
   ashGray: '#CAD2C5',
