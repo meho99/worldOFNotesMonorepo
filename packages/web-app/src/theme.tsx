@@ -29,6 +29,21 @@ const themeConfiguration: ThemeOptions = {
       root: {
         justifyContent: 'center'
       }
+    },
+    MuiOutlinedInput: {
+      input: {
+        color: "black",
+        borderRadius: "30px",
+        backgroundColor: "red",
+        borderColor: "red"
+      },
+      root: {
+        border: "red",
+        borderRadius: "30px",
+      },
+      notchedOutline: {
+        borderRadius: "30px",
+      }
     }
   }
 }
