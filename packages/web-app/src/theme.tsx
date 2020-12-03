@@ -1,7 +1,18 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
+import { createMuiTheme, MuiThemeProvider, ThemeOptions, responsiveFontSizes } from '@material-ui/core/styles'
 
-import { blue, green, red, yellow } from '@material-ui/core/colors'
-import { createMuiTheme, MuiThemeProvider, ThemeOptions, responsiveFontSizes } from '@material-ui/core'
+import { themeTypeSelector } from './redux/selectors/session'
+import { ThemeTypes } from './consts/themeTypes'
+
+const colors = {
+  ashGray: '#CAD2C5',
+  darkSeaGreen: '#84A98C',
+  hookersGreen: '#52796F',
+  darkSlateGreen: '#354F52',
+  charcoal: '#2F3E46',
+  darkBackground: '#424242'
+}
 
 const themeConfiguration: ThemeOptions = {
   typography: {
@@ -13,6 +24,11 @@ const themeConfiguration: ThemeOptions = {
       elevation4: {
         boxShadow: 'none'
       }
+    },
+    MuiListItem: {
+      root: {
+        justifyContent: 'center'
+      }
     }
   }
 }
@@ -22,10 +38,10 @@ const lightTheme = responsiveFontSizes(
     ...themeConfiguration,
     palette: {
       primary: {
-        main: yellow[100]
+        main: colors.darkSeaGreen
       },
       secondary: {
-        main: green[50]
+        main: colors.hookersGreen
       }
     }
   })
@@ -37,26 +53,26 @@ const darkTheme = responsiveFontSizes(
     palette: {
       type: 'dark',
       primary: {
-        main: red[100]
+        main: colors.charcoal
       },
       secondary: {
-        main: blue[100]
+        main: colors.hookersGreen
       }
     }
   })
 )
 
-type ThemeVariants = 'light' | 'dark'
+type ThemeProviderProps = Record<string, any>
 
-type ThemeProviderProps =
-  Record<string, any> & {
-    variant: ThemeVariants;
-  }
+const themeVariantsMap = {
+  [ThemeTypes.Light]: lightTheme,
+  [ThemeTypes.Dark]: darkTheme
+}
 
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({ variant = 'light', children, ...rest }) => {
-  const theme = variant === 'light'
-    ? lightTheme
-    : darkTheme
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, ...rest }) => {
+  const themeVariant = useSelector(themeTypeSelector)
+
+  const theme = themeVariantsMap[themeVariant]
 
   return (
     <MuiThemeProvider theme={theme} {...rest}>

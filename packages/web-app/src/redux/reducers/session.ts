@@ -3,12 +3,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { UserModel } from '@won/core'
 import { FiniteStates } from '../../consts/finiteStates'
 import { reducerNames } from '../../consts/reducerNames'
+import { ThemeTypes } from '../../consts/themeTypes'
 
 export class SessionState {
   token: string | null = localStorage.getItem('token');
   authenticatingStatus: FiniteStates = FiniteStates.Idle;
   loginStatus: FiniteStates = FiniteStates.Idle;
   user: Partial<UserModel> = {};
+  theme: ThemeTypes = localStorage.getItem('themeVariant') as ThemeTypes || ThemeTypes.Dark;
 }
 
 const initialState = { ...new SessionState() }
@@ -45,6 +47,14 @@ const sessionSlice = createSlice({
 
       state.token = token
       state.loginStatus = FiniteStates.Success
+    },
+    changeThemeType: (state) => {
+      const newThemeVariant = state.theme === ThemeTypes.Light
+        ? ThemeTypes.Dark
+        : ThemeTypes.Light
+
+      localStorage.setItem('themeVariant', newThemeVariant)
+      state.theme = newThemeVariant
     }
   }
 })
