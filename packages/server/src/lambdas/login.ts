@@ -39,6 +39,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
 
       const respose: LoginResponse = {
         token: jwtToken,
+        id: ref.id,
         name: data.name,
         email: data.email
       }

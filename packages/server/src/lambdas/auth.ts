@@ -5,11 +5,12 @@ import dotenv from 'dotenv'
 import faunadb from 'faunadb'
 import { APIGatewayEvent, Context } from 'aws-lambda'
 
-import { UserModel } from '@won/core'
+import { AuthResponse, UserModel } from '@won/core'
 import { findEnv } from '../helpers/findEnv'
 import { faunaDBClient } from '../helpers/fauna'
 import { authMiddleware } from '../middlewares/auth'
 import { createErrorResponse, createSuccessResponse } from '../helpers/responses'
+import { FaunaQuery } from '../types'
 
 dotenv.config({ path: findEnv() })
 
@@ -25,7 +26,7 @@ const authHandler = async (event: APIGatewayEvent, context: Context) => {
     if (httpMethod === 'GET') {
       const userId: number = event['user']?.id
 
-      const { data } = await faunaDBClient.query<{ data: UserModel }> (
+      const { data, ref } = await faunaDBClient.query<FaunaQuery<UserModel>> (
         Get(
           Ref(
             Collection("Users"), userId
@@ -33,7 +34,12 @@ const authHandler = async (event: APIGatewayEvent, context: Context) => {
         )
       )
 
-      return createSuccessResponse(data)
+      const response: AuthResponse = {
+        ...data,
+        id: ref.id
+      }
+
+      return createSuccessResponse(response)
     }
   } catch (e) {
     return createErrorResponse(e)
