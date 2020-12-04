@@ -15,8 +15,6 @@
     "lerna": "^3.22.1"
   },
   "dependencies": {
-    "@hookform/error-message": "0.0.5",
-    "cross-env": "^7.0.3",
-    "react-hook-form": "^6.12.2"
+    "cross-env": "^7.0.3"
   }
 }

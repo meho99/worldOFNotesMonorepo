@@ -41,7 +41,6 @@ export const LoginComponent = () => {
         <TextInput
           {...loginFields.password.fieldProps}
           errors={errors}
-          placeholder='Type password'
           inputRef={register(loginFields.password.validation)}
           InputProps={{
             startAdornment: (
