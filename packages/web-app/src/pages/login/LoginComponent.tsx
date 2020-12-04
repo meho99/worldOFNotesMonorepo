@@ -1,59 +1,59 @@
-import { Button, TextField, Typography } from '@material-ui/core';
 import React from 'react'
-import { useForm } from "react-hook-form";
+import { useDispatch } from 'react-redux'
+import { useForm } from 'react-hook-form'
+import { Button } from '@material-ui/core'
+import MailIcon from '@material-ui/icons/Mail'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import LockIcon from '@material-ui/icons/Lock'
+import Typography from '@material-ui/core/Typography/Typography'
 
+import { TextInput } from '../../components/textInput/TextInput'
+import { loginFields, LoginValues } from './Login.fields'
 import { useStyles } from './Login.styles'
-interface IFormInput {
-  email: string;
-  password: string;
-}
-
+import { loginThunk } from '../../redux/thunks/session'
 
 export const LoginComponent = () => {
   const classes = useStyles()
+  const dispatch = useDispatch()
 
-  const { register, handleSubmit, errors } = useForm<IFormInput>();
-  //const onSubmit = (data: IFormInput) => console.log(data);
-  const onSubmit = values => console.log(values);
+  const { register, handleSubmit, errors } = useForm<LoginValues>();
+  const onSubmit = (values: LoginValues) => {
+    dispatch(loginThunk(values))
+  };
 
   return (
-    <div>
+    <div className={classes.root}>
       <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
-        <TextField
-          className={classes.inputText}
-          id="outlined-basic"
-          label="Outlined"
-          variant="outlined"
-          name="email"
-          inputRef={register({
-            required: "You must specify an email",
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "invalid email address"
-            }
-          })}
+        <Typography color='primary' variant='h1' className={classes.title}> User Login </Typography>
+        <TextInput
+          {...loginFields.email.fieldProps}
+          errors={errors}
+          inputRef={register(loginFields.email.validation)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position='start'>
+                <MailIcon color='primary' />
+              </InputAdornment>
+            ),
+          }}
         />
-        <Typography className={classes.inputError}>{errors.email && errors.email.message}</Typography>
 
-        <TextField
-          className={classes.inputText}
-          id="outlined-basic"
-          label="Outlined"
-          variant="outlined"
-          name="password"
-          type="password"
-          inputRef={register({
-            required: "You must specify a password",
-            minLength: {
-              value: 8,
-              message: "Password must have at least 8 characters"
-            }
-          })}
+        <TextInput
+          {...loginFields.password.fieldProps}
+          errors={errors}
+          placeholder='Type password'
+          inputRef={register(loginFields.password.validation)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position='start'>
+                <LockIcon color='primary' />
+              </InputAdornment>
+            ),
+          }}
         />
-        <Typography className={classes.inputError}>{errors.password && errors.password.message}</Typography>
 
-        <Button type="submit" variant="contained" color="primary">
-          Primary
+        <Button className={classes.loginButton} type='submit' variant='contained' color='primary'>
+          Login
         </Button>
       </form>
     </div>

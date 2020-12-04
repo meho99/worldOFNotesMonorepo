@@ -1,10 +1,9 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles(({ palette }) => createStyles({
-  menuButton: {
-    marginRight: '5px',
+  root: {
+    width: '100%',
+    minHeight: '100vh',
+    backgroundColor: palette.background.default
   },
-  title: {
-    flexGrow: 1,
-  }
 }))

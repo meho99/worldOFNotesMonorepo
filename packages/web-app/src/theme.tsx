@@ -10,13 +10,14 @@ const colors = {
   darkSeaGreen: '#84A98C',
   hookersGreen: '#52796F',
   darkSlateGreen: '#354F52',
-  charcoal: '#2F3E46',
-  darkBackground: '#424242'
+  charcoal: '#2f3e46',
+  darkBackground: '#1c1c1c',
+  paperBackground: '#141414'
 }
 
 const themeConfiguration: ThemeOptions = {
   typography: {
-    fontFamily: "'Nunito', sans-serif",
+    fontFamily: `'Nunito', sans-serif`,
     fontSize: 16
   },
   overrides: {
@@ -32,17 +33,19 @@ const themeConfiguration: ThemeOptions = {
     },
     MuiOutlinedInput: {
       input: {
-        color: "black",
-        borderRadius: "30px",
-        backgroundColor: "red",
-        borderColor: "red"
+        borderRadius: '16px',
+        padding: '16px'
       },
       root: {
-        border: "red",
-        borderRadius: "30px",
+        borderRadius: '16px'
       },
       notchedOutline: {
-        borderRadius: "30px",
+        borderRadius: '16px'
+      }
+    },
+    MuiTypography: {
+      h1: {
+        fontSize: '4rem !important'
       }
     }
   }
@@ -56,8 +59,12 @@ const lightTheme = responsiveFontSizes(
         main: colors.darkSeaGreen
       },
       secondary: {
-        main: colors.hookersGreen
-      }
+        main: colors.darkSeaGreen
+      },
+      background: {
+        default: 'white',
+        paper: 'white'
+      },
     }
   })
 )
@@ -68,10 +75,14 @@ const darkTheme = responsiveFontSizes(
     palette: {
       type: 'dark',
       primary: {
-        main: colors.charcoal
+        main: colors.darkSeaGreen
       },
       secondary: {
-        main: colors.hookersGreen
+        main: colors.paperBackground
+      },
+      background: {
+        default: colors.darkBackground,
+        paper: colors.paperBackground
       }
     }
   })

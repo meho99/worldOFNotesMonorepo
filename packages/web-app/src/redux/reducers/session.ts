@@ -27,8 +27,8 @@ const sessionSlice = createSlice({
       state.token = initialState.token
       state.user = initialState.user
     },
-    authenticateSuccess: (state, { payload }: PayloadAction< { token: string; userData: UserModel }>) => {
-      const { token, userData} = payload
+    authenticateSuccess: (state, { payload }: PayloadAction<{ token: string; userData: UserModel }>) => {
+      const { token, userData } = payload
 
       state.user = userData
       state.token = token
