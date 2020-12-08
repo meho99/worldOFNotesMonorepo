@@ -51,7 +51,7 @@ export const HeaderMenu = () => {
                 checked={isDarkTheme}
                 onChange={handleChangeThemeVariant}
                 name='isDarkTheme'
-                color='secondary'
+                color='primary'
               />
             }
             label='Dark'
