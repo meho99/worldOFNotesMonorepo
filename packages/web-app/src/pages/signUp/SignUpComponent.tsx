@@ -5,33 +5,50 @@ import MailIcon from '@material-ui/icons/Mail'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import LockIcon from '@material-ui/icons/Lock'
 import Typography from '@material-ui/core/Typography/Typography'
+import AccountBoxIcon from '@material-ui/icons/AccountBox'
 
 import { TextInput } from '../../components/textInput/TextInput'
-import { loginFields, LoginValues } from './Login.fields'
-import { useStyles } from './Login.styles'
-import { loginThunk } from '../../redux/thunks/session'
+import { signUpFields, SignUpValues } from './SignUp.fields'
+import { useStyles } from './SignUp.styles'
+import { signUpThunk } from '../../redux/thunks/session'
 import { CenteredContainer } from '../../components/centeredContainer/CenteredContainer'
 import { Urls } from '../../consts'
 import { LinkComponent } from '../../components/link/LinkComponent'
 import { SubmitButton } from '../../components/submitButton/SubmitButton'
 
-export const LoginComponent = () => {
+export const SignUpComponent = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
-  const { register, handleSubmit, errors } = useForm<LoginValues>();
-  const onSubmit = (values: LoginValues) => {
-    dispatch(loginThunk(values))
-  };
+  const { register, handleSubmit, errors } = useForm<SignUpValues>()
+  const onSubmit = (values: SignUpValues) => {
+    dispatch(signUpThunk(values))
+  }
 
   return (
     <CenteredContainer>
       <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
-        <Typography color='primary' variant='h1' className={classes.title}> User Login </Typography>
+        <Typography color='primary' variant='h1' className={classes.title}>
+          Sign Up
+        </Typography>
+
         <TextInput
-          {...loginFields.email.fieldProps}
+          {...signUpFields.name.fieldProps}
           errors={errors}
-          inputRef={register(loginFields.email.validation)}
+          inputRef={register(signUpFields.name.validation)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position='start'>
+                <AccountBoxIcon color='primary' />
+              </InputAdornment>
+            ),
+          }}
+        />
+
+        <TextInput
+          {...signUpFields.email.fieldProps}
+          errors={errors}
+          inputRef={register(signUpFields.email.validation)}
           InputProps={{
             startAdornment: (
               <InputAdornment position='start'>
@@ -42,9 +59,9 @@ export const LoginComponent = () => {
         />
 
         <TextInput
-          {...loginFields.password.fieldProps}
+          {...signUpFields.password.fieldProps}
           errors={errors}
-          inputRef={register(loginFields.password.validation)}
+          inputRef={register(signUpFields.password.validation)}
           InputProps={{
             startAdornment: (
               <InputAdornment position='start'>
@@ -55,13 +72,13 @@ export const LoginComponent = () => {
         />
 
         <SubmitButton>
-          Login
+          Sign Up
         </SubmitButton>
 
-        <LinkComponent to={Urls.SignUp}>
-          Don't have an account?
+        <LinkComponent to={Urls.Login}>
+          Already have an account?
         </LinkComponent>
       </form>
-    </CenteredContainer>
+    </CenteredContainer >
   )
 }

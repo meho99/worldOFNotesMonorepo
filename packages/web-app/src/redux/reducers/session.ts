@@ -7,6 +7,7 @@ export class SessionState {
   token: string | null = localStorage.getItem('token');
   authenticatingStatus: FiniteStates = FiniteStates.Idle;
   loginStatus: FiniteStates = FiniteStates.Idle;
+  signUpStatus: FiniteStates = FiniteStates.Idle;
   user: Partial<UserModel> = {};
   theme: ThemeTypes = localStorage.getItem('themeVariant') as ThemeTypes || ThemeTypes.Dark;
 }
@@ -22,14 +23,12 @@ const sessionSlice = createSlice({
     },
     authenticateError: (state) => {
       localStorage.removeItem('token')
-
       state.authenticatingStatus = FiniteStates.Failure
       state.token = initialState.token
       state.user = initialState.user
     },
     authenticateSuccess: (state, { payload }: PayloadAction<{ token: string; userData: UserModel }>) => {
       const { token, userData } = payload
-
       state.user = userData
       state.token = token
       state.authenticatingStatus = FiniteStates.Success
@@ -42,7 +41,18 @@ const sessionSlice = createSlice({
     },
     loginSuccess: (state, { payload: { token } }: PayloadAction<{ token: string }>) => {
       localStorage.setItem('token', token)
+      state.token = token
+      state.loginStatus = FiniteStates.Success
+    },
 
+    signUp: (state) => {
+      state.signUpStatus = FiniteStates.Loading
+    },
+    signUpError: (state) => {
+      state.signUpStatus = FiniteStates.Failure
+    },
+    signUpSuccess: (state, { payload: { token } }: PayloadAction<{ token: string }>) => {
+      localStorage.setItem('token', token)
       state.token = token
       state.loginStatus = FiniteStates.Success
     },
