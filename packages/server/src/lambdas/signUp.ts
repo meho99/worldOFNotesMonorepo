@@ -3,16 +3,16 @@ require('@babel/polyfill')
 import faunadb from 'faunadb'
 import { APIGatewayEvent, Context } from 'aws-lambda'
 
-import { createToken } from '../helpers/authentication'
-import { faunaDBClient } from '../helpers/fauna'
-import { createErrorResponse, createSuccessResponse } from '../helpers/responses'
-
 import { SignUpRequest, UserModel } from '@won/core'
-import { FaunaQuery } from '../types'
 import { SingUpResponse } from '@won/core/src'
 
+import { FaunaQuery } from '../types'
+import { faunaDBClient } from '../helpers/fauna'
+import { createToken } from '../helpers/authentication'
+import { createErrorResponse, createSuccessResponse } from '../helpers/responses'
+
 const {
-  Login,
+  Get,
   Match,
   Index,
   Create,
@@ -34,9 +34,11 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
 
       try {
         const user = await faunaDBClient.query<{ secret: string }>(
-          Login(
-            Match(Index("user_by_email"), email),
-            { password },
+          Get(
+            Match(
+              Index("user_by_email"),
+              email
+            )
           )
         )
 
