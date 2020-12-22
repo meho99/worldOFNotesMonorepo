@@ -5,9 +5,9 @@ import { LoginRequest } from '@won/core'
 import { Urls } from '../../consts'
 import { ReducerNames } from '../../consts'
 import { sessionActions } from '../reducers/session'
-
 import { authenticateUser } from '../../api/auth'
 import { loginUser } from '../../api/login'
+import { signUpUser } from '../../api/signUp'
 
 export const authenticateThunk = createAsyncThunk(
   `${ReducerNames.Session}/authenticateByToken`,
@@ -15,9 +15,9 @@ export const authenticateThunk = createAsyncThunk(
     try {
       dispatch(sessionActions.authenticate())
       const token = localStorage.getItem('token') as string
-      
+
       const userData = await authenticateUser(token)
-  
+
       dispatch(sessionActions.authenticateSuccess({
         token,
         userData
@@ -44,6 +44,25 @@ export const loginThunk = createAsyncThunk<void, LoginRequest>(
       dispatch(push(Urls.Notes))
     } catch (e) {
       dispatch(sessionActions.loginError())
+    }
+  }
+)
+
+export const signUpThunk = createAsyncThunk<void, LoginRequest>(
+  `${ReducerNames.Session}/signUpUser`,
+  async (signUpData, { dispatch }) => {
+    try {
+      dispatch(sessionActions.signUp())
+
+      const loginResponse = await signUpUser(signUpData)
+
+      dispatch(sessionActions.signUpSuccess({
+        token: loginResponse.token
+      }))
+
+      dispatch(push(Urls.Notes))
+    } catch (e) {
+      dispatch(sessionActions.signUpError())
     }
   }
 )
