@@ -24,6 +24,7 @@
     "typescript": "^4.0.5"
   },
   "dependencies": {
+    "@won/core": "file:../core",
     "dotenv": "^8.2.0",
     "faunadb": "^4.0.0",
     "find-up": "^5.0.0",

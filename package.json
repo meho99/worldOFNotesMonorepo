@@ -2,6 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
+    "install-all": "lerna link && lerna exec -- npm i && npm install",
     "build-types": "lerna run watch-types",
     "start-web": "cd packages/web-app &&cross-env BROWSER=none npm start && lerna run watch-types"
   },
