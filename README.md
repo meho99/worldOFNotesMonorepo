@@ -7,6 +7,6 @@
 ### netlify: npm install netlify-cli -g
 
 ## commands:
-### netlify dev - start app and server locally
+### "netlify dev" : start app and server locally
 
-### npm run install-all install and link all packages
+### "npm run install-all" : install and link all packages
