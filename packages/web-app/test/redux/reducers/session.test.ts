@@ -154,4 +154,23 @@ describe('sesionReducer test', () => {
       theme: ThemeTypes.Dark
     } as SessionState)
   })
+
+  it('logOut action test', () => {
+    expect(
+      sessionReducer(
+        {
+          ...new SessionState(),
+          authenticatingStatus: FiniteStates.Success,
+          loginStatus: FiniteStates.Success,
+          signUpStatus: FiniteStates.Success,
+          token: 'tu jest token lol',
+          user: { email: '', id: 5, name: 'name' }
+        },
+        sessionActions.logOut()
+      )
+    ).toEqual({
+      ...new SessionState(),
+      token: null
+    } as SessionState)
+  })
 })

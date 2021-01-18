@@ -63,6 +63,13 @@ const sessionSlice = createSlice({
 
       localStorage.setItem('themeVariant', newThemeVariant)
       state.theme = newThemeVariant
+    },
+    logOut: (state) => {
+      state.token = null
+      state.signUpStatus = FiniteStates.Idle
+      state.loginStatus = FiniteStates.Idle
+      state.authenticatingStatus = FiniteStates.Idle
+      state.user = {}
     }
   }
 })

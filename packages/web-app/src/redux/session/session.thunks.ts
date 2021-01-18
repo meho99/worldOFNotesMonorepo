@@ -66,3 +66,13 @@ export const signUpThunk = createAsyncThunk<void, LoginRequest>(
     }
   }
 )
+
+export const logOutThunk = createAsyncThunk<void>(
+  `${ReducerNames.Session}/logOutUser`,
+  (_, { dispatch }) => {
+    localStorage.removeItem('token')
+
+    dispatch(sessionActions.logOut())
+    dispatch(push(Urls.Login))
+  }
+)

@@ -20,6 +20,7 @@ export const HeaderMenu = () => {
 
   const {
     isDarkTheme,
+    handleLogOut,
     isAuthenticated,
     handleChangeThemeVariant
   } = useMenuOptions()
@@ -58,7 +59,7 @@ export const HeaderMenu = () => {
           />
         </MenuItem>
         {
-          isAuthenticated && <MenuItem onClick={handleClose}>Log out</MenuItem>
+          isAuthenticated && <MenuItem onClick={handleLogOut}>Log out</MenuItem>
         }
       </Menu>
     </div>
