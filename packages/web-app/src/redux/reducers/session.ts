@@ -54,7 +54,7 @@ const sessionSlice = createSlice({
     signUpSuccess: (state, { payload: { token } }: PayloadAction<{ token: string }>) => {
       localStorage.setItem('token', token)
       state.token = token
-      state.loginStatus = FiniteStates.Success
+      state.signUpStatus = FiniteStates.Success
     },
     changeThemeType: (state) => {
       const newThemeVariant = state.theme === ThemeTypes.Light

@@ -4,13 +4,13 @@ exports[`HeaderComponent test Snapshot test 1`] = `
 <div>
    
   <header
-    class="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary MuiPaper-elevation4"
+    class="MuiPaper-root MuiAppBar-root MuiAppBar-positionFixed MuiAppBar-colorSecondary mui-fixed MuiPaper-elevation4"
   >
     <div
       class="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
     >
       <h6
-        class="MuiTypography-root makeStyles-title-3 MuiTypography-h6"
+        class="MuiTypography-root makeStyles-title-2 MuiTypography-h6"
       >
         World of Notes
       </h6>
@@ -19,7 +19,7 @@ exports[`HeaderComponent test Snapshot test 1`] = `
           aria-controls="simple-menu"
           aria-haspopup="true"
           aria-label="menu"
-          class="MuiButtonBase-root MuiIconButton-root makeStyles-menuButton-2 MuiIconButton-colorInherit MuiIconButton-edgeStart"
+          class="MuiButtonBase-root MuiIconButton-root makeStyles-menuButton-1 MuiIconButton-colorInherit MuiIconButton-edgeStart"
           tabindex="0"
           type="button"
         >

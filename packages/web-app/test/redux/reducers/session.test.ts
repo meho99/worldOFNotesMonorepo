@@ -32,7 +32,7 @@ describe('sesionReducer test', () => {
     const testUserData: UserModel = {
       email: 'test@test.test',
       name: 'Damian',
-      id:123
+      id: 123
     }
 
     const testToken = 'tokenData'
@@ -93,6 +93,50 @@ describe('sesionReducer test', () => {
       ...new SessionState(),
       token: testToken,
       loginStatus: FiniteStates.Success
+    } as SessionState)
+  })
+
+  it('signUp action test', () => {
+    expect(
+      sessionReducer(
+        {
+          ...new SessionState()
+        },
+        sessionActions.signUp()
+      )
+    ).toEqual({
+      ...new SessionState(),
+      signUpStatus: FiniteStates.Loading
+    } as SessionState)
+  })
+
+  it('signUpError action test', () => {
+    expect(
+      sessionReducer(
+        {
+          ...new SessionState()
+        },
+        sessionActions.signUpError()
+      )
+    ).toEqual({
+      ...new SessionState(),
+      signUpStatus: FiniteStates.Failure
+    } as SessionState)
+  })
+
+  it('signUpSuccess action test', () => {
+    const testToken = 'testToken'
+    expect(
+      sessionReducer(
+        {
+          ...new SessionState()
+        },
+        sessionActions.signUpSuccess({ token: testToken })
+      )
+    ).toEqual({
+      ...new SessionState(),
+      token: testToken,
+      signUpStatus: FiniteStates.Success
     } as SessionState)
   })
 
