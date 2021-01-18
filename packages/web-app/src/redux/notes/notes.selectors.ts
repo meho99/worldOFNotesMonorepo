@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit'
 
 import { ReducerNames } from '../../consts'
-import { ReducerState } from '../reducers'
+import { ReducerState } from '../rootReducer'
 
 const notesState = (state: ReducerState) => state[ReducerNames.Notes]
 

@@ -1,7 +1,8 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { sessionActions } from '../../redux/reducers/session'
-import { isAuthenticatedSelector, isDarkThemeSelector } from '../../redux/selectors/session'
+import { sessionActions } from '../../redux/session/session.reducer'
+import { isAuthenticatedSelector, isDarkThemeSelector } from '../../redux/session/session.selectors'
+
 
 export const useHeaderMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)

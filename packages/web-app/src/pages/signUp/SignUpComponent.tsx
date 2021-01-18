@@ -10,11 +10,11 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox'
 import { TextInput } from '../../components/textInput/TextInput'
 import { signUpFields, SignUpValues } from './SignUp.fields'
 import { useStyles } from './SignUp.styles'
-import { signUpThunk } from '../../redux/thunks/session'
 import { CenteredContainer } from '../../components/centeredContainer/CenteredContainer'
 import { Urls } from '../../consts'
 import { LinkComponent } from '../../components/link/LinkComponent'
 import { SubmitButton } from '../../components/submitButton/SubmitButton'
+import { signUpThunk } from '../../redux/session/session.thunks'
 
 export const SignUpComponent = () => {
   const classes = useStyles()

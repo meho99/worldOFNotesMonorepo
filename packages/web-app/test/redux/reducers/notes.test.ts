@@ -1,4 +1,4 @@
-import { notesReducer, NotesState, notesActions } from '../../../src/redux/reducers/notes'
+import { notesReducer, NotesState, notesActions } from '../../../src/redux/notes/notes.reducer'
 
 describe('notesReducer test', () => {
   it('setFolderName action test', () => {

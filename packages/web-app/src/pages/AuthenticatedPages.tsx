@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { Route, Switch } from 'react-router-dom'
 
 import { Urls } from '../consts'
-import { authenticateThunk } from '../redux/thunks/session'
+import { authenticateThunk } from '../redux/session/session.thunks'
 import { NotesComponent } from './notes/NotesComponent'
 
 export const AuthenticatedPages: React.FC = () => {
@@ -11,7 +11,7 @@ export const AuthenticatedPages: React.FC = () => {
 
   useEffect(() => {
     dispatch(authenticateThunk())
-  }, [])
+  }, [dispatch])
 
   return (
     <Switch>

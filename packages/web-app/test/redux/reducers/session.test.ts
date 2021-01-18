@@ -1,7 +1,7 @@
 import { UserModel } from '@won/core'
+import { sessionReducer, SessionState, sessionActions } from '../../../src/redux/session/session.reducer'
 
 import { ThemeTypes, FiniteStates } from '../../../src/consts'
-import { sessionReducer, SessionState, sessionActions } from '../../../src/redux/reducers/session'
 
 describe('sesionReducer test', () => {
   it('authenticate action test', () => {
