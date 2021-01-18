@@ -4,10 +4,10 @@ import { push } from 'connected-react-router'
 import { LoginRequest } from '@won/core'
 import { Urls } from '../../consts'
 import { ReducerNames } from '../../consts'
-import { sessionActions } from '../reducers/session'
 import { authenticateUser } from '../../api/auth'
 import { loginUser } from '../../api/login'
 import { signUpUser } from '../../api/signUp'
+import { sessionActions } from './session.reducer'
 
 export const authenticateThunk = createAsyncThunk(
   `${ReducerNames.Session}/authenticateByToken`,
@@ -64,5 +64,15 @@ export const signUpThunk = createAsyncThunk<void, LoginRequest>(
     } catch (e) {
       dispatch(sessionActions.signUpError())
     }
+  }
+)
+
+export const logOutThunk = createAsyncThunk<void>(
+  `${ReducerNames.Session}/logOutUser`,
+  (_, { dispatch }) => {
+    localStorage.removeItem('token')
+
+    dispatch(sessionActions.logOut())
+    dispatch(push(Urls.Login))
   }
 )

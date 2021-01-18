@@ -9,11 +9,11 @@ import Typography from '@material-ui/core/Typography/Typography'
 import { TextInput } from '../../components/textInput/TextInput'
 import { loginFields, LoginValues } from './Login.fields'
 import { useStyles } from './Login.styles'
-import { loginThunk } from '../../redux/thunks/session'
 import { CenteredContainer } from '../../components/centeredContainer/CenteredContainer'
 import { Urls } from '../../consts'
 import { LinkComponent } from '../../components/link/LinkComponent'
 import { SubmitButton } from '../../components/submitButton/SubmitButton'
+import { loginThunk } from '../../redux/session/session.thunks'
 
 export const LoginComponent = () => {
   const classes = useStyles()

@@ -2,8 +2,8 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { createMuiTheme, MuiThemeProvider, ThemeOptions, responsiveFontSizes } from '@material-ui/core/styles'
 
-import { themeTypeSelector } from './redux/selectors/session'
 import { ThemeTypes } from './consts'
+import { themeTypeSelector } from './redux/session/session.selectors'
 
 const colors = {
   ashGray: '#CAD2C5',
@@ -17,7 +17,7 @@ const colors = {
 
 const themeConfiguration: ThemeOptions = {
   typography: {
-    fontFamily: `'Nunito', sans-serif`,
+    fontFamily: '\'Nunito\', sans-serif',
     fontSize: 16
   },
   overrides: {

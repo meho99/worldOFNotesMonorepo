@@ -1,7 +1,7 @@
 import { UserModel } from '@won/core'
+import { sessionReducer, SessionState, sessionActions } from '../../../src/redux/session/session.reducer'
 
 import { ThemeTypes, FiniteStates } from '../../../src/consts'
-import { sessionReducer, SessionState, sessionActions } from '../../../src/redux/reducers/session'
 
 describe('sesionReducer test', () => {
   it('authenticate action test', () => {
@@ -32,7 +32,7 @@ describe('sesionReducer test', () => {
     const testUserData: UserModel = {
       email: 'test@test.test',
       name: 'Damian',
-      id:123
+      id: 123
     }
 
     const testToken = 'tokenData'
@@ -96,6 +96,50 @@ describe('sesionReducer test', () => {
     } as SessionState)
   })
 
+  it('signUp action test', () => {
+    expect(
+      sessionReducer(
+        {
+          ...new SessionState()
+        },
+        sessionActions.signUp()
+      )
+    ).toEqual({
+      ...new SessionState(),
+      signUpStatus: FiniteStates.Loading
+    } as SessionState)
+  })
+
+  it('signUpError action test', () => {
+    expect(
+      sessionReducer(
+        {
+          ...new SessionState()
+        },
+        sessionActions.signUpError()
+      )
+    ).toEqual({
+      ...new SessionState(),
+      signUpStatus: FiniteStates.Failure
+    } as SessionState)
+  })
+
+  it('signUpSuccess action test', () => {
+    const testToken = 'testToken'
+    expect(
+      sessionReducer(
+        {
+          ...new SessionState()
+        },
+        sessionActions.signUpSuccess({ token: testToken })
+      )
+    ).toEqual({
+      ...new SessionState(),
+      token: testToken,
+      signUpStatus: FiniteStates.Success
+    } as SessionState)
+  })
+
   it('changeThemeType action test', () => {
     expect(
       sessionReducer(
@@ -108,6 +152,25 @@ describe('sesionReducer test', () => {
     ).toEqual({
       ...new SessionState(),
       theme: ThemeTypes.Dark
+    } as SessionState)
+  })
+
+  it('logOut action test', () => {
+    expect(
+      sessionReducer(
+        {
+          ...new SessionState(),
+          authenticatingStatus: FiniteStates.Success,
+          loginStatus: FiniteStates.Success,
+          signUpStatus: FiniteStates.Success,
+          token: 'tu jest token lol',
+          user: { email: '', id: 5, name: 'name' }
+        },
+        sessionActions.logOut()
+      )
+    ).toEqual({
+      ...new SessionState(),
+      token: null
     } as SessionState)
   })
 })
