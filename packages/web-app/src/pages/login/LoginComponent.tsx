@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import MailIcon from '@material-ui/icons/Mail'
 import InputAdornment from '@material-ui/core/InputAdornment'
@@ -14,10 +14,13 @@ import { Urls } from '../../consts'
 import { LinkComponent } from '../../components/link/LinkComponent'
 import { SubmitButton } from '../../components/submitButton/SubmitButton'
 import { loginThunk } from '../../redux/session/session.thunks'
+import { isLoginLoadingSelector } from '../../redux/session/session.selectors'
 
 export const LoginComponent = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
+
+  const isLoading = useSelector(isLoginLoadingSelector)
 
   const { register, handleSubmit, errors } = useForm<LoginValues>();
   const onSubmit = (values: LoginValues) => {
@@ -54,7 +57,7 @@ export const LoginComponent = () => {
           }}
         />
 
-        <SubmitButton>
+        <SubmitButton isLoading={isLoading}>
           Login
         </SubmitButton>
 

@@ -4,5 +4,8 @@ export const useStyles = makeStyles(({ spacing }) => createStyles({
   button: {
     marginTop: spacing(2),
     fontWeight: 'bold'
+  },
+  circle: {
+    position: 'absolute'
   }
 }))
