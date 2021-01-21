@@ -8,6 +8,7 @@ import { authenticateUser } from '../../api/auth'
 import { loginUser } from '../../api/login'
 import { signUpUser } from '../../api/signUp'
 import { sessionActions } from './session.reducer'
+import { notificationsActions } from '../notifications/notifications.reducer'
 
 export const authenticateThunk = createAsyncThunk(
   `${ReducerNames.Session}/authenticateByToken`,
@@ -23,8 +24,9 @@ export const authenticateThunk = createAsyncThunk(
         userData
       }))
     } catch (e) {
-      dispatch(sessionActions.authenticateError())
       dispatch(push(Urls.Login))
+      dispatch(sessionActions.authenticateError())
+      dispatch(notificationsActions.addErrorNotification('Unauthorized'))
     }
   }
 )
@@ -44,6 +46,7 @@ export const loginThunk = createAsyncThunk<void, LoginRequest>(
       dispatch(push(Urls.Notes))
     } catch (e) {
       dispatch(sessionActions.loginError())
+      dispatch(notificationsActions.addErrorNotification('Unable to login. Please check your email and password and try again.'))
     }
   }
 )
@@ -62,7 +65,8 @@ export const signUpThunk = createAsyncThunk<void, LoginRequest>(
 
       dispatch(push(Urls.Notes))
     } catch (e) {
-      dispatch(sessionActions.signUpError())
+      dispatch(sessionActions.loginError())
+      dispatch(notificationsActions.addErrorNotification('Unable to sign up. Please check your email and password and try again.'))
     }
   }
 )
