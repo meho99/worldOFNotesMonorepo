@@ -1,6 +1,6 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 
-export const useStyles = makeStyles(({ palette, spacing, breakpoints }) => createStyles({
+export const useStyles = makeStyles(({ palette, spacing, breakpoints, shadows }) => createStyles({
   root: {
     height: '100%',
     width: '100%',
@@ -14,7 +14,7 @@ export const useStyles = makeStyles(({ palette, spacing, breakpoints }) => creat
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    boxShadow: 'rgba(0, 0, 0, 0.3) 0px 3px 8px',
+    boxShadow: shadows[3],
     borderRadius: spacing(1),
     paddingTop: spacing(8),
     paddingBottom: spacing(8),
