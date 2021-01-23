@@ -8,7 +8,7 @@ import { NotificationTypes } from '../../consts'
 import { useNotificationData } from './Notifications.hooks'
 import { useNotificationsStyles } from './Notifications.styles'
 
-const NOTIFICATION_DURATION = 6000
+const NOTIFICATION_DURATION = 8000
 
 const NotificationComponents = {
   [NotificationTypes.Error]: (props: AlertProps) => <Alert severity={NotificationTypes.Error} {...props}></Alert>

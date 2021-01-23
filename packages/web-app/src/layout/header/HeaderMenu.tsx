@@ -25,6 +25,11 @@ export const HeaderMenu = () => {
     handleChangeThemeVariant
   } = useMenuOptions()
 
+  const onLogout = () => {
+    handleLogOut()
+    handleClose()
+  }
+
   return (
     <div>
       <IconButton
@@ -59,7 +64,7 @@ export const HeaderMenu = () => {
           />
         </MenuItem>
         {
-          isAuthenticated && <MenuItem onClick={handleLogOut}>Log out</MenuItem>
+          isAuthenticated && <MenuItem onClick={onLogout}>Log out</MenuItem>
         }
       </Menu>
     </div>
