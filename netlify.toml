@@ -2,11 +2,18 @@
   framework = "#custom"
   command = "npm run start-web"
   targetPort = 3000
+
 [build]
   functions = "packages/server/build"
   publish = "packages/web-app/build"
   command = "lerna run build"
+
 [build.environment]
   NODE_VERSION = "8.11.2"
   YARN_VERSION = "1.9.4"
   REACT_APP_ENVIRONMENT = "netlify"
+
+[[redirects]]
+  from = '/*'
+  to = '/index.html'
+  status = 200
