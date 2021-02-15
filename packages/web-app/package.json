@@ -38,7 +38,8 @@
     "test": "jest",
     "test-update": "jest -u",
     "eject": "react-scripts eject",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "coverage": "jest --coverage"
   },
   "eslintConfig": {
     "extends": [
