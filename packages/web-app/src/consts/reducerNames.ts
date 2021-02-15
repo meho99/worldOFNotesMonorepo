@@ -1,6 +1,6 @@
 export enum ReducerNames {
   Session = 'session',
-  Notes = 'notes',
+  Folders = 'folders',
   Router = 'router',
   Notifications = 'notifications'
 }
