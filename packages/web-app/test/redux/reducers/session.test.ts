@@ -3,7 +3,7 @@ import { sessionReducer, SessionState, sessionActions } from '../../../src/redux
 
 import { ThemeTypes, FiniteStates } from '../../../src/consts'
 
-describe('sesionReducer test', () => {
+describe('sessionReducer test', () => {
   it('authenticate action test', () => {
     expect(
       sessionReducer(
