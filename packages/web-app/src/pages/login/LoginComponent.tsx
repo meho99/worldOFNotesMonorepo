@@ -5,6 +5,8 @@ import MailIcon from '@material-ui/icons/Mail'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import LockIcon from '@material-ui/icons/Lock'
 import Typography from '@material-ui/core/Typography/Typography'
+import { Visibility, VisibilityOff } from '@material-ui/icons'
+import { IconButton } from '@material-ui/core'
 
 import { TextInput } from '../../components/textInput/TextInput'
 import { loginFields, LoginValues } from './Login.fields'
@@ -17,6 +19,15 @@ import { loginThunk } from '../../redux/session/session.thunks'
 import { isLoginLoadingSelector } from '../../redux/session/session.selectors'
 
 export const LoginComponent = () => {
+  const [showPassword, setShowPassword] = React.useState<boolean>();
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -54,7 +65,18 @@ export const LoginComponent = () => {
                 <LockIcon color='primary' />
               </InputAdornment>
             ),
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                >
+                  {showPassword ? <Visibility color='primary' /> : <VisibilityOff color='primary' />}
+                </IconButton>
+              </InputAdornment>
+            )
           }}
+          type={showPassword ? 'text' : 'password'}
         />
 
         <SubmitButton isLoading={isLoading}>
