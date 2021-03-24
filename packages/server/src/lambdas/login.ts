@@ -8,7 +8,7 @@ import { LoginRequest, UserModel, LoginResponse } from '@won/core'
 import { FaunaQuery } from '../types'
 import { faunaDBClient } from '../helpers/fauna'
 import { createToken } from '../helpers/authentication'
-import { createErrorResponse, createSuccessResponse } from '../helpers/responses'
+import { createInternalErrorResponse, createSuccessResponse } from '../helpers/responses'
 
 const {
   Get,
@@ -47,6 +47,6 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
       return createSuccessResponse(respose)
     }
   } catch (e) {
-    return createErrorResponse(e)
+    return createInternalErrorResponse(e)
   }
 }

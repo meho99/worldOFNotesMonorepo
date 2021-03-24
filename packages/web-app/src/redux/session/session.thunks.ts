@@ -2,13 +2,14 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import { push } from 'connected-react-router'
 
 import { LoginRequest, SignUpRequest } from '@won/core'
-import { Urls } from '../../consts'
+import { Urls, FetchingErrors } from '../../consts'
 import { ReducerNames } from '../../consts'
 import { authenticateUser } from '../../api/auth'
 import { loginUser } from '../../api/login'
 import { signUpUser } from '../../api/signUp'
 import { sessionActions } from './session.reducer'
 import { notificationsActions } from '../notifications/notifications.reducer'
+import { errorThunk } from '../notifications/notifications.helpers'
 
 export const authenticateThunk = createAsyncThunk(
   `${ReducerNames.Session}/authenticateByToken`,
@@ -46,7 +47,7 @@ export const loginThunk = createAsyncThunk<void, LoginRequest>(
       dispatch(push(Urls.Notes))
     } catch (e) {
       dispatch(sessionActions.loginError())
-      dispatch(notificationsActions.addErrorNotification('Unable to login. Please check your email and password and try again.'))
+      errorThunk({e, dispatch, defaultMessage: FetchingErrors.LoginError })
     }
   }
 )
@@ -65,7 +66,7 @@ export const signUpThunk = createAsyncThunk<void, SignUpRequest>(
       dispatch(push(Urls.Notes))
     } catch (e) {
       dispatch(sessionActions.signUpError())
-      dispatch(notificationsActions.addErrorNotification('Unable to sign up. Please check your email and password and try again.'))
+      errorThunk({e, dispatch, defaultMessage: FetchingErrors.SingUpError })
     }
   }
 )
