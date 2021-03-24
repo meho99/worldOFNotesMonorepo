@@ -1,20 +1,25 @@
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { notificationsActions } from '../../redux/notifications/notifications.reducer'
-import { notificationDataSelector, shouldShowNotificationSelector } from '../../redux/notifications/notifications.selectors'
+import { getNotificationSelector, notificationAdapterSelectors } from '../../redux/notifications/notifications.selectors'
+import { NotificationData } from '../../redux/notifications/notifications.types'
+
+export const hasNotifications = (show: boolean, notification?: NotificationData): notification is NotificationData => show === true
 
 export const useNotificationData = () => {
   const dispatch = useDispatch()
-  const notificationData = useSelector(notificationDataSelector)
-  const showNotification = useSelector(shouldShowNotificationSelector)
+  const notificationData = useSelector(getNotificationSelector)
+  const showNotification = !!useSelector(notificationAdapterSelectors.selectTotal)
 
-  const clearNotification = useCallback(() => {
-    dispatch(notificationsActions.clearNotification())
-  }, [dispatch])
+  const removeCurrentNotification = useCallback(() => {
+    if (hasNotifications(showNotification, notificationData)) {
+      dispatch(notificationsActions.removeNotification(notificationData.id))
+    }
+  }, [dispatch, notificationData, showNotification])
 
   return {
     showNotification,
     notificationData,
-    clearNotification
+    removeCurrentNotification
   }
 }
