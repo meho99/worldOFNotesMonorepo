@@ -1,14 +1,15 @@
 import { UserModel } from '@won/core'
-import { sessionReducer, SessionState, sessionActions } from '../../../src/redux/session/session.reducer'
 
 import { ThemeTypes, FiniteStates } from '../../../src/consts'
+import { sessionReducer, SessionState, sessionActions } from '../../../src/redux/session/session.reducer'
+import { authenticateThunk, loginThunk, logOutThunk, signUpThunk } from '../../../src/redux/session/session.thunks'
 
 describe('sessionReducer test', () => {
   it('authenticate action test', () => {
     expect(
       sessionReducer(
         { ...new SessionState() },
-        sessionActions.authenticate()
+        authenticateThunk.pending
       )
     ).toEqual({
       ...new SessionState(),
@@ -20,7 +21,7 @@ describe('sessionReducer test', () => {
     expect(
       sessionReducer(
         { ...new SessionState() },
-        sessionActions.authenticateError()
+        authenticateThunk.rejected
       )
     ).toEqual({
       ...new SessionState(),
@@ -42,7 +43,10 @@ describe('sessionReducer test', () => {
         {
           ...new SessionState()
         },
-        sessionActions.authenticateSuccess({ token: testToken, userData: testUserData })
+        {
+          type: authenticateThunk.fulfilled.type,
+          payload: { token: testToken, userData: testUserData }
+        }
       )
     ).toEqual({
       ...new SessionState(),
@@ -58,7 +62,7 @@ describe('sessionReducer test', () => {
         {
           ...new SessionState()
         },
-        sessionActions.login()
+        loginThunk.pending
       )
     ).toEqual({
       ...new SessionState(),
@@ -72,7 +76,7 @@ describe('sessionReducer test', () => {
         {
           ...new SessionState()
         },
-        sessionActions.loginError()
+        loginThunk.rejected
       )
     ).toEqual({
       ...new SessionState(),
@@ -87,7 +91,10 @@ describe('sessionReducer test', () => {
         {
           ...new SessionState()
         },
-        sessionActions.loginSuccess({ token: testToken })
+        {
+          type: loginThunk.fulfilled.type,
+          payload: { token: testToken }
+        }
       )
     ).toEqual({
       ...new SessionState(),
@@ -102,7 +109,7 @@ describe('sessionReducer test', () => {
         {
           ...new SessionState()
         },
-        sessionActions.signUp()
+        signUpThunk.pending
       )
     ).toEqual({
       ...new SessionState(),
@@ -116,7 +123,7 @@ describe('sessionReducer test', () => {
         {
           ...new SessionState()
         },
-        sessionActions.signUpError()
+        signUpThunk.rejected
       )
     ).toEqual({
       ...new SessionState(),
@@ -131,7 +138,10 @@ describe('sessionReducer test', () => {
         {
           ...new SessionState()
         },
-        sessionActions.signUpSuccess({ token: testToken })
+        {
+          type: signUpThunk.fulfilled.type,
+          payload: { token: testToken }
+        }
       )
     ).toEqual({
       ...new SessionState(),
@@ -166,7 +176,7 @@ describe('sessionReducer test', () => {
           token: 'tu jest token lol',
           user: { email: '', id: 5, name: 'name' }
         },
-        sessionActions.logOut()
+        logOutThunk.fulfilled
       )
     ).toEqual({
       ...new SessionState(),

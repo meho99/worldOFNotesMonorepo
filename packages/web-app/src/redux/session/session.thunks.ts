@@ -1,72 +1,57 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { push } from 'connected-react-router'
 
-import { LoginRequest, SignUpRequest } from '@won/core'
+import { LoginRequest, LoginResponse, SignUpRequest, SingUpResponse, UserModel } from '@won/core'
 import { Urls, FetchingErrors } from '../../consts'
 import { ReducerNames } from '../../consts'
 import { authenticateUser } from '../../api/auth'
 import { loginUser } from '../../api/login'
 import { signUpUser } from '../../api/signUp'
-import { sessionActions } from './session.reducer'
 import { notificationsActions } from '../notifications/notifications.reducer'
 import { errorThunk } from '../notifications/notifications.helpers'
 
-export const authenticateThunk = createAsyncThunk(
+export const authenticateThunk = createAsyncThunk<{ token: string; userData: UserModel }>(
   `${ReducerNames.Session}/authenticateByToken`,
   async (_, { dispatch }) => {
     try {
-      dispatch(sessionActions.authenticate())
       const token = localStorage.getItem('token') as string
-
       const userData = await authenticateUser(token)
 
-      dispatch(sessionActions.authenticateSuccess({
-        token,
-        userData
-      }))
+      return { token, userData }
     } catch (e) {
       dispatch(push(Urls.Login))
-      dispatch(sessionActions.authenticateError())
       dispatch(notificationsActions.addErrorNotification('Unauthorized'))
+      throw e
     }
   }
 )
 
-export const loginThunk = createAsyncThunk<void, LoginRequest>(
+export const loginThunk = createAsyncThunk<LoginResponse, LoginRequest>(
   `${ReducerNames.Session}/loginUser`,
   async (loginData, { dispatch }) => {
     try {
-      dispatch(sessionActions.login())
-
       const loginResponse = await loginUser(loginData)
-
-      dispatch(sessionActions.loginSuccess({
-        token: loginResponse.token
-      }))
-
       dispatch(push(Urls.Notes))
+
+      return loginResponse
     } catch (e) {
-      dispatch(sessionActions.loginError())
       errorThunk({e, dispatch, defaultMessage: FetchingErrors.LoginError })
+      throw e
     }
   }
 )
 
-export const signUpThunk = createAsyncThunk<void, SignUpRequest>(
+export const signUpThunk = createAsyncThunk<SingUpResponse, SignUpRequest>(
   `${ReducerNames.Session}/signUpUser`,
   async (signUpData, { dispatch }) => {
     try {
-      dispatch(sessionActions.signUp())
-
       const signUpResponse = await signUpUser(signUpData)
-      dispatch(sessionActions.signUpSuccess({
-        token: signUpResponse.token
-      }))
-
       dispatch(push(Urls.Notes))
+
+      return signUpResponse
     } catch (e) {
-      dispatch(sessionActions.signUpError())
       errorThunk({e, dispatch, defaultMessage: FetchingErrors.SingUpError })
+      throw e
     }
   }
 )
@@ -76,7 +61,6 @@ export const logOutThunk = createAsyncThunk<void>(
   (_, { dispatch }) => {
     localStorage.removeItem('token')
 
-    dispatch(sessionActions.logOut())
     dispatch(push(Urls.Login))
   }
 )

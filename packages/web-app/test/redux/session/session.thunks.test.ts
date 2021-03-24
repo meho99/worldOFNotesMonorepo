@@ -4,7 +4,7 @@ import thunk from 'redux-thunk'
 import axios from 'axios'
 
 import { AuthResponse, LoginRequest, LoginResponse, SignUpRequest } from '@won/core'
-import { sessionActions, SessionState } from '../../../src/redux/session/session.reducer'
+import { SessionState } from '../../../src/redux/session/session.reducer'
 import { Urls } from '../../../src/consts'
 import { authenticateThunk, loginThunk, logOutThunk, signUpThunk } from '../../../src/redux/session/session.thunks'
 import { notificationsActions } from '../../../src/redux/notifications/notifications.reducer'
@@ -43,25 +43,26 @@ describe('session thunks tests', () => {
       axios['mockImplementationOnce'](() => Promise.resolve({ data: authenticateUserResponse }))
 
       const expectedActions = [
-        sessionActions.authenticate(),
-        sessionActions.authenticateSuccess({
-          token: testToken,
-          userData: authenticateUserResponse
+        expect.objectContaining({ type: authenticateThunk.pending.type }),
+        expect.objectContaining({
+          type: authenticateThunk.fulfilled.type,
+          payload: { token: testToken, userData: authenticateUserResponse }
         })
       ]
+    
       const store = mockStore({ ...new SessionState() })
 
       await store.dispatch(authenticateThunk())
       expect(localStorage.getItem).toHaveBeenCalledWith('token')
-      expect(store.getActions()).toEqual(expect.arrayContaining(expectedActions))
+      expect(store.getActions()).toEqual(expectedActions)
     })
 
     it('authenticateThunk error', async () => {
       axios['mockImplementationOnce'](() => Promise.reject({}))
 
       const expectedActions = [
-        sessionActions.authenticate(),
-        sessionActions.authenticateError(),
+        expect.objectContaining({ type: authenticateThunk.pending.type }),
+        expect.objectContaining({ type: authenticateThunk.rejected.type }),
         notificationsActions.addErrorNotification('Unauthorized'),
         push(Urls.Login)
       ]
@@ -83,22 +84,25 @@ describe('session thunks tests', () => {
       axios['mockImplementationOnce'](() => Promise.resolve({ data: mockedSignUpUserResponse }))
 
       const expectedActions = [
-        sessionActions.login(),
-        sessionActions.loginSuccess({ token: mockedSignUpUserResponse.token }),
-        push(Urls.Notes)
+        expect.objectContaining({ type: loginThunk.pending.type }),
+        push(Urls.Notes),
+        expect.objectContaining({
+          type: loginThunk.fulfilled.type,
+          payload: mockedSignUpUserResponse
+        })
       ]
       const store = mockStore({ ...new SessionState() })
 
       await store.dispatch(loginThunk(loginRequestData))
-      expect(store.getActions()).toEqual(expect.arrayContaining(expectedActions))
+      expect(store.getActions()).toEqual(expectedActions)
     })
 
     it('loginThunk error', async () => {
       axios['mockImplementationOnce'](() => Promise.reject({}))
 
       const expectedActions = [
-        sessionActions.login(),
-        sessionActions.loginError(),
+        expect.objectContaining({ type: loginThunk.pending.type }),
+        expect.objectContaining({ type: loginThunk.rejected.type }),
         notificationsActions.addErrorNotification('Unable to login. Please check your email and password and try again.')
       ]
       const store = mockStore({ ...new SessionState() })
@@ -119,23 +123,26 @@ describe('session thunks tests', () => {
       axios['mockImplementationOnce'](() => Promise.resolve({ data: mockedSignUpUserResponse }))
 
       const expectedActions = [
-        sessionActions.signUp(),
-        sessionActions.signUpSuccess({ token: mockedSignUpUserResponse.token }),
-        push(Urls.Notes)
+        expect.objectContaining({ type: signUpThunk.pending.type }),
+        push(Urls.Notes),
+        expect.objectContaining({
+          type: signUpThunk.fulfilled.type,
+          payload: mockedSignUpUserResponse
+        }),
       ]
       const store = mockStore({ ...new SessionState() })
 
       await store.dispatch(signUpThunk(signUpRequestData))
-      expect(store.getActions()).toEqual(expect.arrayContaining(expectedActions))
+      expect(store.getActions()).toEqual(expectedActions)
     })
 
     it('signUpThunk error', async () => {
       axios['mockImplementationOnce'](() => Promise.reject({}))
 
       const expectedActions = [
-        sessionActions.signUp(),
-        sessionActions.signUpError(),
-        notificationsActions.addErrorNotification('Unable to sign up. Please check your email and password and try again.')
+        expect.objectContaining({ type: signUpThunk.pending.type }),
+        notificationsActions.addErrorNotification('Unable to sign up. Please check your email and password and try again.'),
+        expect.objectContaining({ type: signUpThunk.rejected.type }),
       ]
       const store = mockStore({ ...new SessionState() })
 
@@ -144,15 +151,16 @@ describe('session thunks tests', () => {
     })
   })
 
-  it('logOutThunk', () => {
+  it('logOutThunk', async () => {
     const expectedActions = [
-      sessionActions.logOut(),
-      push(Urls.Login)
+      expect.objectContaining({ type: logOutThunk.pending.type }),
+      push(Urls.Login),
+      expect.objectContaining({ type: logOutThunk.fulfilled.type }),
     ]
     const store = mockStore({ todos: [] })
 
-    store.dispatch(logOutThunk())
+    await store.dispatch(logOutThunk())
     expect(localStorage.removeItem).toHaveBeenCalledWith('token')
-    expect(store.getActions()).toEqual(expect.arrayContaining(expectedActions))
+    expect(store.getActions()).toEqual(expectedActions)
   })
 })

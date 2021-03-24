@@ -5,10 +5,10 @@ import CloseIcon from '@material-ui/icons/CancelRounded'
 import Alert, { AlertProps } from '@material-ui/lab/Alert'
 
 import { NotificationTypes } from '../../consts'
-import { useNotificationData } from './Notifications.hooks'
+import { hasNotifications, useNotificationData } from './Notifications.hooks'
 import { useNotificationsStyles } from './Notifications.styles'
 
-const NOTIFICATION_DURATION = 8000
+const NOTIFICATION_DURATION = 6 * 1000
 
 const NotificationComponents = {
   [NotificationTypes.Error]: (props: AlertProps) => <Alert severity={NotificationTypes.Error} {...props}></Alert>
@@ -16,26 +16,27 @@ const NotificationComponents = {
 
 export const NotificationsComponent: React.FC = ({ children }) => {
   const classes = useNotificationsStyles()
-  const { notificationData, clearNotification, showNotification } = useNotificationData()
+  const { notificationData, removeCurrentNotification, showNotification } = useNotificationData()
 
-  const NotificationComponent = notificationData.type
+  const NotificationComponent = notificationData?.type
     ? NotificationComponents[notificationData.type]
     : () => <></>
 
   return (
     <>
       {
-        showNotification && <Snackbar
+        hasNotifications(showNotification, notificationData) && <Snackbar
           open={showNotification}
-          onClose={clearNotification}
+          onClose={removeCurrentNotification}
           autoHideDuration={NOTIFICATION_DURATION}
+          ClickAwayListenerProps={{ onClickAway: () => {} }}
           anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
         >
           <NotificationComponent
             variant='standard'
             className={classes.notification}
             action={
-              <IconButton className={classes.closeButton} onClick={clearNotification}>
+              <IconButton className={classes.closeButton} onClick={removeCurrentNotification}>
                 <CloseIcon fontSize='small' color='error'/>
               </IconButton>
             }

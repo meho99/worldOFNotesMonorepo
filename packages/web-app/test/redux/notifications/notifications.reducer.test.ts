@@ -1,40 +1,25 @@
-import { PayloadAction } from '@reduxjs/toolkit'
-import { NotificationData } from '../../../src/redux/notifications/notifications.types'
 import { NotificationTypes } from '../../../src/consts'
-import { notificationsActions, notificationsReducer, NotificationsState } from '../../../src/redux/notifications/notifications.reducer'
-
-const checkReducerState = <Payload = void>(initialState: NotificationsState, expectedState: NotificationsState, action: PayloadAction<Payload>) => {
-  expect(
-    notificationsReducer(initialState, action)
-  ).toEqual(expectedState)
-}
+import { NotificationData } from '../../../src/redux/notifications/notifications.types'
+import { sortNotifications } from '../../../src/redux/notifications/notifications.reducer'
 
 describe('notificationsReducer test', () => {
-  const testNotificationsData: Required<NotificationData> = {
-    message: 'wiadomosc',
-    type: NotificationTypes.Error,
-  }
+  it('properly sorts notifications', () => {
+    const testNotificationsList: NotificationData[] = [
+      { id: '1', type: NotificationTypes.Success, createdAt: new Date('04/02/2020') },
+      { id: '2', type: NotificationTypes.Error, createdAt: new Date('02/02/2020') },
+      { id: '3', type: NotificationTypes.Success, createdAt: new Date('02/02/2020') },
+      { id: '4', type: NotificationTypes.Error, createdAt: new Date('03/02/2020') }
+    ]
 
-  it('addErrorNotification test', () => {
-    const initialState: NotificationsState = {
-      ...new NotificationsState()
-    }
-    const expectedState: NotificationsState = {
-      ...new NotificationsState(),
-      notificationData: testNotificationsData
-    }
-    checkReducerState(initialState, expectedState, notificationsActions.addErrorNotification(testNotificationsData.message))
-  })
+    const expectedSortedList = [
+      testNotificationsList[3],
+      testNotificationsList[1],
+      testNotificationsList[0],
+      testNotificationsList[2]
+    ]
+    
+    testNotificationsList.sort(sortNotifications)
 
-  it('clearNotification test', () => {
-    const initialState: NotificationsState = {
-      ...new NotificationsState(),
-      notificationData: testNotificationsData
-    }
-    const expectedState: NotificationsState = {
-      ...new NotificationsState(),
-      notificationData: {}
-    }
-    checkReducerState(initialState, expectedState, notificationsActions.clearNotification())
+    expect(testNotificationsList).toEqual(expectedSortedList)
   })
 })
