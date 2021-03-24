@@ -9,7 +9,7 @@ import { SingUpResponse } from '@won/core/src'
 import { FaunaQuery } from '../types'
 import { faunaDBClient } from '../helpers/fauna'
 import { createToken } from '../helpers/authentication'
-import { createErrorResponse, createSuccessResponse } from '../helpers/responses'
+import { createErrorResponse, createInternalErrorResponse, createSuccessResponse } from '../helpers/responses'
 
 const {
   Get,
@@ -70,6 +70,6 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
       return createSuccessResponse(response)
     }
   } catch (e) {
-    return createErrorResponse(e)
+    return createInternalErrorResponse(e)
   }
 }

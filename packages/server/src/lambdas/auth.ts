@@ -9,7 +9,7 @@ import { AuthResponse, UserModel } from '@won/core'
 import { findEnv } from '../helpers/findEnv'
 import { faunaDBClient } from '../helpers/fauna'
 import { authMiddleware } from '../middlewares/auth'
-import { createErrorResponse, createSuccessResponse } from '../helpers/responses'
+import { createInternalErrorResponse, createSuccessResponse } from '../helpers/responses'
 import { FaunaQuery } from '../types'
 
 dotenv.config({ path: findEnv() })
@@ -42,7 +42,7 @@ const authHandler = async (event: APIGatewayEvent, context: Context) => {
       return createSuccessResponse(response)
     }
   } catch (e) {
-    return createErrorResponse(e)
+    return createInternalErrorResponse(e)
   }
 }
 
