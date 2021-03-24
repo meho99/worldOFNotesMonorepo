@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { push } from 'connected-react-router'
 
-import { LoginRequest } from '@won/core'
-import { FetchingErrors, Urls } from '../../consts'
+import { LoginRequest, SignUpRequest } from '@won/core'
+import { Urls, FetchingErrors } from '../../consts'
 import { ReducerNames } from '../../consts'
 import { authenticateUser } from '../../api/auth'
 import { loginUser } from '../../api/login'
@@ -52,21 +52,20 @@ export const loginThunk = createAsyncThunk<void, LoginRequest>(
   }
 )
 
-export const signUpThunk = createAsyncThunk<void, LoginRequest>(
+export const signUpThunk = createAsyncThunk<void, SignUpRequest>(
   `${ReducerNames.Session}/signUpUser`,
   async (signUpData, { dispatch }) => {
     try {
       dispatch(sessionActions.signUp())
 
-      const loginResponse = await signUpUser(signUpData)
-
+      const signUpResponse = await signUpUser(signUpData)
       dispatch(sessionActions.signUpSuccess({
-        token: loginResponse.token
+        token: signUpResponse.token
       }))
 
       dispatch(push(Urls.Notes))
     } catch (e) {
-      dispatch(sessionActions.loginError())
+      dispatch(sessionActions.signUpError())
       errorThunk({e, dispatch, defaultMessage: FetchingErrors.SingUpError })
     }
   }
