@@ -9,7 +9,7 @@ export const hasNotifications = (show: boolean, notification?: NotificationData)
 export const useNotificationData = () => {
   const dispatch = useDispatch()
   const notificationData = useSelector(getNotificationSelector)
-  const showNotification = !!useSelector(notificationAdapterSelectors.selectTotal)
+  const showNotification = useSelector(notificationAdapterSelectors.selectTotal) > 0
 
   const removeCurrentNotification = useCallback(() => {
     if (hasNotifications(showNotification, notificationData)) {
