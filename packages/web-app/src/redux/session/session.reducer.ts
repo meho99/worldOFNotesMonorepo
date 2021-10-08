@@ -1,7 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 import { UserModel } from '@won/core'
 import { ThemeTypes, ReducerNames, FiniteStates } from '../../consts'
+import { authenticateThunk, loginThunk, logOutThunk, signUpThunk } from './session.thunks'
 
 export class SessionState {
   token: string | null = localStorage.getItem('token');
@@ -18,44 +19,6 @@ const sessionSlice = createSlice({
   name: ReducerNames.Session,
   initialState,
   reducers: {
-    authenticate: (state) => {
-      state.authenticatingStatus = FiniteStates.Loading
-    },
-    authenticateError: (state) => {
-      localStorage.removeItem('token')
-      state.authenticatingStatus = FiniteStates.Failure
-      state.token = initialState.token
-      state.user = initialState.user
-    },
-    authenticateSuccess: (state, { payload }: PayloadAction<{ token: string; userData: UserModel }>) => {
-      const { token, userData } = payload
-      state.user = userData
-      state.token = token
-      state.authenticatingStatus = FiniteStates.Success
-    },
-    login: (state) => {
-      state.loginStatus = FiniteStates.Loading
-    },
-    loginError: (state) => {
-      state.loginStatus = FiniteStates.Failure
-    },
-    loginSuccess: (state, { payload: { token } }: PayloadAction<{ token: string }>) => {
-      localStorage.setItem('token', token)
-      state.token = token
-      state.loginStatus = FiniteStates.Success
-    },
-
-    signUp: (state) => {
-      state.signUpStatus = FiniteStates.Loading
-    },
-    signUpError: (state) => {
-      state.signUpStatus = FiniteStates.Failure
-    },
-    signUpSuccess: (state, { payload: { token } }: PayloadAction<{ token: string }>) => {
-      localStorage.setItem('token', token)
-      state.token = token
-      state.signUpStatus = FiniteStates.Success
-    },
     changeThemeType: (state) => {
       const newThemeVariant = state.theme === ThemeTypes.Light
         ? ThemeTypes.Dark
@@ -63,14 +26,72 @@ const sessionSlice = createSlice({
 
       localStorage.setItem('themeVariant', newThemeVariant)
       state.theme = newThemeVariant
-    },
-    logOut: (state) => {
+    }
+  },
+  extraReducers: builder => {
+    // -- LOGIN --
+
+    builder.addCase(loginThunk.pending, state => {
+      state.loginStatus = FiniteStates.Loading
+    })
+
+    builder.addCase(loginThunk.rejected, state => {
+      state.loginStatus = FiniteStates.Failure
+    })
+
+    builder.addCase(loginThunk.fulfilled, (state, { payload }) => {
+      const { token } = payload
+
+      localStorage.setItem('token', token)
+      state.token = token
+      state.loginStatus = FiniteStates.Success
+    })
+
+    // -- SIGNUP --
+
+    builder.addCase(signUpThunk.pending, state => {
+      state.signUpStatus = FiniteStates.Loading
+    })
+
+    builder.addCase(signUpThunk.rejected, state => {
+      state.signUpStatus = FiniteStates.Failure
+    })
+
+    builder.addCase(signUpThunk.fulfilled, (state, { payload }) => {
+      const { token } = payload
+
+      localStorage.setItem('token', token)
+      state.token = token
+      state.signUpStatus = FiniteStates.Success
+    })
+
+    // -- AUTHENTICATE --
+
+    builder.addCase(authenticateThunk.pending, state => {
+      state.authenticatingStatus = FiniteStates.Loading
+    })
+
+    builder.addCase(authenticateThunk.rejected, state => {
+      state.authenticatingStatus = FiniteStates.Failure
+    })
+
+    builder.addCase(authenticateThunk.fulfilled, (state, { payload }) => {
+      const { token, userData } = payload
+
+      state.user = userData
+      state.token = token
+      state.authenticatingStatus = FiniteStates.Success
+    })
+
+    // -- LOGOUT --
+
+    builder.addCase(logOutThunk.fulfilled, state => {
       state.token = null
       state.signUpStatus = FiniteStates.Idle
       state.loginStatus = FiniteStates.Idle
       state.authenticatingStatus = FiniteStates.Idle
       state.user = {}
-    }
+    })
   }
 })
 
