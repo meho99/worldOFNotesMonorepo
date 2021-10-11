@@ -10,8 +10,8 @@ export const LinkComponent: React.FC<LinkComponentProps> = ({ children, to }) =>
   const classes = useStyles()
 
   return (
-    <Link to={to}>
-      <Typography className={classes.link} color='textPrimary'> {children} </Typography>
+    <Link to={to} className={classes.link}>
+      <Typography color='textPrimary'> {children} </Typography>
     </Link>
   )
 }

@@ -47,6 +47,7 @@
     ],
     "rules": {
       "no-unused-vars": 1,
+      "semi": ["warn", "never"],
       "quotes": [
         2,
         "single",
