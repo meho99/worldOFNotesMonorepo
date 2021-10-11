@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom'
 
 import { Urls } from '../consts'
 import { authenticateThunk } from '../redux/session/session.thunks'
-import { NotesComponent } from './notes/NotesComponent'
+import { NotesComponent } from './notes/Notes.component'
 
 export const AuthenticatedPages: React.FC = () => {
   const dispatch = useDispatch()

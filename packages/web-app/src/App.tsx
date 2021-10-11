@@ -3,10 +3,10 @@ import { Switch, Route } from 'react-router-dom'
 
 import { Urls } from './consts'
 import { HeaderComponent } from './layout/header/HeaderComponent'
-import { LoginComponent } from './pages/login/LoginComponent'
+import { LoginComponent } from './pages/login/Login.component'
 import { AuthenticatedPages } from './pages/AuthenticatedPages'
 import { useStyles } from './layout/BackgroundBody.style'
-import { SignUpComponent } from './pages/signUp/SignUpComponent'
+import { SignUpComponent } from './pages/signUp/SignUp.component'
 import { NotificationsComponent } from './components/notifications/Notifications.component'
 
 export const App = () => {

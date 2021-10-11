@@ -3,18 +3,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import MailIcon from '@material-ui/icons/Mail'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import LockIcon from '@material-ui/icons/Lock'
 import Typography from '@material-ui/core/Typography/Typography'
 
-import { TextInput } from '../../components/textInput/TextInput'
+import { TextInput } from '../../components/textInput/TextInput.component'
 import { loginFields, LoginValues } from './Login.fields'
 import { useStyles } from './Login.styles'
-import { CenteredContainer } from '../../components/centeredContainer/CenteredContainer'
+import { CenteredContainer } from '../../components/centeredContainer/CenteredContainer.component'
 import { Urls } from '../../consts'
-import { LinkComponent } from '../../components/link/LinkComponent'
-import { SubmitButton } from '../../components/submitButton/SubmitButton'
+import { LinkComponent } from '../../components/link/Link.component'
+import { SubmitButton } from '../../components/submitButton/SubmitButton.component'
 import { loginThunk } from '../../redux/session/session.thunks'
 import { isLoginLoadingSelector } from '../../redux/session/session.selectors'
+import { PasswordField } from '../../components/passwordInput/PasswordInput.component'
 
 export const LoginComponent = () => {
   const classes = useStyles()
@@ -22,10 +22,11 @@ export const LoginComponent = () => {
 
   const isLoading = useSelector(isLoginLoadingSelector)
 
-  const { register, handleSubmit, errors } = useForm<LoginValues>();
+  const { register, handleSubmit, errors } = useForm<LoginValues>()
+
   const onSubmit = (values: LoginValues) => {
     dispatch(loginThunk(values))
-  };
+  }
 
   return (
     <CenteredContainer>
@@ -40,21 +41,14 @@ export const LoginComponent = () => {
               <InputAdornment position='start'>
                 <MailIcon color='primary' />
               </InputAdornment>
-            ),
+            )
           }}
         />
 
-        <TextInput
+        <PasswordField
           {...loginFields.password.fieldProps}
           errors={errors}
           inputRef={register(loginFields.password.validation)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position='start'>
-                <LockIcon color='primary' />
-              </InputAdornment>
-            ),
-          }}
         />
 
         <SubmitButton isLoading={isLoading}>

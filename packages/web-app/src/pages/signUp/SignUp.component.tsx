@@ -3,19 +3,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import MailIcon from '@material-ui/icons/Mail'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import LockIcon from '@material-ui/icons/Lock'
 import Typography from '@material-ui/core/Typography/Typography'
 import AccountBoxIcon from '@material-ui/icons/AccountBox'
 
-import { TextInput } from '../../components/textInput/TextInput'
+import { TextInput } from '../../components/textInput/TextInput.component'
 import { signUpFields, SignUpValues } from './SignUp.fields'
 import { useStyles } from './SignUp.styles'
-import { CenteredContainer } from '../../components/centeredContainer/CenteredContainer'
+import { CenteredContainer } from '../../components/centeredContainer/CenteredContainer.component'
 import { Urls } from '../../consts'
-import { LinkComponent } from '../../components/link/LinkComponent'
-import { SubmitButton } from '../../components/submitButton/SubmitButton'
+import { LinkComponent } from '../../components/link/Link.component'
+import { SubmitButton } from '../../components/submitButton/SubmitButton.component'
 import { signUpThunk } from '../../redux/session/session.thunks'
 import { isSignUpLoadingSelector } from '../../redux/session/session.selectors'
+import { PasswordField } from '../../components/passwordInput/PasswordInput.component'
 
 export const SignUpComponent = () => {
   const classes = useStyles()
@@ -24,6 +24,7 @@ export const SignUpComponent = () => {
   const isLoading = useSelector(isSignUpLoadingSelector)
 
   const { register, handleSubmit, errors } = useForm<SignUpValues>()
+
   const onSubmit = (values: SignUpValues) => {
     dispatch(signUpThunk(values))
   }
@@ -57,21 +58,14 @@ export const SignUpComponent = () => {
               <InputAdornment position='start'>
                 <MailIcon color='primary' />
               </InputAdornment>
-            ),
+            )
           }}
         />
 
-        <TextInput
+        <PasswordField
           {...signUpFields.password.fieldProps}
           errors={errors}
           inputRef={register(signUpFields.password.validation)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position='start'>
-                <LockIcon color='primary' />
-              </InputAdornment>
-            ),
-          }}
         />
 
         <SubmitButton isLoading={isLoading}>

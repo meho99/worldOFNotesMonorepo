@@ -5,21 +5,22 @@ import Typography from '@material-ui/core/Typography'
 import { TextInputProps } from './TextInput.types'
 import { useStyles } from './TextInput.styles'
 
-export const TextInput: React.FC<TextInputProps> = ({ errors, name, ...props }) => {
+export const TextInput: React.FC<TextInputProps> = ({ errors, name = '', ...props }) => {
   const classes = useStyles()
-  const fieldName = name as string
-  const hasError = Boolean(errors?.[fieldName])
+  const hasError = Boolean(errors?.[name])
 
   return (
     <>
       <TextField
+        className={classes.input}
+
         variant='outlined'
         error={hasError}
-        name={fieldName}
+        name={name}
         {...props}
       />
       <Typography variant='body2' color='error' className={classes.inputError}>
-        {hasError && errors?.[fieldName].message}
+        {hasError && errors?.[name].message}
       </Typography>
     </>
   )
