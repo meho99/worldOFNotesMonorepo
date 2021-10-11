@@ -4,3 +4,4 @@
 /.env
 # Local Netlify folder
 .netlify
+lerna-debug.log
