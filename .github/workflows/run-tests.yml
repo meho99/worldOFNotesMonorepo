@@ -16,5 +16,7 @@ jobs:
       - run: npm install -g fauna-shell
       # setup local fauna database
       - run: npm run fauna-dev
+      # Set needed envs
+      - run: export $(grep -v '^#' .env.test | xargs)
       # run tests
       - run: lerna run test
