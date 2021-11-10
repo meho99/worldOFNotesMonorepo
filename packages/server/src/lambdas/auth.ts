@@ -7,7 +7,7 @@ import { APIGatewayEvent, Context } from 'aws-lambda'
 
 import { AuthResponse, UserModel } from '@won/core'
 import { findEnv } from '../helpers/findEnv'
-import { faunaDBClient } from '../helpers/fauna'
+import { getFaunaDBClient } from '../helpers/fauna'
 import { authMiddleware } from '../middlewares/auth'
 import { createInternalErrorResponse, createSuccessResponse } from '../helpers/responses'
 import { FaunaQuery } from '../types'
@@ -25,6 +25,8 @@ const authHandler = async (event: APIGatewayEvent, context: Context) => {
   try {
     if (httpMethod === 'GET') {
       const userId: number = event['user']?.id
+
+      const faunaDBClient = getFaunaDBClient();
 
       const { data, ref } = await faunaDBClient.query<FaunaQuery<UserModel>> (
         Get(

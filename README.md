@@ -7,7 +7,7 @@
 
 - ## install:
 
-    - node and npm
+    - node, npm and docker
     - lerna: `npm i -D lerna`
     - netlify: `npm install netlify-cli -g`
     - fauna-shell: `npm install -g fauna-shell`

@@ -16,4 +16,6 @@ const prodConfig: ClientConfig = {
   secret: process.env.FAUNA_KEY
 }
 
-export const faunaDBClient = new faunadb.Client(process.env.DB == "cloud" ? prodConfig : localConfig)
+export const faunaDBConfig = process.env.DB == "cloud" ? prodConfig : localConfig
+
+export const getFaunaDBClient = () => new faunadb.Client(faunaDBConfig)

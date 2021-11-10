@@ -6,7 +6,7 @@ import { APIGatewayEvent, Context } from 'aws-lambda'
 import { LoginRequest, UserModel, LoginResponse } from '@won/core'
 
 import { FaunaQuery } from '../types'
-import { faunaDBClient } from '../helpers/fauna'
+import { getFaunaDBClient } from '../helpers/fauna'
 import { createToken } from '../helpers/authentication'
 import { createInternalErrorResponse, createSuccessResponse } from '../helpers/responses'
 
@@ -23,6 +23,8 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
   try {
     if (httpMethod === 'POST') {
       const { email, password }: LoginRequest = JSON.parse(body) || {}
+
+      const faunaDBClient = getFaunaDBClient();
 
       const { instance } = await faunaDBClient.query<{ instance: string }>(
         Login(

@@ -18,7 +18,7 @@ ENDPOINT_EXIST=$(fauna list-endpoints | grep ${ENDPOINT_NAME})
 
 if [ -z "$ENDPOINT_EXIST" ]
 then
-  echo n | fauna add-endpoint http://localhost:8443/ --alias ${ENDPOINT_NAME} --key ${KEY}
+  echo n | fauna add-endpoint http://localhost:${FAUNA_PORT}/ --alias ${ENDPOINT_NAME} --key ${KEY}
 else
   echo "endpoint ${ENDPOINT_NAME} already exist"
 fi
@@ -40,6 +40,7 @@ DOCKER_IP=$(echo $DOCKER_IP | sed -E -e 's/ |"|:|,|IPAddress//g')
 echo "Docker IP: ${DOCKER_IP}"
 
 echo "JWT_SECRET=test
+DB=local
 FAUNADB_SCHEME=http
 FAUNA_ADMIN_KEY=${SECRET}
 FAUNADB_PORT=${FAUNA_PORT}

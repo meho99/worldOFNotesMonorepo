@@ -7,7 +7,7 @@ import { SignUpRequest, UserModel } from '@won/core'
 import { SingUpResponse } from '@won/core/src'
 
 import { FaunaQuery } from '../types'
-import { faunaDBClient } from '../helpers/fauna'
+import { getFaunaDBClient } from '../helpers/fauna'
 import { createToken } from '../helpers/authentication'
 import { createErrorResponse, createInternalErrorResponse, createSuccessResponse } from '../helpers/responses'
 
@@ -31,6 +31,8 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
           message: 'please enter all fields'
         })
       }
+
+      const faunaDBClient = getFaunaDBClient();
 
       try {
         const user = await faunaDBClient.query<{ secret: string }>(

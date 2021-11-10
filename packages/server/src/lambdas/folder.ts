@@ -7,7 +7,7 @@ import { APIGatewayEvent, Context } from 'aws-lambda'
 
 import { FoldersData } from '../types'
 import { findEnv } from '../helpers/findEnv'
-import { faunaDBClient } from '../helpers/fauna'
+import { getFaunaDBClient } from '../helpers/fauna'
 import { authMiddleware } from '../middlewares/auth'
 import { createInternalErrorResponse, createSuccessResponse } from '../helpers/responses'
 
@@ -31,6 +31,9 @@ const foldersHandler = async (event: APIGatewayEvent, context: Context) => {
   try {
     if (httpMethod === 'GET') {
       const id = queryStringParameters.id
+
+      const faunaDBClient = getFaunaDBClient();
+
       const foldersData = await faunaDBClient.query<{ data: FoldersData[] }>(
         Map(
           Paginate(
