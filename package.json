@@ -4,7 +4,9 @@
   "scripts": {
     "install-all": "lerna link && lerna exec -- npm i && npm install",
     "build-types": "lerna run watch-types",
-    "start-web": "cd packages/web-app &&cross-env BROWSER=none npm start && lerna run watch-types"
+    "start-web": "cd packages/web-app &&cross-env BROWSER=none npm start && lerna run watch-types",
+    "fauna-dev": "./scripts/fauna-dev.sh ",
+    "init-db": "lerna exec npm run init-db --scope @won/server"
   },
   "workspaces": {
     "packages": [

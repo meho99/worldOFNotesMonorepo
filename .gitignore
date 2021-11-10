@@ -2,6 +2,7 @@
 
 /.faunarc
 /.env
+/.env.test
 # Local Netlify folder
 .netlify
 lerna-debug.log

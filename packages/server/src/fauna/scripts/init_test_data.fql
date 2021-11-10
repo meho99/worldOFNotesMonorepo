@@ -1,0 +1,12 @@
+Do(
+  Create(
+    Collection('Users'), {
+    credentials: { password: '123123123' },
+    data: { email: 'test@test.test', name: 'Test User' },
+  }),
+  Create(
+    Collection('Users'), {
+    credentials: { password: '123123123' },
+    data: { email: 'test@test.pies', name: 'Test Pies' },
+  })
+)

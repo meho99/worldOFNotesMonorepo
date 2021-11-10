@@ -4,32 +4,53 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "check-types": "tsc --noEmit",
+    "postinstall": "npm run build",
     "serve": "netlify-lambda serve ./src/lambdas",
     "build": "netlify-lambda build ./src/lambdas",
-    "postinstall": "npm run build",
-    "check-types": "tsc --noEmit"
+    "schema-migrate": "fauna-schema-migrate run",
+    "apply-migrations": "fauna-schema-migrate apply",
+    "fill-initial-data": "fauna eval notes --file src/fauna/scripts/init_test_data.fql",
+    "init-db": "npm run apply-migrations && npm run fill-initial-data"
   },
   "author": "",
   "license": "ISC",
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "moduleDirectories": [
+      "src",
+      "node_modules"
+    ],
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$"
+  },
   "devDependencies": {
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
     "@types/aws-lambda": "^8.10.64",
+    "@types/jest": "^27.0.2",
     "@types/jsonwebtoken": "^8.5.0",
+    "@types/lambda-tester": "^3.6.1",
     "@types/node": "^14.14.8",
     "babel-loader": "^8.0.4",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.23.0",
+    "jest": "^27.2.5",
+    "lambda-tester": "^4.0.1",
     "typescript": "^4.0.5"
   },
   "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.15.8",
+    "@fauna-labs/fauna-schema-migrate": "^2.1.5",
     "@won/core": "file:../core",
     "dotenv": "^8.2.0",
-    "faunadb": "^4.0.0",
+    "faunadb": "^4.4.1",
     "find-up": "^5.0.0",
     "jsonwebtoken": "^8.5.1",
     "middy": "^0.36.0",
-    "netlify-lambda": "^1.0.2"
+    "netlify-lambda": "^2.0.15"
   }
 }
