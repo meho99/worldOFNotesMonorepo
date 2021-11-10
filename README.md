@@ -1,7 +1,6 @@
 # World Of Notes monorepo
 
 ## **1. To run and use this project you must:**
-
 - ## add files:
     - `.fauncarc` file in main directory that contains: `FAUNA_KEY=YOUR_FAUNA_KEY`
 
@@ -11,6 +10,7 @@
     - lerna: `npm i -D lerna`
     - netlify: `npm install netlify-cli -g`
     - fauna-shell: `npm install -g fauna-shell`
+    - project-dependencies: `npm run install-all`
 
 - ## connect with fauna database
     - in case of connection with cloud fauna db

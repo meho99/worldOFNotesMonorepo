@@ -7,7 +7,6 @@
     "url": "git+https://github.com/meho99/worldOFNotesMonorepo.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1",
     "build": "tsc",
     "watch-types": "tsc --w",
     "check-types": "tsc --noEmit",

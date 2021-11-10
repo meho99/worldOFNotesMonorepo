@@ -8,8 +8,8 @@ docker pull fauna/faunadb
 docker container stop faunadb || true && docker container rm faunadb || true
 CID=$(docker run --name faunadb -d \
   --health-cmd="faunadb-admin status" --health-interval=2s \
-  -p 8443:8443 \
-  -p 8084:8084 \
+  -p ${FAUNA_PORT}:8443 \
+  -p 6379:8084 \
   fauna/faunadb)
 
 ./scripts/wait-for-healthy.sh faunadb 30
