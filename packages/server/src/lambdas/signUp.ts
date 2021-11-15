@@ -24,7 +24,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
 
   try {
     if (httpMethod === 'POST') {
-      const { email, password, name }: SignUpRequest = JSON.parse(body) || {}
+      const { email, password, name }: SignUpRequest = JSON.parse(body || '{}')
 
       if (!email || !password || !name) {
         return createErrorResponse({

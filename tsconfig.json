@@ -8,6 +8,7 @@
     "experimentalDecorators": true,
     "noImplicitAny": false,
     "jsx": "react",
+    "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },

@@ -19,7 +19,7 @@ export const authMiddleware = (): MiddlewareObject<APIGatewayEvent, any> => {
           callback(null, createUnauthorizedErrorResponse())
         }
 
-        let decoded: JwtContent = jwt.verify(jwtToken, process.env.JWT_SECRET) as JwtContent
+        let decoded: JwtContent = jwt.verify(jwtToken, process.env.JWT_SECRET as string) as JwtContent
 
         event['user'] = decoded
 
