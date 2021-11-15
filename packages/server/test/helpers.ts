@@ -83,7 +83,7 @@ const runMigrations = async () => {
       { env: process.env },
       (error, stdout, stderr) => {
         if (error || stderr) {
-          reject()
+          reject(`migrations error: ${stderr}`)
           return;
         }
         resolve()
@@ -92,11 +92,17 @@ const runMigrations = async () => {
 }
 
 export const setupTestDatabase = async () => {
-  await removeIfExist()
-
-  const childDatabase = createChildDatabase()
-
-  await runMigrations()
-
-  return childDatabase
+  try {
+    await removeIfExist()
+  
+    const childDatabase = await createChildDatabase()
+  
+    await runMigrations()
+  
+  
+    return childDatabase
+  } catch(e) {
+    console.error('Error in database setup:')
+    console.error(e)
+  }
 }

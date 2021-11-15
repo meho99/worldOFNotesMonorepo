@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "test": "jest",
+    "test": "jest --runInBand",
     "check-types": "tsc --noEmit",
     "postinstall": "npm run build",
     "serve": "netlify-lambda serve ./src/lambdas",
@@ -25,7 +25,8 @@
       "src",
       "node_modules"
     ],
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$"
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+    "testTimeout": 15000
   },
   "devDependencies": {
     "@babel/polyfill": "^7.12.1",
