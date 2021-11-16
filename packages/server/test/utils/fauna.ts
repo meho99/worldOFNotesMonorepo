@@ -1,6 +1,6 @@
 import { exec } from 'child_process'
 import { query, Client } from "faunadb"
-import { faunaDBConfig } from '../src/helpers/fauna'
+import { faunaDBConfig } from '../../src/helpers/fauna'
 
 const {
   Do,

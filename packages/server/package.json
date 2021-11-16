@@ -46,6 +46,7 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.15.8",
     "@fauna-labs/fauna-schema-migrate": "^2.1.5",
+    "@middy/http-json-body-parser": "^2.5.3",
     "@won/core": "file:../core",
     "dotenv": "^8.2.0",
     "faunadb": "^4.4.1",

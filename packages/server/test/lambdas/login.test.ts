@@ -1,14 +1,15 @@
 import faunadb from 'faunadb'
+import jwt from 'jsonwebtoken'
 import lambdaTester from 'lambda-tester'
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import { LoginRequest, LoginResponse, UserModel } from '@won/core'
 
-import { FaunaQuery } from '../../src/types'
+import { FaunaQuery, JwtContent } from '../../src/types'
 import { handler } from "../../src/lambdas/login"
 import * as helpers from '../../src/helpers/fauna'
 import { LambdaResponse } from '../../src/helpers/responses'
 
-import { setupTestDatabase } from '../helpers'
+import { setupTestDatabase } from '../utils/fauna'
 
 jest.mock('../../src/helpers/fauna', () => {
   const helpers = jest.requireActual('../../src/helpers/fauna')
@@ -22,7 +23,8 @@ jest.mock('../../src/helpers/fauna', () => {
 let dbClient: faunadb.Client
 
 beforeEach(async () => {
-  dbClient = await setupTestDatabase();
+  const client = await setupTestDatabase();
+  if (client) dbClient = client;
 
   (helpers.getFaunaDBClient as jest.Mock).mockImplementationOnce(() => dbClient)
 })
@@ -38,15 +40,11 @@ describe("login", () => {
         email: 'test@test',
         password: '321536dfh'
       }
-
-      const request: Partial<APIGatewayProxyEvent> = {
-        httpMethod: "POST",
-        body: JSON.stringify(requestData)
-      }
+      const request = createRequest(requestData)
 
       await lambdaTester(handler)
         .event(request as APIGatewayProxyEvent)
-        .expectResolve((result: LambdaResponse) => {
+        .expectResult((result: LambdaResponse) => {
           const responseBody = JSON.parse(result.body)
 
           expect(result.statusCode).toBe(500)
@@ -81,15 +79,11 @@ describe("login", () => {
       // -- login --
 
       const requestData: LoginRequest = { email, password }
-
-      const request: Partial<APIGatewayProxyEvent> = {
-        httpMethod: "POST",
-        body: JSON.stringify(requestData)
-      }
+      const request = createRequest(requestData)
 
       await lambdaTester(handler)
         .event(request as APIGatewayProxyEvent)
-        .expectResolve((result: LambdaResponse) => {
+        .expectResult((result: LambdaResponse) => {
           const responseBody = JSON.parse(result.body) as LoginResponse
 
           expect(result.statusCode).toBe(200)
@@ -97,6 +91,10 @@ describe("login", () => {
           expect(responseBody.name).toBe(name)
           expect(responseBody.token.length).toBeGreaterThan(0)
           expect(responseBody.id).toBeDefined()
+
+          let decoded: JwtContent = jwt.verify(responseBody.token, process.env.JWT_SECRET as string) as JwtContent
+
+          expect(decoded.id).toBeDefined()
         })
     })
   })

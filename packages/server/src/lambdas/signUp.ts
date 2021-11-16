@@ -1,7 +1,9 @@
 require('@babel/polyfill')
 
 import faunadb from 'faunadb'
+import middy from 'middy'
 import { APIGatewayEvent, Context } from 'aws-lambda'
+import jsonBodyParser from '@middy/http-json-body-parser'
 
 import { SignUpRequest, UserModel } from '@won/core'
 import { SingUpResponse } from '@won/core/src'
@@ -19,12 +21,13 @@ const {
   Collection
 } = faunadb.query
 
-export const handler = async (event: APIGatewayEvent, context: Context) => {
+const signUphandler = async (event: APIGatewayEvent, context: Context) => {
   const { body, httpMethod } = event
 
   try {
     if (httpMethod === 'POST') {
-      const { email, password, name }: SignUpRequest = JSON.parse(body || '{}')
+      // at this point body will have a proper type due to validation in middleware
+      const { email, password, name } = body as unknown as SignUpRequest
 
       if (!email || !password || !name) {
         return createErrorResponse({
@@ -75,3 +78,6 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
     return createInternalErrorResponse(e)
   }
 }
+
+export const handler = middy(signUphandler)
+  .use(jsonBodyParser())
