@@ -2,12 +2,14 @@ require('@babel/polyfill')
 
 import faunadb from 'faunadb'
 import middy from 'middy'
+import { JSONSchemaType } from 'ajv'
 import { APIGatewayEvent, Context } from 'aws-lambda'
+import validator from '@middy/validator'
 import jsonBodyParser from '@middy/http-json-body-parser'
 
 import { LoginRequest, UserModel, LoginResponse } from '@won/core'
 
-import { FaunaQuery } from '../types'
+import { FaunaQuery, RequestData } from '../types'
 import { getFaunaDBClient } from '../helpers/fauna'
 import { createToken } from '../helpers/authentication'
 import { createInternalErrorResponse, createSuccessResponse } from '../helpers/responses'
@@ -56,5 +58,21 @@ const loginHandler = async (event: APIGatewayEvent, context: Context) => {
   }
 }
 
+const inputSchema: JSONSchemaType<RequestData<LoginRequest>> = {
+  type: 'object',
+  required: ['body'],
+  properties: {
+    body: {
+      type: 'object',
+      properties: {
+        email: { type: 'string', format: 'email' },
+        password: { type: 'string' }
+      },
+      required: ['email', 'password']
+    }
+  }
+}
+
 export const handler = middy(loginHandler)
   .use(jsonBodyParser())
+  .use(validator({ inputSchema }))

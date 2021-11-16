@@ -44,9 +44,11 @@
     "typescript": "^4.4.4"
   },
   "dependencies": {
+    "ajv": "^8.8.0",
     "@babel/plugin-transform-runtime": "^7.15.8",
     "@fauna-labs/fauna-schema-migrate": "^2.1.5",
     "@middy/http-json-body-parser": "^2.5.3",
+    "@middy/validator": "^2.5.3",
     "@won/core": "file:../core",
     "dotenv": "^8.2.0",
     "faunadb": "^4.4.1",

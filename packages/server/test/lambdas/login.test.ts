@@ -10,6 +10,7 @@ import * as helpers from '../../src/helpers/fauna'
 import { LambdaResponse } from '../../src/helpers/responses'
 
 import { setupTestDatabase } from '../utils/fauna'
+import { createRequest } from '../utils/helpers'
 
 jest.mock('../../src/helpers/fauna', () => {
   const helpers = jest.requireActual('../../src/helpers/fauna')
@@ -37,7 +38,7 @@ describe("login", () => {
   describe("should fail", () => {
     it("when user data is not valid", async () => {
       const requestData: LoginRequest = {
-        email: 'test@test',
+        email: 'test@test.te',
         password: '321536dfh'
       }
       const request = createRequest(requestData)
@@ -49,6 +50,50 @@ describe("login", () => {
 
           expect(result.statusCode).toBe(500)
           expect(responseBody.message).toBe("authentication failed")
+        })
+    })
+
+    it("when email is missing", async () => {
+      const requestData: LoginRequest = {
+        password: '321536dfh'
+      } as LoginRequest
+      const request = createRequest(requestData)
+
+      await lambdaTester(handler)
+        .event(request as APIGatewayProxyEvent)
+        .expectError((e) => {
+          expect(e.message).toBe("Event object failed validation")
+          expect(e.details[0].message).toBe("must have required property email")
+        })
+    })
+
+    it("when email is invalid", async () => {
+      const requestData: LoginRequest = {
+        password: '321536dfh',
+        email: 'testWrongFormat'
+      }
+      const request = createRequest(requestData)
+
+      await lambdaTester(handler)
+        .event(request as APIGatewayProxyEvent)
+        .expectError((e) => {
+          expect(e.message).toBe("Event object failed validation")
+          expect(e.details[0].message).toBe(`must match format "email"`)
+        })
+    })
+
+    it("when password is missing", async () => {
+      const requestData: LoginRequest = {
+        email: 'w@w.w'
+      } as LoginRequest
+
+      const request = createRequest(requestData)
+
+      await lambdaTester(handler)
+        .event(request as APIGatewayProxyEvent)
+        .expectError((e) => {
+          expect(e.message).toBe("Event object failed validation")
+          expect(e.details[0].message).toBe("must have required property password")
         })
     })
   })
