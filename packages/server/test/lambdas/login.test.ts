@@ -61,9 +61,12 @@ describe("login", () => {
 
       await lambdaTester(handler)
         .event(request as APIGatewayProxyEvent)
-        .expectError((e) => {
-          expect(e.message).toBe("Event object failed validation")
-          expect(e.details[0].message).toBe("must have required property email")
+        .expectResult((result: LambdaResponse) => {
+          const responseBody = JSON.parse(result.body)
+        
+          expect(result.statusCode).toBe(400)
+          expect(responseBody.message).toBe("Event object failed validation")
+          expect(responseBody.details[0].message).toBe("must have required property email")
         })
     })
 
@@ -76,9 +79,12 @@ describe("login", () => {
 
       await lambdaTester(handler)
         .event(request as APIGatewayProxyEvent)
-        .expectError((e) => {
-          expect(e.message).toBe("Event object failed validation")
-          expect(e.details[0].message).toBe(`must match format "email"`)
+        .expectResult((result: LambdaResponse) => {
+          const responseBody = JSON.parse(result.body)
+        
+          expect(result.statusCode).toBe(400)
+          expect(responseBody.message).toBe("Event object failed validation")
+          expect(responseBody.details[0].message).toBe(`must match format "email"`)
         })
     })
 
@@ -91,9 +97,12 @@ describe("login", () => {
 
       await lambdaTester(handler)
         .event(request as APIGatewayProxyEvent)
-        .expectError((e) => {
-          expect(e.message).toBe("Event object failed validation")
-          expect(e.details[0].message).toBe("must have required property password")
+        .expectResult((result: LambdaResponse) => {
+          const responseBody = JSON.parse(result.body)
+        
+          expect(result.statusCode).toBe(400)
+          expect(responseBody.message).toBe("Event object failed validation")
+          expect(responseBody.details[0].message).toBe("must have required property password")
         })
     })
   })

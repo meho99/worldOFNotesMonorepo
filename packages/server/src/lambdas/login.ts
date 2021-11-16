@@ -12,7 +12,8 @@ import { LoginRequest, UserModel, LoginResponse } from '@won/core'
 import { FaunaQuery, RequestData } from '../types'
 import { getFaunaDBClient } from '../helpers/fauna'
 import { createToken } from '../helpers/authentication'
-import { createInternalErrorResponse, createSuccessResponse } from '../helpers/responses'
+import { createSuccessResponse } from '../helpers/responses'
+import { errorsMiddleware } from '../middlewares/errorsMiddleware'
 
 const {
   Get,
@@ -24,37 +25,33 @@ const {
 const loginHandler = async (event: APIGatewayEvent, context: Context) => {
   const { body, httpMethod } = event
 
-  try {
-    if (httpMethod === 'POST') {
-      // at this point body will have a proper type due to validation in middleware
-      const { email, password } = body as unknown as LoginRequest
+  if (httpMethod === 'POST') {
+    // at this point body will have a proper type due to validation in middleware
+    const { email, password } = body as unknown as LoginRequest
 
-      const faunaDBClient = getFaunaDBClient();
+    const faunaDBClient = getFaunaDBClient();
 
-      const { instance } = await faunaDBClient.query<{ instance: string }>(
-        Login(
-          Match(Index("user_by_email"), email),
-          { password },
-        )
+    const { instance } = await faunaDBClient.query<{ instance: string }>(
+      Login(
+        Match(Index("user_by_email"), email),
+        { password },
       )
+    )
 
-      const { data, ref } = await faunaDBClient.query<FaunaQuery<UserModel>>(
-        Get(instance)
-      )
+    const { data, ref } = await faunaDBClient.query<FaunaQuery<UserModel>>(
+      Get(instance)
+    )
 
-      const jwtToken = createToken(ref.id)
+    const jwtToken = createToken(ref.id)
 
-      const respose: LoginResponse = {
-        token: jwtToken,
-        id: ref.id,
-        name: data.name,
-        email: data.email
-      }
-
-      return createSuccessResponse(respose)
+    const respose: LoginResponse = {
+      token: jwtToken,
+      id: ref.id,
+      name: data.name,
+      email: data.email
     }
-  } catch (e) {
-    return createInternalErrorResponse(e)
+
+    return createSuccessResponse(respose)
   }
 }
 
@@ -76,3 +73,4 @@ const inputSchema: JSONSchemaType<RequestData<LoginRequest>> = {
 export const handler = middy(loginHandler)
   .use(jsonBodyParser())
   .use(validator({ inputSchema }))
+  .use(errorsMiddleware())

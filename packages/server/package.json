@@ -49,6 +49,7 @@
     "@fauna-labs/fauna-schema-migrate": "^2.1.5",
     "@middy/http-json-body-parser": "^2.5.3",
     "@middy/validator": "^2.5.3",
+    "@schibsted/middy-error-handler": "2.0.3",
     "@won/core": "file:../core",
     "dotenv": "^8.2.0",
     "faunadb": "^4.4.1",
