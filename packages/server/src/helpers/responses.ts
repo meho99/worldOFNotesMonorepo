@@ -2,6 +2,10 @@ export const headers = {
   'Access-Control-Allow-Origin': '*'
 }
 
+export type ErrorDetail = {
+  message: string
+}
+
 export type LambdaResponse = {
   statusCode: number;
   headers: { [name: string]: string };
@@ -14,13 +18,13 @@ export const createSuccessResponse = <ResponseData = Object>(body: ResponseData)
   body: JSON.stringify(body)
 })
 
-export const createErrorResponse = <ErrorDetail = Object>(errorDetail: ErrorDetail): LambdaResponse => ({
+export const createErrorResponse = <E = Object>(errorDetail: E): LambdaResponse => ({
   statusCode: 400,
   headers,
   body: JSON.stringify(errorDetail)
 })
 
-export const createInternalErrorResponse = <ErrorDetail = Object>(errorDetail: ErrorDetail): LambdaResponse => ({
+export const createInternalErrorResponse = <E = Object>(errorDetail: E): LambdaResponse => ({
   statusCode: 500,
   headers,
   body: JSON.stringify(errorDetail)

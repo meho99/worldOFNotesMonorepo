@@ -1,7 +1,7 @@
 import { emailField, passwordField, nameField } from '../../fields/commonFields'
 
 export type SignUpValues = {
-  userName: string;
+  name: string;
   email: string;
   password: string;
 }

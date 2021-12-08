@@ -2,10 +2,10 @@ export type UserModel = Record<'email' | 'name', string> & {
   id: number;
 }
 
-export type SignUpRequest = Partial<
+export type SignUpRequest =
   Pick<UserModel, 'email' | 'name'> & {
-  password: string;
-}>
+    password: string;
+  }
 
 export type LoginRequest = Pick<SignUpRequest, 'email' | 'password'>
 

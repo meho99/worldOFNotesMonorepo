@@ -8,7 +8,7 @@ dotenv.config({ path: findEnv() })
 export const createToken = (id: number) => {
   const jwtToken = jwt.sign(
     { id },
-    process.env.JWT_SECRET,
+    process.env.JWT_SECRET as string,
     { expiresIn: 3600 }
   )
 
