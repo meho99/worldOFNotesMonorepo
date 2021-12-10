@@ -12,7 +12,9 @@ describe('foldersReducer test', () => {
   const testFoldersData = [{
     description: 'opis',
     name: 'nazwa',
+    id: 123
   }]
+
   const testCurrentFolderId = 5
 
   it('setFolders test', () => {
