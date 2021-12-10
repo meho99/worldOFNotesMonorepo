@@ -1,7 +1,7 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 
-import { HeaderComponent } from '../../../src/layout/header/HeaderComponent'
+import { HeaderComponent } from '../../../src/layout/header/Header.component'
 import { FiniteStates } from '../../../src/consts'
 import { CreateProvider } from '../../../src/testUtils'
 
