@@ -1,17 +1,16 @@
 require('@babel/polyfill')
 
 import middy from 'middy'
-import dotenv from 'dotenv'
 import faunadb from 'faunadb'
 import { APIGatewayEvent, Context } from 'aws-lambda'
 
-import { FoldersData } from '../types'
-import { findEnv } from '../helpers/findEnv'
-import { getFaunaDBClient } from '../helpers/fauna'
-import { authMiddleware } from '../middlewares/auth'
-import { createInternalErrorResponse, createSuccessResponse } from '../helpers/responses'
+import { FolderModel, UserFoldersResponse } from '@won/core'
 
-dotenv.config({ path: findEnv() })
+import { errorsMiddleware, authMiddleware } from '../middlewares'
+import { FoldersData } from '../types'
+import { getFaunaDBClient } from '../helpers/fauna'
+import { isAuthenticated } from '../helpers/authentication'
+import { createSuccessResponse } from '../helpers/responses'
 
 const {
   Map,
@@ -20,39 +19,48 @@ const {
   Ref,
   Index,
   Match,
-  Select,
   Lambda,
   Paginate,
   Collection
 } = faunadb.query
 
 const foldersHandler = async (event: APIGatewayEvent, context: Context) => {
-  const { httpMethod, queryStringParameters } = event
-  try {
-    if (httpMethod === 'GET') {
-      const id = queryStringParameters?.id
+  if (!isAuthenticated(event)) return
 
-      const faunaDBClient = getFaunaDBClient();
+  const { httpMethod, user } = event
 
-      const foldersData = await faunaDBClient.query<{ data: FoldersData[] }>(
-        Map(
-          Paginate(
-            Match(
-              Index("folders_by_user"),
-              Ref(Collection("Users"), id)
-            )
-          ),
-          Lambda("ref", Select(["data"], Get(Var("ref"))))
-        )
+  if (httpMethod === 'GET') {
+    const faunaDBClient = getFaunaDBClient();
+
+    const { data: foldersData } = await faunaDBClient.query<{ data: FoldersData[] }>(
+      Map(
+        Paginate(
+          Match(
+            Index("folders_by_user"),
+            Ref(Collection("Users"), user.id)
+          )
+        ),
+        Lambda("ref", Get(Var("ref")))
       )
+    )
 
-      const parsedFoldersData = foldersData.data.map(({ user, ...rest }) => rest)
-      return createSuccessResponse(parsedFoldersData)
+    const parsedFoldersData: FolderModel[] = foldersData.map(({ ref, data }) => {
+      const { user, ...filteredData } = data
+
+      return {
+        id: ref.id,
+        ...filteredData
+      }
+    })
+
+    const response: UserFoldersResponse = {
+      folders: parsedFoldersData
     }
-  } catch (e) {
-    return createInternalErrorResponse(e)
+
+    return createSuccessResponse(response)
   }
 }
 
 export const handler = middy(foldersHandler)
   .use(authMiddleware())
+  .use(errorsMiddleware())
