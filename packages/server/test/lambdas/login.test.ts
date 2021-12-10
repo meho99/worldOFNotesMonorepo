@@ -27,7 +27,7 @@ beforeEach(async () => {
   const client = await setupTestDatabase();
   if (client) dbClient = client;
 
-  (helpers.getFaunaDBClient as jest.Mock).mockImplementationOnce(() => dbClient)
+  (helpers.getFaunaDBClient as jest.Mock).mockImplementation(() => dbClient)
 })
 
 afterAll(() => {

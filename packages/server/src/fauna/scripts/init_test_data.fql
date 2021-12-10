@@ -8,5 +8,26 @@ Do(
     Collection('Users'), {
     credentials: { password: '123123123' },
     data: { email: 'test@test.pies', name: 'Test Pies' },
-  })
+  }),
+  Let(
+    {
+      userRef: Select(
+        'ref',
+        Create(
+          Collection('Users'), {
+          credentials: { password: '123123123' },
+          data: { email: 'folderOwner@test.pies', name: 'Folder Owner' },
+        })
+      )
+    },
+    Create(
+      Collection('Folders'), {
+        data: {
+          name: 'Test folder',
+          description: 'Initial folder description',
+          user: Var("userRef")
+        }
+      }
+    )
+  )
 )

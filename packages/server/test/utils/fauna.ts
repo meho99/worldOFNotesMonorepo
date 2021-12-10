@@ -79,7 +79,7 @@ const createChildDatabase = async () => {
 const runMigrations = async () => {
   return new Promise<void>((resolve, reject) => {
     exec(
-      `npx fauna-schema-migrate -c ${CHILD_DB_NAME} apply`,
+      `npx fauna-schema-migrate -c ${CHILD_DB_NAME} apply 100`,
       { env: process.env },
       (error, stdout, stderr) => {
         if (error || stderr) {
