@@ -9,4 +9,5 @@ jobs:
         with:
           node-version: '14'
       - run: npm run install-all
+      - run: lerna run build --scope @won/core 
       - run: lerna run check-types
