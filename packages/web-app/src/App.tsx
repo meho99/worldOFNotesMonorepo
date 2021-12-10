@@ -19,11 +19,7 @@ export const App = () => {
         <Switch>
           <Route exact path={Urls.Login} component={LoginComponent} />
           <Route exact path={Urls.SignUp} component={SignUpComponent} />
-          <Route exact path='*' render={() => (
-            <>
-              <AuthenticatedPages />
-            </>
-          )} />
+          <Route exact path='*' component={AuthenticatedPages} />
         </Switch>
       </NotificationsComponent>
     </div>

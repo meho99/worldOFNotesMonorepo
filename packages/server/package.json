@@ -10,7 +10,7 @@
     "serve": "netlify-lambda serve ./src/lambdas",
     "build": "netlify-lambda build ./src/lambdas",
     "schema-migrate": "fauna-schema-migrate run",
-    "apply-migrations": "fauna-schema-migrate apply",
+    "apply-migrations": "fauna-schema-migrate apply 100",
     "fill-initial-data": "fauna eval notes --file src/fauna/scripts/init_test_data.fql",
     "init-db": "npm run apply-migrations && npm run fill-initial-data"
   },

@@ -2,15 +2,16 @@ import faunadb from 'faunadb'
 import jwt from 'jsonwebtoken'
 import lambdaTester from 'lambda-tester'
 import { APIGatewayProxyEvent } from 'aws-lambda'
-import { LoginRequest, LoginResponse, UserModel } from '@won/core'
+import { LoginRequest, LoginResponse } from '@won/core'
 
-import { FaunaQuery, JwtContent } from '../../src/types'
+import { JwtContent } from '../../src/types'
 import { handler } from "../../src/lambdas/login"
 import * as helpers from '../../src/helpers/fauna'
 import { LambdaResponse } from '../../src/helpers/responses'
 
 import { setupTestDatabase } from '../utils/fauna'
 import { createRequest } from '../utils/helpers'
+import { addUser } from '../utils/queries'
 
 jest.mock('../../src/helpers/fauna', () => {
   const helpers = jest.requireActual('../../src/helpers/fauna')
@@ -27,7 +28,7 @@ beforeEach(async () => {
   const client = await setupTestDatabase();
   if (client) dbClient = client;
 
-  (helpers.getFaunaDBClient as jest.Mock).mockImplementationOnce(() => dbClient)
+  (helpers.getFaunaDBClient as jest.Mock).mockImplementation(() => dbClient)
 })
 
 afterAll(() => {
@@ -109,26 +110,13 @@ describe("login", () => {
 
   describe("should suceed", () => {
     it("with valid credentials", async () => {
-      const {
-        Create,
-        Collection
-      } = faunadb.query
-
       const password = 'testPassword123'
       const email = 'test@email.com'
       const name = 'Test User'
 
       // -- add user to database --
 
-      await dbClient.query<FaunaQuery<UserModel>>(
-        Create(
-          Collection('Users'),
-          {
-            credentials: { password },
-            data: { email, name },
-          }
-        )
-      )
+      await addUser(dbClient, { email, name, password })
 
       // -- login --
 

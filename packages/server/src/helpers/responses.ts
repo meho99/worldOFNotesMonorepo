@@ -33,5 +33,5 @@ export const createInternalErrorResponse = <E = Object>(errorDetail: E): LambdaR
 export const createUnauthorizedErrorResponse = (): LambdaResponse => ({
   statusCode: 401,
   headers,
-  body: JSON.stringify({ message: "No token authorization denied" })
+  body: JSON.stringify({ message: "Missing token, authorization denied" })
 })

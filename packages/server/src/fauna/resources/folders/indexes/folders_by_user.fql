@@ -1,0 +1,11 @@
+CreateIndex({
+  name: 'folders_by_user',
+  source: Collection('Folders'),
+  terms: [
+    {
+      field: ['data', 'user'],
+    },
+  ],
+  unique: false,
+  serialized: true
+})

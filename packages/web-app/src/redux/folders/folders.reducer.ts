@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { FoldersModel } from '@won/core'
+import { FolderModel } from '@won/core'
 import { ReducerNames, FiniteStates } from '../../consts'
 
 export class FoldersState {
-  data: Array<FoldersModel> = [];
+  data: Array<FolderModel> = [];
   status: FiniteStates = FiniteStates.Idle;
   currentFolder?: number = undefined
 }
@@ -14,7 +14,7 @@ const foldersSlice = createSlice({
   name: ReducerNames.Folders,
   initialState,
   reducers: {
-    setFolders: (state, { payload }: PayloadAction<Array<FoldersModel>>) => {
+    setFolders: (state, { payload }: PayloadAction<Array<FolderModel>>) => {
       state.data = payload
       state.status = FiniteStates.Success
     },
