@@ -4,16 +4,14 @@ import faunadb from 'faunadb'
 import { JSONSchemaType } from 'ajv'
 import { APIGatewayEvent, Context } from 'aws-lambda'
 import middy from 'middy'
-import validator from '@middy/validator'
-import jsonBodyParser from '@middy/http-json-body-parser'
 
 import { SignUpRequest, UserModel, SingUpResponse } from '@won/core'
 
+import { errorsMiddleware, bodyParserMiddleware, validatorMiddleware } from '../middlewares'
 import { FaunaQuery, RequestData } from '../types'
 import { getFaunaDBClient } from '../helpers/fauna'
 import { createToken } from '../helpers/authentication'
 import { createErrorResponse, createSuccessResponse } from '../helpers/responses'
-import { errorsMiddleware } from '../middlewares/errorsMiddleware'
 
 const {
   Get,
@@ -88,6 +86,6 @@ const inputSchema: JSONSchemaType<RequestData<SignUpRequest>> = {
 }
 
 export const handler = middy(signUphandler)
-  .use(jsonBodyParser())
-  .use(validator({ inputSchema }))
+  .use(bodyParserMiddleware())
+  .use(validatorMiddleware({ inputSchema }))
   .use(errorsMiddleware())

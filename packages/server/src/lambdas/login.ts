@@ -1,19 +1,17 @@
 require('@babel/polyfill')
 
-import faunadb from 'faunadb'
 import middy from 'middy'
+import faunadb from 'faunadb'
 import { JSONSchemaType } from 'ajv'
 import { APIGatewayEvent, Context } from 'aws-lambda'
-import validator from '@middy/validator'
-import jsonBodyParser from '@middy/http-json-body-parser'
 
 import { LoginRequest, UserModel, LoginResponse } from '@won/core'
 
+import { errorsMiddleware, validatorMiddleware, bodyParserMiddleware } from '../middlewares'
 import { FaunaQuery, RequestData } from '../types'
 import { getFaunaDBClient } from '../helpers/fauna'
 import { createToken } from '../helpers/authentication'
 import { createSuccessResponse } from '../helpers/responses'
-import { errorsMiddleware } from '../middlewares/errorsMiddleware'
 
 const {
   Get,
@@ -71,6 +69,6 @@ const inputSchema: JSONSchemaType<RequestData<LoginRequest>> = {
 }
 
 export const handler = middy(loginHandler)
-  .use(jsonBodyParser())
-  .use(validator({ inputSchema }))
+  .use(bodyParserMiddleware())
+  .use(validatorMiddleware({ inputSchema }))
   .use(errorsMiddleware())
