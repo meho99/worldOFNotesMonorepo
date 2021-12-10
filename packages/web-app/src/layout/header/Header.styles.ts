@@ -1,8 +1,8 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 
-export const useStyles = makeStyles(({ palette }) => createStyles({
+export const useStyles = makeStyles(({ spacing }) => createStyles({
   menuButton: {
-    marginRight: '5px',
+    marginRight: spacing(1),
   },
   title: {
     flexGrow: 1,

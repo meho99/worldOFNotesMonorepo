@@ -2,7 +2,7 @@ import React from 'react'
 import { AppBar, Toolbar, Typography } from '@material-ui/core'
 
 import { useStyles } from './Header.styles'
-import { HeaderMenu } from './HeaderMenu'
+import { HeaderMenu } from './Header.menu'
 
 export const HeaderComponent = () => {
   const classes = useStyles()

@@ -4,7 +4,6 @@ import { sessionActions } from '../../redux/session/session.reducer'
 import { isAuthenticatedSelector, isDarkThemeSelector } from '../../redux/session/session.selectors'
 import { logOutThunk } from '../../redux/session/session.thunks'
 
-
 export const useHeaderMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
