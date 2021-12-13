@@ -109,6 +109,25 @@ describe("signUp", () => {
           expect(responseBody.details[0].message).toBe("must have required property name")
         })
     })
+
+    it("when http method is not supported", async () => {
+      const requestData: SignUpRequest = {
+        email: 'w@w.w',
+        name: 'Test User',
+        password: '123123123123'
+      }
+
+      const request = createRequest(requestData, { httpMethod: 'GET' })
+
+      await lambdaTester(handler)
+        .event(request as APIGatewayProxyEvent)
+        .expectResult((result: LambdaResponse) => {
+          const responseBody = JSON.parse(result.body)
+
+          expect(result.statusCode).toBe(400)
+          expect(responseBody.message).toBe("HTTP method not supported")
+        })
+    })
   })
 
   describe("should suceed", () => {

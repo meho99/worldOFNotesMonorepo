@@ -8,10 +8,10 @@ import middy from 'middy'
 import { SignUpRequest, UserModel, SingUpResponse } from '@won/core'
 
 import { errorsMiddleware, bodyParserMiddleware, validatorMiddleware } from '../middlewares'
-import { FaunaQuery, RequestData } from '../types'
+import { FaunaQuery, HttpMethods, RequestData } from '../types'
 import { getFaunaDBClient } from '../helpers/fauna'
 import { createToken } from '../helpers/authentication'
-import { createErrorResponse, createSuccessResponse } from '../helpers/responses'
+import { createErrorResponse, createInvalidHttpMethodResponse, createSuccessResponse } from '../helpers/responses'
 
 const {
   Get,
@@ -23,55 +23,61 @@ const {
 
 const signUphandler = async (event: APIGatewayEvent, context: Context) => {
   const { body, httpMethod } = event
-  
-  if (httpMethod === 'POST') {
-    // at this point body will have a proper type due to validation in middleware
-    const { email, password, name } = body as unknown as SignUpRequest
 
-    const faunaDBClient = getFaunaDBClient();
+  switch (httpMethod as HttpMethods) {
+    case 'POST': {
+      // at this point body will have a proper type due to validation in middleware
+      const { email, password, name } = body as unknown as SignUpRequest
 
-    try {
-      const user = await faunaDBClient.query<{ user: UserModel }>(
-        Get(
-          Match(
-            Index("user_by_email"),
-            email
+      const faunaDBClient = getFaunaDBClient();
+
+      try {
+        const user = await faunaDBClient.query<{ user: UserModel }>(
+          Get(
+            Match(
+              Index("user_by_email"),
+              email
+            )
           )
+        )
+
+        if (user) {
+          return createErrorResponse({
+            message: 'User already exists'
+          })
+        }
+      } catch (e) { }
+
+      const { data, ref } = await faunaDBClient.query<FaunaQuery<UserModel>>(
+        Create(
+          Collection('Users'), {
+          credentials: { password },
+          data: { email, name },
+        }
         )
       )
 
-      if (user) {
-        return createErrorResponse({
-          message: 'User already exists'
-        })
+      const jwtToken = createToken(ref.id)
+
+      const response: SingUpResponse = {
+        token: jwtToken,
+        id: ref.id,
+        name: data.name,
+        email: data.email
       }
-    } catch (e) { }
 
-    const { data, ref } = await faunaDBClient.query<FaunaQuery<UserModel>>(
-      Create(
-        Collection('Users'), {
-        credentials: { password },
-        data: { email, name },
-      }
-      )
-    )
-
-    const jwtToken = createToken(ref.id)
-
-    const response: SingUpResponse = {
-      token: jwtToken,
-      id: ref.id,
-      name: data.name,
-      email: data.email
+      return createSuccessResponse(response)
     }
 
-    return createSuccessResponse(response)
+    default: {
+      return createInvalidHttpMethodResponse()
+    }
   }
 }
 
 const inputSchema: JSONSchemaType<RequestData<SignUpRequest>> = {
   type: 'object',
-  required: ['body'],
+  required: ['body', 'httpMethod'],
   properties: {
     body: {
       type: 'object',
@@ -81,6 +87,9 @@ const inputSchema: JSONSchemaType<RequestData<SignUpRequest>> = {
         name: { type: 'string' }
       },
       required: ['email', 'password', 'name']
+    },
+    httpMethod: {
+      type: 'string'
     }
   }
 }

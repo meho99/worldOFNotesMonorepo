@@ -35,3 +35,7 @@ export const createUnauthorizedErrorResponse = (): LambdaResponse => ({
   headers,
   body: JSON.stringify({ message: "Missing token, authorization denied" })
 })
+
+export const createInvalidHttpMethodResponse = (): LambdaResponse => createErrorResponse({
+  message: 'HTTP method not supported'
+})

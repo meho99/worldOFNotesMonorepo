@@ -7,10 +7,10 @@ import { APIGatewayEvent, Context } from 'aws-lambda'
 import { FolderModel, UserFoldersResponse } from '@won/core'
 
 import { errorsMiddleware, authMiddleware } from '../middlewares'
-import { FoldersData } from '../types'
+import { FoldersData, HttpMethods } from '../types'
 import { getFaunaDBClient } from '../helpers/fauna'
 import { isAuthenticated } from '../helpers/authentication'
-import { createSuccessResponse } from '../helpers/responses'
+import { createInvalidHttpMethodResponse, createSuccessResponse } from '../helpers/responses'
 
 const {
   Map,
@@ -29,35 +29,41 @@ const foldersHandler = async (event: APIGatewayEvent, context: Context) => {
 
   const { httpMethod, user } = event
 
-  if (httpMethod === 'GET') {
-    const faunaDBClient = getFaunaDBClient();
+  const faunaDBClient = getFaunaDBClient();
 
-    const { data: foldersData } = await faunaDBClient.query<{ data: FoldersData[] }>(
-      Map(
-        Paginate(
-          Match(
-            Index("folders_by_user"),
-            Ref(Collection("Users"), user.id)
-          )
-        ),
-        Lambda("ref", Get(Var("ref")))
+  switch (httpMethod as HttpMethods) {
+    case 'GET': {
+      const { data: foldersData } = await faunaDBClient.query<{ data: FoldersData[] }>(
+        Map(
+          Paginate(
+            Match(
+              Index("folders_by_user"),
+              Ref(Collection("Users"), user.id)
+            )
+          ),
+          Lambda("ref", Get(Var("ref")))
+        )
       )
-    )
 
-    const parsedFoldersData: FolderModel[] = foldersData.map(({ ref, data }) => {
-      const { user, ...filteredData } = data
+      const parsedFoldersData: FolderModel[] = foldersData.map(({ ref, data }) => {
+        const { user, ...filteredData } = data
 
-      return {
-        id: ref.id,
-        ...filteredData
+        return {
+          id: ref.id,
+          ...filteredData
+        }
+      })
+
+      const response: UserFoldersResponse = {
+        folders: parsedFoldersData
       }
-    })
 
-    const response: UserFoldersResponse = {
-      folders: parsedFoldersData
+      return createSuccessResponse(response)
     }
 
-    return createSuccessResponse(response)
+    default: {
+      return createInvalidHttpMethodResponse()
+    }
   }
 }
 
