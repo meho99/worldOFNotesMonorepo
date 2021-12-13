@@ -1,0 +1,11 @@
+CreateIndex({
+  "name": "user_folder_by_name",
+  "source": Collection("Folders"),
+  "terms": [{
+    "field": ["data", "user"]
+  }, {
+    "field": ["data", "name"]
+  }],
+  "unique": false,
+  "serialized": true
+})

@@ -1,6 +1,6 @@
 import faunadb from 'faunadb'
 import { AddFolderRequest, SignUpRequest, UserModel } from '@won/core'
-import { FaunaQuery } from '../../src/types'
+import { FaunaQuery, FoldersData } from '../../src/types'
 
 export const addUser = async (dbClient: faunadb.Client, userData: SignUpRequest) => {
   const {
@@ -45,7 +45,7 @@ export const addFolder = async (
     }
   }
 
-  const { ref, data } = await dbClient.query<FaunaQuery<UserModel>>(
+  const { ref, data } = await dbClient.query<FoldersData>(
     Create(Collection('Folders'), folder)
   )
 
