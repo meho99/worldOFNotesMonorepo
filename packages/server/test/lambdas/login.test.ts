@@ -36,6 +36,61 @@ afterAll(() => {
 })
 
 describe("login", () => {
+  describe("data validation", () => {
+    it("email is missing", async () => {
+      const requestData: LoginRequest = {
+        password: '321536dfh'
+      } as LoginRequest
+      const request = createRequest(requestData)
+
+      await lambdaTester(handler)
+        .event(request as APIGatewayProxyEvent)
+        .expectResult((result: LambdaResponse) => {
+          const responseBody = JSON.parse(result.body)
+
+          expect(result.statusCode).toBe(400)
+          expect(responseBody.message).toBe("Event object failed validation")
+          expect(responseBody.details[0].message).toBe("must have required property email")
+        })
+    })
+
+    it("email is invalid", async () => {
+      const requestData: LoginRequest = {
+        password: '321536dfh',
+        email: 'testWrongFormat'
+      }
+      const request = createRequest(requestData)
+
+      await lambdaTester(handler)
+        .event(request as APIGatewayProxyEvent)
+        .expectResult((result: LambdaResponse) => {
+          const responseBody = JSON.parse(result.body)
+
+          expect(result.statusCode).toBe(400)
+          expect(responseBody.message).toBe("Event object failed validation")
+          expect(responseBody.details[0].message).toBe(`must match format "email"`)
+        })
+    })
+
+    it("password is missing", async () => {
+      const requestData: LoginRequest = {
+        email: 'w@w.w'
+      } as LoginRequest
+
+      const request = createRequest(requestData)
+
+      await lambdaTester(handler)
+        .event(request as APIGatewayProxyEvent)
+        .expectResult((result: LambdaResponse) => {
+          const responseBody = JSON.parse(result.body)
+
+          expect(result.statusCode).toBe(400)
+          expect(responseBody.message).toBe("Event object failed validation")
+          expect(responseBody.details[0].message).toBe("must have required property password")
+        })
+    })
+  })
+
   describe("should fail", () => {
     it("when user data is not valid", async () => {
       const requestData: LoginRequest = {
@@ -54,56 +109,21 @@ describe("login", () => {
         })
     })
 
-    it("when email is missing", async () => {
+    it("when http method is invalid", async () => {
       const requestData: LoginRequest = {
+        email: 'w@w.w',
         password: '321536dfh'
-      } as LoginRequest
-      const request = createRequest(requestData)
-
-      await lambdaTester(handler)
-        .event(request as APIGatewayProxyEvent)
-        .expectResult((result: LambdaResponse) => {
-          const responseBody = JSON.parse(result.body)
-        
-          expect(result.statusCode).toBe(400)
-          expect(responseBody.message).toBe("Event object failed validation")
-          expect(responseBody.details[0].message).toBe("must have required property email")
-        })
-    })
-
-    it("when email is invalid", async () => {
-      const requestData: LoginRequest = {
-        password: '321536dfh',
-        email: 'testWrongFormat'
       }
-      const request = createRequest(requestData)
+
+      const request = createRequest(requestData, { httpMethod: 'GET' })
 
       await lambdaTester(handler)
         .event(request as APIGatewayProxyEvent)
         .expectResult((result: LambdaResponse) => {
           const responseBody = JSON.parse(result.body)
-        
+
           expect(result.statusCode).toBe(400)
-          expect(responseBody.message).toBe("Event object failed validation")
-          expect(responseBody.details[0].message).toBe(`must match format "email"`)
-        })
-    })
-
-    it("when password is missing", async () => {
-      const requestData: LoginRequest = {
-        email: 'w@w.w'
-      } as LoginRequest
-
-      const request = createRequest(requestData)
-
-      await lambdaTester(handler)
-        .event(request as APIGatewayProxyEvent)
-        .expectResult((result: LambdaResponse) => {
-          const responseBody = JSON.parse(result.body)
-        
-          expect(result.statusCode).toBe(400)
-          expect(responseBody.message).toBe("Event object failed validation")
-          expect(responseBody.details[0].message).toBe("must have required property password")
+          expect(responseBody.message).toBe("HTTP method not supported")
         })
     })
   })

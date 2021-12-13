@@ -7,3 +7,5 @@ export type UserFoldersResponse = {
 }
 
 export type AddFolderRequest = Omit<FolderModel, 'id'>
+
+export type AddFolderResponse = FolderModel
