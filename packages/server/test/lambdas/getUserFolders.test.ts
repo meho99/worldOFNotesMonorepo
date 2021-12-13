@@ -34,7 +34,7 @@ afterAll(() => {
   jest.clearAllMocks
 })
 
-describe("folders", () => {
+describe("getUserFolder", () => {
   describe("should fail", () => {
     it("when user is not authenticated", async () => {
       const request = createRequest(undefined, { httpMethod: 'GET' })

@@ -11,6 +11,7 @@ import { LambdaResponse } from '../../src/helpers/responses'
 
 import { setupTestDatabase } from '../utils/fauna'
 import { createRequest } from '../utils/helpers'
+import { addUser } from '../utils/queries'
 
 jest.mock('../../src/helpers/fauna', () => {
   const helpers = jest.requireActual('../../src/helpers/fauna')
@@ -35,8 +36,8 @@ afterAll(() => {
 })
 
 describe("signUp", () => {
-  describe("should fail", () => {
-    it("when email is missing", async () => {
+  describe("data validation", () => {
+    it("missing email", async () => {
       const requestData: SignUpRequest = {
         password: '321536dfh'
       } as SignUpRequest
@@ -53,7 +54,7 @@ describe("signUp", () => {
         })
     })
 
-    it("when email is invalid", async () => {
+    it("invalid email", async () => {
       const requestData: SignUpRequest = {
         name: 'Test Name',
         password: '321536dfh',
@@ -72,7 +73,7 @@ describe("signUp", () => {
         })
     })
 
-    it("when password is missing", async () => {
+    it("missing password", async () => {
       const requestData: SignUpRequest = {
         email: 'w@w.w',
         name: 'Test Name'
@@ -91,7 +92,7 @@ describe("signUp", () => {
         })
     })
 
-    it("when name is missing", async () => {
+    it("missing name", async () => {
       const requestData: SignUpRequest = {
         email: 'w@w.w',
         password: '123123123123'
@@ -109,7 +110,9 @@ describe("signUp", () => {
           expect(responseBody.details[0].message).toBe("must have required property name")
         })
     })
+  })
 
+  describe("should fail", () => {
     it("when http method is not supported", async () => {
       const requestData: SignUpRequest = {
         email: 'w@w.w',
@@ -128,6 +131,30 @@ describe("signUp", () => {
           expect(responseBody.message).toBe("HTTP method not supported")
         })
     })
+
+    it("when user with the same email already exist", async () => {
+      const password = 'testPassword123'
+      const email = 'test@email.com'
+      const name = 'Test User'
+
+      // -- add user to database --
+
+      await addUser(dbClient, { password, email, name })
+
+      // -- try to sign up user with same email --
+
+      const requestData: SignUpRequest = { email, password, name }
+      const request = createRequest(requestData)
+
+      await lambdaTester(handler)
+        .event(request as APIGatewayProxyEvent)
+        .expectResult((result: LambdaResponse) => {
+          const responseBody = JSON.parse(result.body)
+
+          expect(result.statusCode).toBe(400)
+          expect(responseBody.message).toBe("User already exists")
+        })
+    })
   })
 
   describe("should suceed", () => {
@@ -142,7 +169,7 @@ describe("signUp", () => {
       const email = 'test@email.com'
       const name = 'Test User'
 
-      // -- login --
+      // -- sign up --
 
       const requestData: SignUpRequest = { email, password, name }
       const request = createRequest(requestData)

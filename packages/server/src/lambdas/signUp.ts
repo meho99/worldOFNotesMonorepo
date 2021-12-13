@@ -1,9 +1,9 @@
 require('@babel/polyfill')
 
+import middy from 'middy'
 import faunadb from 'faunadb'
 import { JSONSchemaType } from 'ajv'
 import { APIGatewayEvent, Context } from 'aws-lambda'
-import middy from 'middy'
 
 import { SignUpRequest, UserModel, SingUpResponse } from '@won/core'
 
