@@ -1,5 +1,5 @@
 export type FolderModel = Record<'description' | 'name', string> & {
-  id: number;
+  id: string;
 }
 
 export type UserFoldersResponse = {

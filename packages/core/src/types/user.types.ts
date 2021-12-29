@@ -1,5 +1,5 @@
 export type UserModel = Record<'email' | 'name', string> & {
-  id: number;
+  id: string;
 }
 
 export type SignUpRequest =
