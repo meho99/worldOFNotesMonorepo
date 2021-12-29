@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "jest --runInBand --verbose",
+    "coverage": "npm run test -- --coverage",
     "check-types": "tsc --noEmit",
     "postinstall": "npm run build",
     "serve": "netlify-lambda serve ./src/lambdas",

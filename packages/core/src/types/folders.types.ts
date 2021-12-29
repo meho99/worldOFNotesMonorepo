@@ -11,3 +11,10 @@ export type AddFolderResponse = FolderModel
 
 export type UpdateFolderRequest = FolderModel
 export type UpdateFolderResponse = FolderModel
+
+export type DeleteFolderRequest = {
+  id: string;
+}
+export type DeleteFolderResponse = {
+  id: string;
+}

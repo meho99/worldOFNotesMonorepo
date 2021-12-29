@@ -3,3 +3,6 @@
 
 # production
 /build
+
+#coverage
+/coverage
