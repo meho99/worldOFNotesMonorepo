@@ -1,4 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit'
+import { FolderModel } from '@won/core'
 import { FiniteStates } from '../../../src/consts'
 import { foldersActions, foldersReducer, FoldersState } from '../../../src/redux/folders/folders.reducer'
 
@@ -9,10 +10,10 @@ const checkReducerState = <Payload = void>(initialState: FoldersState, expectedS
 }
 
 describe('foldersReducer test', () => {
-  const testFoldersData = [{
+  const testFoldersData: FolderModel[] = [{
     description: 'opis',
     name: 'nazwa',
-    id: 123
+    id: '123'
   }]
 
   const testCurrentFolderId = 5

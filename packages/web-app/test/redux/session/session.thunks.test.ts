@@ -22,7 +22,7 @@ window.localStorage.__proto__.getItem = mockedGetItem
 
 const mockedSignUpUserResponse: LoginResponse = {
   email: 'mail',
-  id: 5,
+  id: '5',
   name: 'imie',
   token: '34534534'
 }
@@ -37,7 +37,7 @@ describe('session thunks tests', () => {
       const authenticateUserResponse: AuthResponse = {
         email: 'email',
         name: 'imie',
-        id: 5
+        id: '5'
       }
 
       axios['mockImplementationOnce'](() => Promise.resolve({ data: authenticateUserResponse }))

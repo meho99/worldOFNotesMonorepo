@@ -38,7 +38,7 @@ afterAll(() => {
 
 describe("addFolder", () => {
   let loggedUserToken: string
-  let loggedUserId: number
+  let loggedUserId: string
 
   beforeEach(async () => {
     // -- add user and login --
@@ -172,7 +172,7 @@ describe("addFolder", () => {
       const requestData: AddFolderRequest = { name: 'folder', description: 'test2' }
       const request = createRequest(requestData, { httpMethod: 'POST', headers: createAuthHeaders(loggedUserToken) })
 
-      let addedFolderId: number;
+      let addedFolderId: string;
 
       await lambdaTester(addFolderHandler)
         .event(request as APIGatewayProxyEvent)
