@@ -52,8 +52,8 @@ describe("getUserFolder", () => {
 
   describe("should suceed", () => {
     let loggedUserToken: string
-    let loggedUserId: number
-    let user2Id: number
+    let loggedUserId: string
+    let user2Id: string
 
     beforeEach(async () => {
       {// -- add user and login --

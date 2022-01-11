@@ -27,7 +27,7 @@ export const addUser = async (dbClient: faunadb.Client, userData: SignUpRequest)
 
 export const addFolder = async (
   dbClient: faunadb.Client,
-  folderData: AddFolderRequest & { userId: number }
+  folderData: AddFolderRequest & { userId: string }
 ) => {
   const {
     Ref,

@@ -1,9 +1,9 @@
 import faunadb from 'faunadb'
 import lambdaTester from 'lambda-tester'
 import { APIGatewayProxyEvent } from 'aws-lambda'
-import { AddFolderRequest, LoginRequest, LoginResponse, SignUpRequest, UserFoldersResponse, MAX_FOLDERS_PER_USER, AddFolderResponse } from '@won/core'
+import { LoginRequest, LoginResponse, UserFoldersResponse, UpdateFolderRequest, UpdateFolderResponse, SignUpRequest } from '@won/core'
 
-import { handler as addFolderHandler } from "../../src/lambdas/addFolder"
+import { handler as updateFolderHandler } from "../../src/lambdas/updateFolder"
 import { handler as getUserFoldersHandler } from "../../src/lambdas/getUserFolders"
 import { handler as loginHandler } from "../../src/lambdas/login"
 
@@ -36,34 +36,25 @@ afterAll(() => {
   jest.clearAllMocks
 })
 
-describe("addFolder", () => {
+describe("updateFolder", () => {
   let loggedUserToken: string
   let loggedUserId: string
 
   beforeEach(async () => {
     // -- add user and login --
     const user1Data: SignUpRequest = { email: 'test2@email.com', name: 'Test User2', password: 'testPassword123' }
-    const { id } = await addUser(dbClient, user1Data)
+
+    const { id, token } = await addAndloginUser(user1Data)
+    loggedUserToken = token
     loggedUserId = id
-
-    const requestData: LoginRequest = { email: user1Data.email, password: user1Data.password }
-    const loginRequest = createRequest(requestData)
-
-    await lambdaTester(loginHandler)
-      .event(loginRequest as APIGatewayProxyEvent)
-      .expectResult((result: LambdaResponse) => {
-        const responseBody = JSON.parse(result.body) as LoginResponse
-
-        loggedUserToken = responseBody.token
-      })
   })
 
   describe("data validation", () => {
     it("missing name", async () => {
-      const requestData: AddFolderRequest = { description: 'test2' } as AddFolderRequest
+      const requestData: UpdateFolderRequest = { description: 'test2', id: '123' } as UpdateFolderRequest
       const request = createRequest(requestData, { httpMethod: 'POST', headers: createAuthHeaders(loggedUserToken) })
 
-      await lambdaTester(addFolderHandler)
+      await lambdaTester(updateFolderHandler)
         .event(request as APIGatewayProxyEvent)
         .expectResult((result: LambdaResponse) => {
           const responseBody = JSON.parse(result.body)
@@ -75,10 +66,10 @@ describe("addFolder", () => {
     })
 
     it("invalid name", async () => {
-      const requestData: AddFolderRequest = { description: 'test2', name: { test: true } } as unknown as AddFolderRequest
+      const requestData: UpdateFolderRequest = { description: 'test2', id: '123', name: { test: true } } as unknown as UpdateFolderRequest
       const request = createRequest(requestData, { httpMethod: 'POST', headers: createAuthHeaders(loggedUserToken) })
 
-      await lambdaTester(addFolderHandler)
+      await lambdaTester(updateFolderHandler)
         .event(request as APIGatewayProxyEvent)
         .expectResult((result: LambdaResponse) => {
           const responseBody = JSON.parse(result.body)
@@ -90,10 +81,10 @@ describe("addFolder", () => {
     })
 
     it("missing description", async () => {
-      const requestData: AddFolderRequest = { name: 'test' } as AddFolderRequest
+      const requestData: UpdateFolderRequest = { name: 'test', id: '123' } as UpdateFolderRequest
       const request = createRequest(requestData, { httpMethod: 'POST', headers: createAuthHeaders(loggedUserToken) })
 
-      await lambdaTester(addFolderHandler)
+      await lambdaTester(updateFolderHandler)
         .event(request as APIGatewayProxyEvent)
         .expectResult((result: LambdaResponse) => {
           const responseBody = JSON.parse(result.body)
@@ -103,13 +94,28 @@ describe("addFolder", () => {
           expect(responseBody.details[0].message).toBe("must have required property description")
         })
     })
+
+    it("missing folder id", async () => {
+      const requestData: UpdateFolderRequest = { name: 'test', description: 'desc' } as UpdateFolderRequest
+      const request = createRequest(requestData, { httpMethod: 'POST', headers: createAuthHeaders(loggedUserToken) })
+
+      await lambdaTester(updateFolderHandler)
+        .event(request as APIGatewayProxyEvent)
+        .expectResult((result: LambdaResponse) => {
+          const responseBody = JSON.parse(result.body)
+
+          expect(result.statusCode).toBe(400)
+          expect(responseBody.message).toBe("Event object failed validation")
+          expect(responseBody.details[0].message).toBe("must have required property id")
+        })
+    })
   })
 
   describe("should fail", () => {
     it("when user is not authenticated", async () => {
       const request = createRequest(undefined, { httpMethod: 'POST' })
 
-      await lambdaTester(addFolderHandler)
+      await lambdaTester(updateFolderHandler)
         .event(request as APIGatewayProxyEvent)
         .expectResult((result: LambdaResponse) => {
           const responseBody = JSON.parse(result.body)
@@ -119,48 +125,33 @@ describe("addFolder", () => {
         })
     })
 
-    it("when user already has folder with the same name", async () => {
-      const name = 'testFolder'
-      await addFolder(dbClient, { name, description: 'test', userId: loggedUserId })
+    it("when folder is not owned by the user", async () => {
+      // -- add folder --
 
-      const requestData: AddFolderRequest = { name, description: 'test2' }
-      const request = createRequest(requestData, { httpMethod: 'POST', headers: createAuthHeaders(loggedUserToken) })
-
-      await lambdaTester(addFolderHandler)
-        .event(request as APIGatewayProxyEvent)
-        .expectResult((result: LambdaResponse) => {
-          const responseBody = JSON.parse(result.body)
-
-          expect(result.statusCode).toBe(400)
-          expect(responseBody.message).toBe("Folder with the same name already exist")
-        })
-    })
-
-    it("when user exceeds max number of folders", async () => {
-      // -- add max amount of folders for user --
-
-      const promises = Array.from({ length: MAX_FOLDERS_PER_USER }).map((_, index) => {
-        return addFolder(dbClient, {
-          userId: loggedUserId,
-          name: `folder_${index}`,
-          description: 'added in the loop',
-        })
+      const { id } = await addFolder(dbClient, {
+        userId: loggedUserId,
+        name: 'folder',
+        description: 'desc'
       })
 
-      await Promise.all(promises)
+      const folderId = id
 
-      // -- try to add one more folder --
+      // try to update folder data
 
-      const requestData: AddFolderRequest = { name: 'folderek', description: 'test2' }
-      const request = createRequest(requestData, { httpMethod: 'POST', headers: createAuthHeaders(loggedUserToken) })
+      const anotherUserData: SignUpRequest = { email: 'test3@email.com', name: 'Another User', password: 'testPassword123' }
 
-      await lambdaTester(addFolderHandler)
+      const { token } = await addAndloginUser(anotherUserData)
+
+      const requestData: UpdateFolderRequest = { name: 'folder_updated', description: 'desc_updated', id: folderId }
+      const request = createRequest(requestData, { httpMethod: 'POST', headers: createAuthHeaders(token) })
+
+      await lambdaTester(updateFolderHandler)
         .event(request as APIGatewayProxyEvent)
         .expectResult((result: LambdaResponse) => {
           const responseBody = JSON.parse(result.body)
 
-          expect(result.statusCode).toBe(400)
-          expect(responseBody.message).toBe("Max amount of folders per user exceeded")
+          expect(result.statusCode).toBe(500)
+          expect(responseBody.message).toBe("instance not found")
         })
     })
   })
@@ -169,25 +160,31 @@ describe("addFolder", () => {
     it("when all data is valid", async () => {
       // -- add folder --
 
-      const requestData: AddFolderRequest = { name: 'folder', description: 'test2' }
+      const { id } = await addFolder(dbClient, {
+        userId: loggedUserId,
+        name: 'folder',
+        description: 'desc'
+      })
+
+      const folderId = id
+
+      // -- update folder data --
+
+      const requestData: UpdateFolderRequest = { name: 'folder_updated', description: 'desc_updated', id: folderId }
       const request = createRequest(requestData, { httpMethod: 'POST', headers: createAuthHeaders(loggedUserToken) })
 
-      let addedFolderId: string;
-
-      await lambdaTester(addFolderHandler)
+      await lambdaTester(updateFolderHandler)
         .event(request as APIGatewayProxyEvent)
         .expectResult((result: LambdaResponse) => {
-          const responseBody = JSON.parse(result.body) as AddFolderResponse
+          const responseBody = JSON.parse(result.body) as UpdateFolderResponse
 
           expect(result.statusCode).toBe(200)
           expect(responseBody.id).toBeDefined()
           expect(responseBody.name).toBe(requestData.name)
           expect(responseBody.description).toBe(requestData.description)
-
-          addedFolderId = responseBody.id
         })
 
-      // -- check if folder was properly added to database --
+      // -- check if folder was properly updated --
 
       const getFoldersRequest = createRequest(undefined, { httpMethod: 'GET', headers: createAuthHeaders(loggedUserToken) })
 
@@ -196,9 +193,33 @@ describe("addFolder", () => {
         .expectResult((result: LambdaResponse) => {
           const responseBody = JSON.parse(result.body) as UserFoldersResponse
 
-          const isAdded = responseBody.folders.findIndex(folder => folder.id === addedFolderId)
-          expect(isAdded).toBeGreaterThanOrEqual(0)
+          const updatedFolder = responseBody.folders.find(folder => folder.id === folderId)
+
+          expect(updatedFolder?.description).toBe(requestData.description)
+          expect(updatedFolder?.name).toBe(requestData.name)
         })
     })
   })
 })
+
+const addAndloginUser = async (userData: SignUpRequest) => {
+  const requestData: LoginRequest = { email: userData.email, password: userData.password }
+  const loginRequest = createRequest(requestData)
+
+  let token: string
+  const { id } = await addUser(dbClient, userData)
+
+  await lambdaTester(loginHandler)
+    .event(loginRequest as APIGatewayProxyEvent)
+    .expectResult((result: LambdaResponse) => {
+      const responseBody = JSON.parse(result.body) as LoginResponse
+
+      token = responseBody.token
+    })
+
+  return {
+    id,
+    // @ts-ignore
+    token
+  }
+}

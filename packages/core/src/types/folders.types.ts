@@ -1,5 +1,5 @@
 export type FolderModel = Record<'description' | 'name', string> & {
-  id: number;
+  id: string;
 }
 
 export type UserFoldersResponse = {
@@ -7,5 +7,14 @@ export type UserFoldersResponse = {
 }
 
 export type AddFolderRequest = Omit<FolderModel, 'id'>
-
 export type AddFolderResponse = FolderModel
+
+export type UpdateFolderRequest = FolderModel
+export type UpdateFolderResponse = FolderModel
+
+export type DeleteFolderRequest = {
+  id: string;
+}
+export type DeleteFolderResponse = {
+  id: string;
+}

@@ -7,7 +7,7 @@ import { AuthenticatedAPIGatewayEvent } from '../types'
 
 dotenv.config({ path: findEnv() })
 
-export const createToken = (id: number) => {
+export const createToken = (id: string) => {
   const jwtToken = jwt.sign(
     { id },
     process.env.JWT_SECRET as string,

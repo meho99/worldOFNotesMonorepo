@@ -33,7 +33,7 @@ describe('sessionReducer test', () => {
     const testUserData: UserModel = {
       email: 'test@test.test',
       name: 'Damian',
-      id: 123
+      id: '123'
     }
 
     const testToken = 'tokenData'
@@ -174,7 +174,7 @@ describe('sessionReducer test', () => {
           loginStatus: FiniteStates.Success,
           signUpStatus: FiniteStates.Success,
           token: 'tu jest token lol',
-          user: { email: '', id: 5, name: 'name' }
+          user: { email: '', id: '5', name: 'name' }
         },
         logOutThunk.fulfilled
       )
