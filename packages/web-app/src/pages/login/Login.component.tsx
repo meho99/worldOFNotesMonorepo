@@ -1,6 +1,8 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
+import { useDispatch, useSelector } from 'react-redux'
+
+import Grid from '@mui/material/Grid'
 import MailIcon from '@mui/icons-material/Mail'
 import Typography from '@mui/material/Typography'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -34,24 +36,31 @@ export const LoginComponent = () => {
     <CenteredContainer>
       <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
         <Typography color='primary' variant='h1' className={classes.title}> User Login </Typography>
-        <TextInput
-          {...loginFields.email.fieldProps}
-          errors={errors}
-          inputRef={register(loginFields.email.validation)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position='start'>
-                <MailIcon color='primary' />
-              </InputAdornment>
-            )
-          }}
-        />
 
-        <PasswordField
-          {...loginFields.password.fieldProps}
-          errors={errors}
-          inputRef={register(loginFields.password.validation)}
-        />
+        <Grid container spacing={0}>
+          <Grid xs={12} margin={2}>
+            <TextInput
+              {...loginFields.email.fieldProps}
+              autoFocus
+              errors={errors}
+              inputRef={register(loginFields.email.validation)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <MailIcon color='primary' />
+                  </InputAdornment>
+                )
+              }}
+            />
+          </Grid>
+          <Grid xs={12} margin={2}>
+            <PasswordField
+              {...loginFields.password.fieldProps}
+              errors={errors}
+              inputRef={register(loginFields.password.validation)}
+            />
+          </Grid>
+        </Grid>
 
         <SubmitButton isLoading={isLoading}>
           Login

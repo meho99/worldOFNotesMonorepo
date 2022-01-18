@@ -3,7 +3,7 @@ import { alpha } from '@mui/system/colorManipulator'
 
 export const useStyles = makeStyles(({ spacing, palette }) => createStyles({
   link: {
-    marginTop: spacing(3),
+    marginTop: spacing(2),
     padding: 5,
     '&:focus, &:hover': {
       backgroundColor: alpha(palette.action.active, palette.action.hoverOpacity),

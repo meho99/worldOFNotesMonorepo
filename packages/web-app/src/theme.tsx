@@ -23,13 +23,6 @@ const colors = {
 }
 
 const getThemeConfiguration = ({ palette, spacing, breakpoints }: Theme): ThemeOptions => ({
-  typography: {
-    fontFamily: '\'Nunito\', sans-serif',
-    fontSize: 16,
-    h1: {
-      fontSize: '4rem !important'
-    }
-  },
   components: {
     MuiPaper: {
       styleOverrides: {
@@ -81,12 +74,30 @@ const getThemeConfiguration = ({ palette, spacing, breakpoints }: Theme): ThemeO
           }
         }
       }
+    },
+    MuiAppBar: {
+      styleOverrides: {
+        colorSecondary: {
+          background: palette.secondary.main
+        }
+      }
     }
   }
 })
 
+const baseConfig: ThemeOptions = {
+  typography: {
+    fontFamily: '\'Nunito\', sans-serif',
+    fontSize: 16,
+    h1: {
+      fontSize: '4rem !important'
+    }
+  }
+}
+
 const lightTheme = responsiveFontSizes(
   createTheme({
+    ...baseConfig,
     palette: {
       primary: {
         main: colors.darkSeaGreen
@@ -104,6 +115,7 @@ const lightTheme = responsiveFontSizes(
 
 const darkTheme = responsiveFontSizes(
   createTheme({
+    ...baseConfig,
     palette: {
       mode: 'dark',
       primary: {
