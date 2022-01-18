@@ -16,14 +16,14 @@ export const useStyles = makeStyles(({ palette, spacing, breakpoints, shadows })
     flexDirection: 'column',
     boxShadow: shadows[3],
     borderRadius: spacing(1),
-    padding: `${spacing(8)} ${spacing(12)}`,
+    padding: spacing(8),
     position: 'absolute',
     top: '50%',
     backgroundColor: palette.background.paper,
     transform: 'translate(0, -50%)',
     [breakpoints.down('sm')]: {
       boxShadow: 'none',
-      padding: `${spacing(6)} 0}`,
+      padding: `${spacing(4)} 0}`,
       width: '100%',
     }
   }
