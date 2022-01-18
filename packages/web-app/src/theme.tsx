@@ -1,9 +1,16 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
-import { createMuiTheme, MuiThemeProvider, ThemeOptions, responsiveFontSizes } from '@material-ui/core/styles'
+import { createTheme, ThemeOptions, responsiveFontSizes, ThemeProvider as MuiThemeProvider, Theme, Palette } from '@mui/material/styles'
+import { ThemeProvider as MuiThemeProvider2 } from '@mui/styles'
 
 import { ThemeTypes } from './consts'
 import { themeTypeSelector } from './redux/session/session.selectors'
+
+import '@mui/styles'
+
+declare module '@mui/styles/defaultTheme' {
+  interface DefaultTheme extends Theme { }
+}
 
 const colors = {
   ashGray: '#CAD2C5',
@@ -15,45 +22,71 @@ const colors = {
   paperBackground: '#141414'
 }
 
-const themeConfiguration: ThemeOptions = {
+const getThemeConfiguration = ({ palette, spacing, breakpoints }: Theme): ThemeOptions => ({
   typography: {
     fontFamily: '\'Nunito\', sans-serif',
-    fontSize: 16
+    fontSize: 16,
+    h1: {
+      fontSize: '4rem !important'
+    }
   },
-  overrides: {
+  components: {
     MuiPaper: {
-      elevation4: {
-        boxShadow: 'none'
+      styleOverrides: {
+        elevation4: {
+          boxShadow: 'none'
+        }
       }
     },
     MuiListItem: {
-      root: {
-        justifyContent: 'center'
+      styleOverrides: {
+        root: {
+          justifyContent: 'center'
+        }
       }
     },
     MuiOutlinedInput: {
-      input: {
-        borderRadius: '16px',
-        padding: '16px'
-      },
-      root: {
-        borderRadius: '16px'
-      },
-      notchedOutline: {
-        borderRadius: '16px'
+      styleOverrides: {
+        input: {
+          borderRadius: '16px',
+          padding: '16px'
+        },
+        root: {
+          borderRadius: '16px'
+        },
+        notchedOutline: {
+          borderRadius: '16px'
+        }
       }
     },
-    MuiTypography: {
-      h1: {
-        fontSize: '4rem !important'
+    MuiIconButton: {
+      styleOverrides: {
+        sizeSmall: {
+          width: '20px',
+          height: '20px',
+        }
+      }
+    },
+    MuiAlert: {
+      styleOverrides: {
+        action: {
+          display: 'flex',
+          alignItems: 'center',
+          borderLeft: `1px solid ${palette.error.main}`,
+          padding: 4,
+          paddingLeft: 8,
+          marginLeft: spacing(8),
+          [breakpoints.down('sm')]: {
+            marginLeft: spacing(2),
+          }
+        }
       }
     }
   }
-}
+})
 
 const lightTheme = responsiveFontSizes(
-  createMuiTheme({
-    ...themeConfiguration,
+  createTheme({
     palette: {
       primary: {
         main: colors.darkSeaGreen
@@ -70,10 +103,9 @@ const lightTheme = responsiveFontSizes(
 )
 
 const darkTheme = responsiveFontSizes(
-  createMuiTheme({
-    ...themeConfiguration,
+  createTheme({
     palette: {
-      type: 'dark',
+      mode: 'dark',
       primary: {
         main: colors.darkSeaGreen
       },
@@ -98,11 +130,22 @@ const themeVariantsMap = {
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, ...rest }) => {
   const themeVariant = useSelector(themeTypeSelector)
 
-  const theme = themeVariantsMap[themeVariant]
+  const baseTheme = useMemo(() =>
+    themeVariantsMap[themeVariant],
+    [themeVariant]
+  )
+
+  const theme = useMemo(() =>
+    createTheme(baseTheme, getThemeConfiguration(baseTheme)),
+    [baseTheme]
+  )
 
   return (
     <MuiThemeProvider theme={theme} {...rest}>
-      {children}
+      <MuiThemeProvider2 theme={theme}>
+        {children}
+
+      </MuiThemeProvider2>
     </MuiThemeProvider>
   )
 }

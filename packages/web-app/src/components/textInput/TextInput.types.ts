@@ -1,4 +1,4 @@
-import { TextFieldProps } from '@material-ui/core/TextField'
+import { TextFieldProps } from '@mui/material/TextField'
 import { DeepMap, FieldError, FieldValues } from 'react-hook-form'
 
 export type TextInputProps = TextFieldProps & {

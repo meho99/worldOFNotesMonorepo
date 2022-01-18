@@ -1,7 +1,7 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { createStyles, makeStyles } from '@mui/styles'
 import { alpha } from '@mui/system/colorManipulator'
 
-export const useStyles = makeStyles(({ spacing, palette, }) => createStyles({
+export const useStyles = makeStyles(({ spacing, palette }) => createStyles({
   link: {
     marginTop: spacing(3),
     padding: 5,

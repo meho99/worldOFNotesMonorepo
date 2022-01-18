@@ -1,5 +1,5 @@
 import React from 'react'
-import Typography from '@material-ui/core/Typography'
+import Typography from '@mui/material/Typography'
 import { Link, LinkProps } from 'react-router-dom'
 
 import { useStyles } from './Link.styles'
