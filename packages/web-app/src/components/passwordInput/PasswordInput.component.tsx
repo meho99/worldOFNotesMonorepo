@@ -1,7 +1,7 @@
 import React from 'react'
-import IconButton from '@material-ui/core/IconButton'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import { Visibility, VisibilityOff, Lock } from '@material-ui/icons'
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
+import { Visibility, VisibilityOff, Lock } from '@mui/icons-material'
 
 import { TextInput } from '../textInput/TextInput.component'
 import { PasswordInputProps } from './PasswordInput.types'

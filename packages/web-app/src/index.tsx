@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { createGenerateClassName, StylesProvider } from '@material-ui/core/styles'
 import { ConnectedRouter } from 'connected-react-router'
+import { createGenerateClassName, StylesProvider } from '@mui/styles'
 
 import { store } from './redux'
 import { ThemeProvider } from './theme'
@@ -15,7 +15,7 @@ const generateClassName = createGenerateClassName({
 })
 
 ReactDOM.render(
-  <StylesProvider generateClassName={generateClassName} injectFirst>
+  <StylesProvider injectFirst generateClassName={generateClassName}>
     <Provider store={store}>
       <ThemeProvider>
         <ConnectedRouter history={historyProvider}>

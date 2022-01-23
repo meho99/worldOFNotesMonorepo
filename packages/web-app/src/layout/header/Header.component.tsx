@@ -1,5 +1,7 @@
 import React from 'react'
-import { AppBar, Toolbar, Typography } from '@material-ui/core'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
 
 import { useStyles } from './Header.styles'
 import { HeaderMenu } from './Header.menu'

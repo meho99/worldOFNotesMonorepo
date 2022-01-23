@@ -1,11 +1,12 @@
 import React from 'react'
-import Button from '@material-ui/core/Button'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import classNames from 'classnames'
+import Button from '@mui/material/Button'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { useStyles } from './SubmitButton.styles'
 import { SubmitButtonProps } from './SubmitButton.types'
 
-export const SubmitButton: React.FC<SubmitButtonProps> = ({ children, isLoading }) => {
+export const SubmitButton: React.FC<SubmitButtonProps> = ({ children, isLoading, className, ...buttonProps }) => {
   const classes = useStyles()
 
   return (
@@ -14,7 +15,9 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({ children, isLoading 
       color='primary'
       variant='contained'
       disabled={isLoading}
-      className={classes.button}
+      size='large'
+      className={classNames(classes.button, className)}
+      {...buttonProps}
     >
       {
         isLoading && <CircularProgress

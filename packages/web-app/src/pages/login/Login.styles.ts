@@ -1,4 +1,4 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { createStyles, makeStyles } from '@mui/styles'
 
 export const useStyles = makeStyles(({ spacing }) => createStyles({
   form: {
@@ -6,8 +6,9 @@ export const useStyles = makeStyles(({ spacing }) => createStyles({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
+    maxWidth: 450,
   },
   title: {
-    marginBottom: `${spacing(7)}px !important`
+    marginBottom: `${spacing(4)} !important`
   }
 }))
