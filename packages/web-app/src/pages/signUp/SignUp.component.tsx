@@ -25,9 +25,10 @@ export const SignUpComponent = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
-  const isLoading = useSelector(isSignUpLoadingSelector)
+  const { register, handleSubmit, errors, formState } = useForm<SignUpValues>()
 
-  const { register, handleSubmit, errors } = useForm<SignUpValues>()
+  const isLoading = useSelector(isSignUpLoadingSelector)
+  const disabled = formState.isSubmitted && !formState.isValid
 
   const onSubmit = (values: SignUpValues) => {
     dispatch(signUpThunk(values))
@@ -81,7 +82,7 @@ export const SignUpComponent = () => {
           </Grid>
         </Grid>
 
-        <SubmitButton isLoading={isLoading}>
+        <SubmitButton isLoading={isLoading} disabled={disabled}>
           Sign Up
         </SubmitButton>
 

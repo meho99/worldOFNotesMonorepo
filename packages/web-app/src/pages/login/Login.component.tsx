@@ -24,13 +24,15 @@ export const LoginComponent = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
+  const { register, handleSubmit, errors, formState } = useForm<LoginValues>()
+  
   const isLoading = useSelector(isLoginLoadingSelector)
-
-  const { register, handleSubmit, errors } = useForm<LoginValues>()
+  const disabled = formState.isSubmitted && !formState.isValid
 
   const onSubmit = (values: LoginValues) => {
     dispatch(loginThunk(values))
   }
+
 
   return (
     <CenteredContainer>
@@ -62,7 +64,7 @@ export const LoginComponent = () => {
           </Grid>
         </Grid>
 
-        <SubmitButton isLoading={isLoading}>
+        <SubmitButton isLoading={isLoading} disabled={disabled}>
           Login
         </SubmitButton>
 
