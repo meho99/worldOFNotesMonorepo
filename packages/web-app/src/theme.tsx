@@ -67,11 +67,10 @@ const getThemeConfiguration = ({ palette, spacing, breakpoints }: Theme): ThemeO
         action: {
           display: 'flex',
           alignItems: 'center',
-          borderLeft: `1px solid ${palette.error.main}`,
+          borderLeft: `2px solid ${palette.error.main}`,
           padding: 1,
           paddingLeft: 8,
           marginLeft: spacing(10),
-          height: 'fit-content',
           [breakpoints.down('sm')]: {
             marginLeft: spacing(2),
           },
@@ -92,7 +91,13 @@ const getThemeConfiguration = ({ palette, spacing, breakpoints }: Theme): ThemeO
         },
         root: {
           display: 'flex',
-          alignItems: 'center'
+          alignItems: 'center',
+          borderLeft: `2px solid ${palette.error.main}`
+        },
+        icon: {
+          '& svg': {
+            color: palette.error.main
+          }
         }
       }
     },
