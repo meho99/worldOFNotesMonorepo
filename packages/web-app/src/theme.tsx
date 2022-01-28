@@ -19,7 +19,9 @@ const colors = {
   darkSlateGreen: '#354F52',
   charcoal: '#2f3e46',
   darkBackground: '#1c1c1c',
-  paperBackground: '#141414'
+  paperBackground: '#141414',
+  red: '#f44336',
+  darkRed: '#580a05'
 }
 
 const getThemeConfiguration = ({ palette, spacing, breakpoints }: Theme): ThemeOptions => ({
@@ -66,12 +68,31 @@ const getThemeConfiguration = ({ palette, spacing, breakpoints }: Theme): ThemeO
           display: 'flex',
           alignItems: 'center',
           borderLeft: `1px solid ${palette.error.main}`,
-          padding: 4,
+          padding: 1,
           paddingLeft: 8,
-          marginLeft: spacing(8),
+          marginLeft: spacing(10),
+          height: 'fit-content',
           [breakpoints.down('sm')]: {
             marginLeft: spacing(2),
+          },
+          '& button': {
+            backgroundColor: palette.error.main,
+            margin: '0px 3px',
+            color: 'initial',
+            width: 18,
+            height: 18,
+
+            '&:hover': {
+              backgroundColor: palette.error.dark
+            },
+            '& svg': {
+              width: 18
+            }
           }
+        },
+        root: {
+          display: 'flex',
+          alignItems: 'center'
         }
       }
     },
@@ -109,6 +130,10 @@ const lightTheme = responsiveFontSizes(
         default: 'white',
         paper: 'white'
       },
+      error: {
+        main: colors.red,
+        dark: colors.darkRed
+      }
     }
   })
 )
@@ -127,6 +152,10 @@ const darkTheme = responsiveFontSizes(
       background: {
         default: colors.darkBackground,
         paper: colors.paperBackground
+      },
+      error: {
+        main: colors.red,
+        dark: colors.darkRed
       }
     }
   })
