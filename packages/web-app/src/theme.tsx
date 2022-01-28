@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
-import { createTheme, ThemeOptions, responsiveFontSizes, ThemeProvider as MuiThemeProvider, Theme, Palette } from '@mui/material/styles'
+import { createTheme, ThemeOptions, responsiveFontSizes, ThemeProvider as MuiThemeProvider, Theme } from '@mui/material/styles'
 import { ThemeProvider as MuiThemeProvider2 } from '@mui/styles'
 
 import { ThemeTypes } from './consts'

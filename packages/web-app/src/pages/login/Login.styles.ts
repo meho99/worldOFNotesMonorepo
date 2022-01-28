@@ -9,6 +9,6 @@ export const useStyles = makeStyles(({ spacing }) => createStyles({
     maxWidth: 450,
   },
   title: {
-    marginBottom: `${spacing(4)} !important`
+    marginBottom: spacing(4)
   }
 }))
