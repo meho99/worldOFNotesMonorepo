@@ -10,5 +10,6 @@ export enum FieldsErrors {
 export enum FetchingErrors {
   LoginError = 'Unable to login. Please check your email and password and try again.',
   SingUpError = 'Unable to sign up. Please check your email and password and try again.',
-  Unauthorized = 'Unauthorized'
+  Unauthorized = 'Unauthorized',
+  FetchError = 'Error in fetching data. Please check your network connection and try again.'
 }

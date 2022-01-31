@@ -35,6 +35,15 @@ const notificationsSlice = createSlice({
         type: NotificationTypes.Error
       })
     },
+    addSuccessNotification: (state, { payload = 'Success!' }: PayloadAction<string | undefined>) => {
+
+      notificationsAdapter.addOne(state, {
+        id: generateId(),
+        message: payload,
+        createdAt: new Date(),
+        type: NotificationTypes.Success
+      })
+    },
     clearNotifications: notificationsAdapter.removeAll,
     removeNotification: notificationsAdapter.removeOne
   }

@@ -10,5 +10,6 @@ export const isDarkThemeSelector = createSelector(sessionState, state => state.t
 export const themeTypeSelector = createSelector(sessionState, state => state.theme)
 export const userDataSelector = createSelector(sessionState, state => state.user)
 export const isAuthenticatedSelector = createSelector(sessionState, state => state.authenticatingStatus === FiniteStates.Success)
+export const authenticatingStatusSelector = createSelector(sessionState, state => state.authenticatingStatus)
 export const isLoginLoadingSelector = createSelector(sessionState, state => state.loginStatus === FiniteStates.Loading)
 export const isSignUpLoadingSelector = createSelector(sessionState, state => state.signUpStatus === FiniteStates.Loading)

@@ -10,7 +10,7 @@ export const HeaderComponent = () => {
   const classes = useStyles()
 
   return (
-    <AppBar position='fixed' color='secondary'>
+    <AppBar position='sticky' color='secondary'>
       <Toolbar>
         <Typography variant='h6' className={classes.title}>
           World of Notes
