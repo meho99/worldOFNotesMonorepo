@@ -67,7 +67,8 @@ const getThemeConfiguration = ({ palette, spacing, breakpoints }: Theme): ThemeO
         action: {
           display: 'flex',
           alignItems: 'center',
-          borderLeft: `2px solid ${palette.error.main}`,
+          borderLeftWidth: 2,
+          borderLeftStyle: 'solid',
           padding: 1,
           paddingLeft: 8,
           marginLeft: spacing(10),
@@ -75,28 +76,42 @@ const getThemeConfiguration = ({ palette, spacing, breakpoints }: Theme): ThemeO
             marginLeft: spacing(2),
           },
           '& button': {
-            backgroundColor: palette.error.main,
             margin: '0px 3px',
             color: 'initial',
             width: 18,
             height: 18,
-
-            '&:hover': {
-              backgroundColor: palette.error.dark
-            },
             '& svg': {
-              width: 18
+              width: 18,
+              color: 'white'
             }
           }
         },
         root: {
           display: 'flex',
           alignItems: 'center',
-          borderLeft: `2px solid ${palette.error.main}`
         },
-        icon: {
-          '& svg': {
-            color: palette.error.main
+        standardSuccess: {
+          borderLeft: `2px solid ${palette.success.main}`,
+          '.MuiAlert-action': {
+            borderLeftColor: palette.success.main,
+            '& button': {
+              backgroundColor: palette.success.main,
+              '&:hover': {
+                backgroundColor: palette.success.dark
+              },
+            }
+          }
+        },
+        standardError: {
+          borderLeft: `2px solid ${palette.error.main}`,
+          '.MuiAlert-action': {
+            borderLeftColor: palette.error.main,
+            '& button': {
+              backgroundColor: palette.error.main,
+              '&:hover': {
+                backgroundColor: palette.error.dark
+              },
+            }
           }
         }
       }
