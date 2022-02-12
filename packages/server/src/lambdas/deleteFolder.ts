@@ -7,50 +7,45 @@ import { APIGatewayEvent, Context } from 'aws-lambda'
 
 import { DeleteFolderRequest, DeleteFolderResponse } from '@won/core'
 
-import { errorsMiddleware, authMiddleware, bodyParserMiddleware, validatorMiddleware } from '../middlewares'
+import {
+  errorsMiddleware,
+  authMiddleware,
+  bodyParserMiddleware,
+  validatorMiddleware,
+} from '../middlewares'
 import { FoldersData, HttpMethods, RequestData } from '../types'
 import { getFaunaDBClient } from '../helpers/fauna'
 import { isAuthenticated } from '../helpers/authentication'
-import { createInvalidHttpMethodResponse, createSuccessResponse } from '../helpers/responses'
+import {
+  createInvalidHttpMethodResponse,
+  createSuccessResponse,
+} from '../helpers/responses'
 
-const {
-  Get,
-  Ref,
-  Index,
-  Match,
-  Delete,
-  Collection
-} = faunadb.query
+const { Get, Ref, Index, Match, Delete, Collection } = faunadb.query
 
 const foldersHandler = async (event: APIGatewayEvent, context: Context) => {
   if (!isAuthenticated(event)) return
 
   const { httpMethod, user, body } = event
 
-  const faunaDBClient = getFaunaDBClient();
+  const faunaDBClient = getFaunaDBClient()
 
   switch (httpMethod as HttpMethods) {
     case 'DELETE': {
       // at this point body will have a proper type due to validation in middleware
       const { id } = body as unknown as DeleteFolderRequest
 
-      const userRef = Ref(Collection("Users"), user.id)
+      const userRef = Ref(Collection('Users'), user.id)
 
       // check if folder exist and it's owned by the user
 
       await faunaDBClient.query<FoldersData>(
-        Get(Match(
-          Index("user_folder_by_id"),
-          userRef,
-          id
-        ))
+        Get(Match(Index('user_folder_by_id'), userRef, id)),
       )
 
       // -- delete folder --
 
-      await faunaDBClient.query<FoldersData>(
-        Delete(Ref(Collection('Folders'), id))
-      )
+      await faunaDBClient.query<FoldersData>(Delete(Ref(Collection('Folders'), id)))
 
       const response: DeleteFolderResponse = { id }
 
@@ -70,14 +65,14 @@ const inputSchema: JSONSchemaType<RequestData<DeleteFolderRequest>> = {
     body: {
       type: 'object',
       properties: {
-        id: { type: 'string' }
+        id: { type: 'string' },
       },
-      required: ['id']
+      required: ['id'],
     },
     httpMethod: {
-      type: 'string'
-    }
-  }
+      type: 'string',
+    },
+  },
 }
 
 export const handler = middy(foldersHandler)

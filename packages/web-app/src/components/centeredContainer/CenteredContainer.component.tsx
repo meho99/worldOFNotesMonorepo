@@ -7,9 +7,7 @@ export const CenteredContainer: React.FC = ({ children }) => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.container}>
-        {children}
-      </div>
+      <div className={classes.container}>{children}</div>
     </div>
   )
 }

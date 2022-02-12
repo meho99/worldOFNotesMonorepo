@@ -25,7 +25,7 @@ export const LoginComponent = () => {
   const dispatch = useDispatch()
 
   const { register, handleSubmit, errors, formState } = useForm<LoginValues>()
-  
+
   const isLoading = useSelector(isLoginLoadingSelector)
   const disabled = formState.isSubmitted && !formState.isValid
 
@@ -33,11 +33,13 @@ export const LoginComponent = () => {
     dispatch(loginThunk(values))
   }
 
-
   return (
     <CenteredContainer>
       <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
-        <Typography color='primary' variant='h1' className={classes.title}> User Login </Typography>
+        <Typography color='primary' variant='h1' className={classes.title}>
+          {' '}
+          User Login{' '}
+        </Typography>
 
         <Grid container spacing={0}>
           <Grid xs={12} margin={2}>
@@ -51,7 +53,7 @@ export const LoginComponent = () => {
                   <InputAdornment position='start'>
                     <MailIcon color='primary' />
                   </InputAdornment>
-                )
+                ),
               }}
             />
           </Grid>
@@ -68,9 +70,7 @@ export const LoginComponent = () => {
           Login
         </SubmitButton>
 
-        <LinkComponent to={Urls.SignUp}>
-          Don't have an account?
-        </LinkComponent>
+        <LinkComponent to={Urls.SignUp}>Don't have an account?</LinkComponent>
       </form>
     </CenteredContainer>
   )

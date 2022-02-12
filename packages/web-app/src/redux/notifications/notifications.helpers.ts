@@ -4,12 +4,16 @@ import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit'
 import { notificationsActions } from './notifications.reducer'
 
 type NotificationWrapperConfig = {
-  e: unknown;
-  defaultMessage: string;
-  dispatch: ThunkDispatch<any, any, AnyAction>;
+  e: unknown
+  defaultMessage: string
+  dispatch: ThunkDispatch<any, any, AnyAction>
 }
 
-const prepareErrorMessage = (status = 400, message = '', defaultMessage = 'Fetching Error') => {
+const prepareErrorMessage = (
+  status = 400,
+  message = '',
+  defaultMessage = 'Fetching Error',
+) => {
   if (status >= 400 && status < 500) {
     return message.length > 0 ? message : defaultMessage
   } else {
@@ -20,11 +24,15 @@ const prepareErrorMessage = (status = 400, message = '', defaultMessage = 'Fetch
 export const errorThunk = async ({
   e,
   dispatch,
-  defaultMessage
+  defaultMessage,
 }: NotificationWrapperConfig) => {
-    const error = e as AxiosError<Error>
-    const { response } = error
+  const error = e as AxiosError<Error>
+  const { response } = error
 
-    const errorMessage = prepareErrorMessage(response?.status, response?.data?.message, defaultMessage)
-    dispatch(notificationsActions.addErrorNotification(errorMessage))
+  const errorMessage = prepareErrorMessage(
+    response?.status,
+    response?.data?.message,
+    defaultMessage,
+  )
+  dispatch(notificationsActions.addErrorNotification(errorMessage))
 }

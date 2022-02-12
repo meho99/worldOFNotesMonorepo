@@ -1,10 +1,16 @@
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { notificationsActions } from '../../redux/notifications/notifications.reducer'
-import { getNotificationSelector, notificationAdapterSelectors } from '../../redux/notifications/notifications.selectors'
+import {
+  getNotificationSelector,
+  notificationAdapterSelectors,
+} from '../../redux/notifications/notifications.selectors'
 import { NotificationData } from '../../redux/notifications/notifications.types'
 
-export const hasNotifications = (show: boolean, notification?: NotificationData): notification is NotificationData => show === true
+export const hasNotifications = (
+  show: boolean,
+  notification?: NotificationData,
+): notification is NotificationData => show === true
 
 export const useNotificationData = () => {
   const dispatch = useDispatch()
@@ -20,6 +26,6 @@ export const useNotificationData = () => {
   return {
     showNotification,
     notificationData,
-    removeCurrentNotification
+    removeCurrentNotification,
   }
 }

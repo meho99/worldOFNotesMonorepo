@@ -7,19 +7,21 @@ import { APIGatewayEvent, Context } from 'aws-lambda'
 
 import { SignUpRequest, UserModel, SingUpResponse } from '@won/core'
 
-import { errorsMiddleware, bodyParserMiddleware, validatorMiddleware } from '../middlewares'
+import {
+  errorsMiddleware,
+  bodyParserMiddleware,
+  validatorMiddleware,
+} from '../middlewares'
 import { FaunaQuery, HttpMethods, RequestData } from '../types'
 import { getFaunaDBClient } from '../helpers/fauna'
 import { createToken } from '../helpers/authentication'
-import { createErrorResponse, createInvalidHttpMethodResponse, createSuccessResponse } from '../helpers/responses'
+import {
+  createErrorResponse,
+  createInvalidHttpMethodResponse,
+  createSuccessResponse,
+} from '../helpers/responses'
 
-const {
-  Get,
-  Match,
-  Index,
-  Create,
-  Collection
-} = faunadb.query
+const { Get, Match, Index, Create, Collection } = faunadb.query
 
 const signUphandler = async (event: APIGatewayEvent, context: Context) => {
   const { body, httpMethod } = event
@@ -29,32 +31,25 @@ const signUphandler = async (event: APIGatewayEvent, context: Context) => {
       // at this point body will have a proper type due to validation in middleware
       const { email, password, name } = body as unknown as SignUpRequest
 
-      const faunaDBClient = getFaunaDBClient();
+      const faunaDBClient = getFaunaDBClient()
 
       try {
         const user = await faunaDBClient.query<{ user: UserModel }>(
-          Get(
-            Match(
-              Index("user_by_email"),
-              email
-            )
-          )
+          Get(Match(Index('user_by_email'), email)),
         )
 
         if (user) {
           return createErrorResponse({
-            message: 'User already exists'
+            message: 'User already exists',
           })
         }
-      } catch (e) { }
+      } catch (e) {}
 
       const { data, ref } = await faunaDBClient.query<FaunaQuery<UserModel>>(
-        Create(
-          Collection('Users'), {
+        Create(Collection('Users'), {
           credentials: { password },
           data: { email, name },
-        }
-        )
+        }),
       )
 
       const jwtToken = createToken(ref.id)
@@ -63,7 +58,7 @@ const signUphandler = async (event: APIGatewayEvent, context: Context) => {
         token: jwtToken,
         id: ref.id,
         name: data.name,
-        email: data.email
+        email: data.email,
       }
 
       return createSuccessResponse(response)
@@ -84,14 +79,14 @@ const inputSchema: JSONSchemaType<RequestData<SignUpRequest>> = {
       properties: {
         email: { type: 'string', format: 'email' },
         password: { type: 'string' },
-        name: { type: 'string' }
+        name: { type: 'string' },
       },
-      required: ['email', 'password', 'name']
+      required: ['email', 'password', 'name'],
     },
     httpMethod: {
-      type: 'string'
-    }
-  }
+      type: 'string',
+    },
+  },
 }
 
 export const handler = middy(signUphandler)

@@ -12,18 +12,10 @@ import { useHeaderMenu, useMenuOptions } from './Header.hooks'
 export const HeaderMenu = () => {
   const classes = useStyles()
 
-  const {
-    anchorEl,
-    handleClick,
-    handleClose
-  } = useHeaderMenu()
+  const { anchorEl, handleClick, handleClose } = useHeaderMenu()
 
-  const {
-    isDarkTheme,
-    handleLogOut,
-    isAuthenticated,
-    handleChangeThemeVariant
-  } = useMenuOptions()
+  const { isDarkTheme, handleLogOut, isAuthenticated, handleChangeThemeVariant } =
+    useMenuOptions()
 
   const onLogout = () => {
     handleLogOut()
@@ -35,7 +27,8 @@ export const HeaderMenu = () => {
       <IconButton
         edge='start'
         className={classes.menuButton}
-        color='inherit' aria-label='menu'
+        color='inherit'
+        aria-label='menu'
         aria-controls='simple-menu'
         aria-haspopup='true'
         onClick={handleClick}
@@ -50,7 +43,7 @@ export const HeaderMenu = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem >
+        <MenuItem>
           <FormControlLabel
             control={
               <Switch
@@ -63,9 +56,7 @@ export const HeaderMenu = () => {
             label='Dark'
           />
         </MenuItem>
-        {
-          isAuthenticated && <MenuItem onClick={onLogout}>Log out</MenuItem>
-        }
+        {isAuthenticated && <MenuItem onClick={onLogout}>Log out</MenuItem>}
       </Menu>
     </div>
   )

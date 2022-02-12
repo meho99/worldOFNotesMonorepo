@@ -1,39 +1,40 @@
 import { UserModel } from '@won/core'
 
 import { ThemeTypes, FiniteStates } from '../../../src/consts'
-import { sessionReducer, SessionState, sessionActions } from '../../../src/redux/session/session.reducer'
-import { authenticateThunk, loginThunk, logOutThunk, signUpThunk } from '../../../src/redux/session/session.thunks'
+import {
+  sessionReducer,
+  SessionState,
+  sessionActions,
+} from '../../../src/redux/session/session.reducer'
+import {
+  authenticateThunk,
+  loginThunk,
+  logOutThunk,
+  signUpThunk,
+} from '../../../src/redux/session/session.thunks'
 
 describe('sessionReducer test', () => {
   it('authenticate action test', () => {
-    expect(
-      sessionReducer(
-        { ...new SessionState() },
-        authenticateThunk.pending
-      )
-    ).toEqual({
+    expect(sessionReducer({ ...new SessionState() }, authenticateThunk.pending)).toEqual({
       ...new SessionState(),
-      authenticatingStatus: FiniteStates.Loading
+      authenticatingStatus: FiniteStates.Loading,
     } as SessionState)
   })
 
   it('authenticationError action test', () => {
-    expect(
-      sessionReducer(
-        { ...new SessionState() },
-        authenticateThunk.rejected
-      )
-    ).toEqual({
-      ...new SessionState(),
-      authenticatingStatus: FiniteStates.Failure
-    } as SessionState)
+    expect(sessionReducer({ ...new SessionState() }, authenticateThunk.rejected)).toEqual(
+      {
+        ...new SessionState(),
+        authenticatingStatus: FiniteStates.Failure,
+      } as SessionState,
+    )
   })
 
   it('authenticationSuccess action test', () => {
     const testUserData: UserModel = {
       email: 'test@test.test',
       name: 'Damian',
-      id: '123'
+      id: '123',
     }
 
     const testToken = 'tokenData'
@@ -41,18 +42,18 @@ describe('sessionReducer test', () => {
     expect(
       sessionReducer(
         {
-          ...new SessionState()
+          ...new SessionState(),
         },
         {
           type: authenticateThunk.fulfilled.type,
-          payload: { token: testToken, userData: testUserData }
-        }
-      )
+          payload: { token: testToken, userData: testUserData },
+        },
+      ),
     ).toEqual({
       ...new SessionState(),
       user: testUserData,
       token: testToken,
-      authenticatingStatus: FiniteStates.Success
+      authenticatingStatus: FiniteStates.Success,
     } as SessionState)
   })
 
@@ -60,13 +61,13 @@ describe('sessionReducer test', () => {
     expect(
       sessionReducer(
         {
-          ...new SessionState()
+          ...new SessionState(),
         },
-        loginThunk.pending
-      )
+        loginThunk.pending,
+      ),
     ).toEqual({
       ...new SessionState(),
-      loginStatus: FiniteStates.Loading
+      loginStatus: FiniteStates.Loading,
     } as SessionState)
   })
 
@@ -74,13 +75,13 @@ describe('sessionReducer test', () => {
     expect(
       sessionReducer(
         {
-          ...new SessionState()
+          ...new SessionState(),
         },
-        loginThunk.rejected
-      )
+        loginThunk.rejected,
+      ),
     ).toEqual({
       ...new SessionState(),
-      loginStatus: FiniteStates.Failure
+      loginStatus: FiniteStates.Failure,
     } as SessionState)
   })
 
@@ -89,17 +90,17 @@ describe('sessionReducer test', () => {
     expect(
       sessionReducer(
         {
-          ...new SessionState()
+          ...new SessionState(),
         },
         {
           type: loginThunk.fulfilled.type,
-          payload: { token: testToken }
-        }
-      )
+          payload: { token: testToken },
+        },
+      ),
     ).toEqual({
       ...new SessionState(),
       token: testToken,
-      loginStatus: FiniteStates.Success
+      loginStatus: FiniteStates.Success,
     } as SessionState)
   })
 
@@ -107,13 +108,13 @@ describe('sessionReducer test', () => {
     expect(
       sessionReducer(
         {
-          ...new SessionState()
+          ...new SessionState(),
         },
-        signUpThunk.pending
-      )
+        signUpThunk.pending,
+      ),
     ).toEqual({
       ...new SessionState(),
-      signUpStatus: FiniteStates.Loading
+      signUpStatus: FiniteStates.Loading,
     } as SessionState)
   })
 
@@ -121,13 +122,13 @@ describe('sessionReducer test', () => {
     expect(
       sessionReducer(
         {
-          ...new SessionState()
+          ...new SessionState(),
         },
-        signUpThunk.rejected
-      )
+        signUpThunk.rejected,
+      ),
     ).toEqual({
       ...new SessionState(),
-      signUpStatus: FiniteStates.Failure
+      signUpStatus: FiniteStates.Failure,
     } as SessionState)
   })
 
@@ -136,17 +137,17 @@ describe('sessionReducer test', () => {
     expect(
       sessionReducer(
         {
-          ...new SessionState()
+          ...new SessionState(),
         },
         {
           type: signUpThunk.fulfilled.type,
-          payload: { token: testToken }
-        }
-      )
+          payload: { token: testToken },
+        },
+      ),
     ).toEqual({
       ...new SessionState(),
       token: testToken,
-      signUpStatus: FiniteStates.Success
+      signUpStatus: FiniteStates.Success,
     } as SessionState)
   })
 
@@ -155,13 +156,13 @@ describe('sessionReducer test', () => {
       sessionReducer(
         {
           ...new SessionState(),
-          theme: ThemeTypes.Light
+          theme: ThemeTypes.Light,
         },
-        sessionActions.changeThemeType()
-      )
+        sessionActions.changeThemeType(),
+      ),
     ).toEqual({
       ...new SessionState(),
-      theme: ThemeTypes.Dark
+      theme: ThemeTypes.Dark,
     } as SessionState)
   })
 
@@ -174,13 +175,13 @@ describe('sessionReducer test', () => {
           loginStatus: FiniteStates.Success,
           signUpStatus: FiniteStates.Success,
           token: 'tu jest token lol',
-          user: { email: '', id: '5', name: 'name' }
+          user: { email: '', id: '5', name: 'name' },
         },
-        logOutThunk.fulfilled
-      )
+        logOutThunk.fulfilled,
+      ),
     ).toEqual({
       ...new SessionState(),
-      token: null
+      token: null,
     } as SessionState)
   })
 })

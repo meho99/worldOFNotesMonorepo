@@ -1,0 +1,13 @@
+Map(
+  Paginate(
+    Match(Index('user_by_email'), 'folderOwner@test.pies')
+  ),
+  Lambda(
+    'userRef',
+    Get(Match(
+      Index("user_folder_by_id"),
+      Var('userRef'),
+      '319135051827642880'
+    ))
+  )
+)

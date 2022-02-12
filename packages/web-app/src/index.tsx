@@ -19,5 +19,5 @@ ReactDOM.render(
       </ThemeProvider>
     </Provider>
   </StyledEngineProvider>,
-  document.getElementById('root')
+  document.getElementById('root'),
 )

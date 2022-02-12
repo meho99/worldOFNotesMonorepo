@@ -1,6 +1,9 @@
-import { APIGatewayProxyEvent } from "aws-lambda";
+import { APIGatewayProxyEvent } from 'aws-lambda'
 
-export const createRequest = (requestData?: object, config?: Partial<APIGatewayProxyEvent>): Partial<APIGatewayProxyEvent> => {
+export const createRequest = (
+  requestData?: object,
+  config?: Partial<APIGatewayProxyEvent>,
+): Partial<APIGatewayProxyEvent> => {
   const body = JSON.stringify(requestData)
 
   let headers = { 'Content-Type': 'application/json' }
@@ -19,5 +22,5 @@ export const createRequest = (requestData?: object, config?: Partial<APIGatewayP
 }
 
 export const createAuthHeaders = (token: string) => ({
-  authorization: token
+  authorization: token,
 })

@@ -5,7 +5,7 @@ import { APIGatewayProxyEvent } from 'aws-lambda'
 import { LoginRequest, LoginResponse } from '@won/core'
 
 import { JwtContent } from '../../src/types'
-import { handler } from "../../src/lambdas/login"
+import { handler } from '../../src/lambdas/login'
 import * as helpers from '../../src/helpers/fauna'
 import { LambdaResponse } from '../../src/helpers/responses'
 
@@ -18,28 +18,27 @@ jest.mock('../../src/helpers/fauna', () => {
 
   return {
     ...helpers,
-    getFaunaDBClient: jest.fn()
+    getFaunaDBClient: jest.fn(),
   }
 })
 
 let dbClient: faunadb.Client
 
 beforeEach(async () => {
-  const client = await setupTestDatabase();
-  if (client) dbClient = client;
-
-  (helpers.getFaunaDBClient as jest.Mock).mockImplementation(() => dbClient)
+  const client = await setupTestDatabase()
+  if (client) dbClient = client
+  ;(helpers.getFaunaDBClient as jest.Mock).mockImplementation(() => dbClient)
 })
 
 afterAll(() => {
   jest.clearAllMocks
 })
 
-describe("login", () => {
-  describe("data validation", () => {
-    it("email is missing", async () => {
+describe('login', () => {
+  describe('data validation', () => {
+    it('email is missing', async () => {
       const requestData: LoginRequest = {
-        password: '321536dfh'
+        password: '321536dfh',
       } as LoginRequest
       const request = createRequest(requestData)
 
@@ -49,15 +48,17 @@ describe("login", () => {
           const responseBody = JSON.parse(result.body)
 
           expect(result.statusCode).toBe(400)
-          expect(responseBody.message).toBe("Event object failed validation")
-          expect(responseBody.details[0].message).toBe("must have required property email")
+          expect(responseBody.message).toBe('Event object failed validation')
+          expect(responseBody.details[0].message).toBe(
+            'must have required property email',
+          )
         })
     })
 
-    it("email is invalid", async () => {
+    it('email is invalid', async () => {
       const requestData: LoginRequest = {
         password: '321536dfh',
-        email: 'testWrongFormat'
+        email: 'testWrongFormat',
       }
       const request = createRequest(requestData)
 
@@ -67,14 +68,14 @@ describe("login", () => {
           const responseBody = JSON.parse(result.body)
 
           expect(result.statusCode).toBe(400)
-          expect(responseBody.message).toBe("Event object failed validation")
+          expect(responseBody.message).toBe('Event object failed validation')
           expect(responseBody.details[0].message).toBe(`must match format "email"`)
         })
     })
 
-    it("password is missing", async () => {
+    it('password is missing', async () => {
       const requestData: LoginRequest = {
-        email: 'w@w.w'
+        email: 'w@w.w',
       } as LoginRequest
 
       const request = createRequest(requestData)
@@ -85,17 +86,19 @@ describe("login", () => {
           const responseBody = JSON.parse(result.body)
 
           expect(result.statusCode).toBe(400)
-          expect(responseBody.message).toBe("Event object failed validation")
-          expect(responseBody.details[0].message).toBe("must have required property password")
+          expect(responseBody.message).toBe('Event object failed validation')
+          expect(responseBody.details[0].message).toBe(
+            'must have required property password',
+          )
         })
     })
   })
 
-  describe("should fail", () => {
-    it("when user data is not valid", async () => {
+  describe('should fail', () => {
+    it('when user data is not valid', async () => {
       const requestData: LoginRequest = {
         email: 'test@test.te',
-        password: '321536dfh'
+        password: '321536dfh',
       }
       const request = createRequest(requestData)
 
@@ -105,14 +108,14 @@ describe("login", () => {
           const responseBody = JSON.parse(result.body)
 
           expect(result.statusCode).toBe(500)
-          expect(responseBody.message).toBe("authentication failed")
+          expect(responseBody.message).toBe('authentication failed')
         })
     })
 
-    it("when http method is invalid", async () => {
+    it('when http method is invalid', async () => {
       const requestData: LoginRequest = {
         email: 'w@w.w',
-        password: '321536dfh'
+        password: '321536dfh',
       }
 
       const request = createRequest(requestData, { httpMethod: 'GET' })
@@ -123,13 +126,13 @@ describe("login", () => {
           const responseBody = JSON.parse(result.body)
 
           expect(result.statusCode).toBe(400)
-          expect(responseBody.message).toBe("HTTP method not supported")
+          expect(responseBody.message).toBe('HTTP method not supported')
         })
     })
   })
 
-  describe("should suceed", () => {
-    it("with valid credentials", async () => {
+  describe('should suceed', () => {
+    it('with valid credentials', async () => {
       const password = 'testPassword123'
       const email = 'test@email.com'
       const name = 'Test User'
@@ -154,7 +157,10 @@ describe("login", () => {
           expect(responseBody.token.length).toBeGreaterThan(0)
           expect(responseBody.id).toBeDefined()
 
-          let decoded: JwtContent = jwt.verify(responseBody.token, process.env.JWT_SECRET as string) as JwtContent
+          let decoded: JwtContent = jwt.verify(
+            responseBody.token,
+            process.env.JWT_SECRET as string,
+          ) as JwtContent
 
           expect(decoded.id).toBeDefined()
         })

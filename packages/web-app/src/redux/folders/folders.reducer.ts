@@ -4,15 +4,15 @@ import { ReducerNames, FiniteStates } from '../../consts'
 import { addFolderThunk, fetchFoldersThunk } from './folders.thunks'
 
 type FoldersList = {
-  data: Array<FolderModel>;
-  status: FiniteStates;
+  data: Array<FolderModel>
+  status: FiniteStates
 }
 export class FoldersState {
   folders: FoldersList = {
     data: [],
-    status: FiniteStates.Idle
-  };
-  addFolderStatus: FiniteStates = FiniteStates.Idle;
+    status: FiniteStates.Idle,
+  }
+  addFolderStatus: FiniteStates = FiniteStates.Idle
   currentFolder?: number = undefined
 }
 
@@ -22,18 +22,20 @@ const foldersSlice = createSlice({
   name: ReducerNames.Folders,
   initialState,
   reducers: {
-    setCurrentFolder: (state, { payload }: PayloadAction<FoldersState['currentFolder']>) => {
+    setCurrentFolder: (
+      state,
+      { payload }: PayloadAction<FoldersState['currentFolder']>,
+    ) => {
       state.currentFolder = payload
-    }
+    },
   },
-  extraReducers: builder => {
-
+  extraReducers: (builder) => {
     // -- GET FOLDERS --
 
-    builder.addCase(fetchFoldersThunk.pending, state => {
+    builder.addCase(fetchFoldersThunk.pending, (state) => {
       state.folders.status = FiniteStates.Loading
     })
-    builder.addCase(fetchFoldersThunk.rejected, state => {
+    builder.addCase(fetchFoldersThunk.rejected, (state) => {
       state.folders.status = FiniteStates.Failure
     })
     builder.addCase(fetchFoldersThunk.fulfilled, (state, { payload }) => {
@@ -45,16 +47,16 @@ const foldersSlice = createSlice({
 
     // -- ADD FOLDER --
 
-    builder.addCase(addFolderThunk.pending, state => {
+    builder.addCase(addFolderThunk.pending, (state) => {
       state.addFolderStatus = FiniteStates.Loading
     })
-    builder.addCase(addFolderThunk.rejected, state => {
+    builder.addCase(addFolderThunk.rejected, (state) => {
       state.addFolderStatus = FiniteStates.Failure
     })
     builder.addCase(addFolderThunk.fulfilled, (state) => {
-      state.addFolderStatus = FiniteStates.Success
+      state.addFolderStatus = FiniteStates.Idle
     })
-  }
+  },
 })
 
 export const foldersActions = foldersSlice.actions

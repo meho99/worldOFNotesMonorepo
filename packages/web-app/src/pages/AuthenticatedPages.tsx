@@ -16,11 +16,7 @@ export const AuthenticatedPages: React.FC = () => {
   if (authenticatingStatus !== FiniteStates.Success) {
     return (
       <div className={classes.progressContainer}>
-        <CircularProgress
-          size={30}
-          thickness={6}
-          color='primary'
-        />
+        <CircularProgress size={30} thickness={6} color='primary' />
       </div>
     )
   }

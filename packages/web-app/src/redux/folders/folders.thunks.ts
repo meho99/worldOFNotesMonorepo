@@ -17,7 +17,7 @@ export const fetchFoldersThunk = createAsyncThunk<UserFoldersResponse>(
       errorThunk({ e, dispatch, defaultMessage: FetchingErrors.FetchError })
       throw e
     }
-  }
+  },
 )
 
 export const addFolderThunk = createAsyncThunk(
@@ -33,5 +33,5 @@ export const addFolderThunk = createAsyncThunk(
     } catch (e) {
       errorThunk({ e, dispatch, defaultMessage: FetchingErrors.FetchError })
     }
-  }
+  },
 )

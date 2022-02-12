@@ -1,0 +1,4 @@
+Map(
+  Paginate(Documents(Collection('Folders'))),
+  Lambda(x => Get(x))
+)

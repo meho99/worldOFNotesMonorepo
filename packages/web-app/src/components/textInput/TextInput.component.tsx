@@ -13,7 +13,6 @@ export const TextInput: React.FC<TextInputProps> = ({ errors, name = '', ...prop
     <>
       <TextField
         className={classes.input}
-
         variant='outlined'
         error={hasError}
         name={name}

@@ -9,16 +9,17 @@ const NOTIFICATION_DURATION = 6 * 1000
 
 export const NotificationsComponent: React.FC = ({ children }) => {
   const classes = useNotificationsStyles()
-  const { notificationData, removeCurrentNotification, showNotification } = useNotificationData()
+  const { notificationData, removeCurrentNotification, showNotification } =
+    useNotificationData()
 
   return (
     <>
-      {
-        hasNotifications(showNotification, notificationData) && <Snackbar
+      {hasNotifications(showNotification, notificationData) && (
+        <Snackbar
           open={showNotification}
           onClose={removeCurrentNotification}
           autoHideDuration={NOTIFICATION_DURATION}
-          ClickAwayListenerProps={{ onClickAway: () => { } }}
+          ClickAwayListenerProps={{ onClickAway: () => {} }}
         >
           <Alert
             onClose={removeCurrentNotification}
@@ -28,7 +29,7 @@ export const NotificationsComponent: React.FC = ({ children }) => {
             {notificationData.message}
           </Alert>
         </Snackbar>
-      }
+      )}
       {children}
     </>
   )

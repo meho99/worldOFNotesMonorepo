@@ -1,5 +1,5 @@
 import { exec } from 'child_process'
-import { query, Client } from "faunadb"
+import { query, Client } from 'faunadb'
 import { faunaDBConfig } from '../../src/helpers/fauna'
 
 const {
@@ -31,26 +31,22 @@ const removeIfExist = async () => {
   // delete keys - delete keys linked to database
 
   await parentFauna.query<{ data: any }>(
-    Map(Paginate(Documents(Keys())), x =>
+    Map(Paginate(Documents(Keys())), (x) =>
       Let(
         {
           key: Get(x),
           ref: Select(['ref'], Var('key')),
-          db: Select(['database'], Var('key'), 'none')
+          db: Select(['database'], Var('key'), 'none'),
         },
-        If(Equals(Var('db'), Database(CHILD_DB_NAME)), Delete(Var('ref')), false)
-      )
-    )
+        If(Equals(Var('db'), Database(CHILD_DB_NAME)), Delete(Var('ref')), false),
+      ),
+    ),
   )
 
   // delete child database
 
   await parentFauna.query(
-    If(
-      Exists(Database(CHILD_DB_NAME)),
-      Delete(Database(CHILD_DB_NAME)),
-      false
-    )
+    If(Exists(Database(CHILD_DB_NAME)), Delete(Database(CHILD_DB_NAME)), false),
   )
 }
 
@@ -60,13 +56,13 @@ const createChildDatabase = async () => {
   const { secret } = await parentFauna.query<{ secret: string }>(
     Do(
       CreateDatabase({
-        name: CHILD_DB_NAME
+        name: CHILD_DB_NAME,
       }),
       CreateKey({
         database: Database(CHILD_DB_NAME),
-        role: "server"
-      })
-    )
+        role: 'server',
+      }),
+    ),
   )
 
   const childFauna = new Client({ ...faunaConfig, secret })
@@ -84,24 +80,24 @@ const runMigrations = async () => {
       (error, stdout, stderr) => {
         if (error || stderr) {
           reject(`migrations error: ${stderr}`)
-          return;
+          return
         }
         resolve()
-      })
+      },
+    )
   })
 }
 
 export const setupTestDatabase = async () => {
   try {
     await removeIfExist()
-  
+
     const childDatabase = await createChildDatabase()
-  
+
     await runMigrations()
-  
-  
+
     return childDatabase
-  } catch(e) {
+  } catch (e) {
     console.error('Error in database setup:')
     console.error(e)
   }

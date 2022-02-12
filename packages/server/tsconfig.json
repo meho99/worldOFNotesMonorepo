@@ -2,12 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "moduleResolution": "node",
-    "rootDirs": [
-      "src"
-    ]
+    "rootDirs": ["src"]
   },
-  "include": [
-    "src",
-    "test"
-  ]
+  "include": ["src", "test"]
 }

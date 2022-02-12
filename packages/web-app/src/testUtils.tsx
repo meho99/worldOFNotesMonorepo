@@ -13,9 +13,16 @@ const mockStore = configureStore()
 
 const mockTheme = createTheme()
 
-export const CreateProvider = (testState: DeepPartial<ReducerState>): React.FC => ({ children }) =>
-  <Provider store={mockStore(testState)}> <ThemeProvider theme={mockTheme}> {children} </ThemeProvider></Provider>
+export const CreateProvider =
+  (testState: DeepPartial<ReducerState>): React.FC =>
+  ({ children }) =>
+    (
+      <Provider store={mockStore(testState)}>
+        {' '}
+        <ThemeProvider theme={mockTheme}> {children} </ThemeProvider>
+      </Provider>
+    )
 
-
-export const RouterProvider: React.FC = ({ children }) =>
+export const RouterProvider: React.FC = ({ children }) => (
   <Router history={createMemoryHistory()}> {children} </Router>
+)

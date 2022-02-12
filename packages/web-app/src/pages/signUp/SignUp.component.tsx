@@ -68,7 +68,7 @@ export const SignUpComponent = () => {
                   <InputAdornment position='start'>
                     <MailIcon color='primary' />
                   </InputAdornment>
-                )
+                ),
               }}
             />
           </Grid>
@@ -86,10 +86,8 @@ export const SignUpComponent = () => {
           Sign Up
         </SubmitButton>
 
-        <LinkComponent to={Urls.Login}>
-          Already have an account?
-        </LinkComponent>
+        <LinkComponent to={Urls.Login}>Already have an account?</LinkComponent>
       </form>
-    </CenteredContainer >
+    </CenteredContainer>
   )
 }
