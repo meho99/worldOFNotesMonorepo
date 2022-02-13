@@ -12,4 +12,5 @@ export enum FetchingErrors {
   SingUpError = 'Unable to sign up. Please check your email and password and try again.',
   Unauthorized = 'Unauthorized',
   FetchError = 'Error in fetching data. Please check your network connection and try again.',
+  SaveError = 'Unable to save data. Please check your network connection and try again.',
 }

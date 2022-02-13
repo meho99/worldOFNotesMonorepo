@@ -2,6 +2,7 @@ import { push } from 'connected-react-router'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import axios from 'axios'
+import { AnyAction } from '@reduxjs/toolkit'
 
 import { AuthResponse, LoginRequest, LoginResponse, SignUpRequest } from '@won/core'
 import { SessionState } from '../../../src/redux/session/session.reducer'
@@ -58,7 +59,7 @@ describe('session thunks tests', () => {
 
       const store = mockStore({ ...new SessionState() })
 
-      await store.dispatch(authenticateThunk())
+      await store.dispatch(authenticateThunk() as unknown as AnyAction)
       expect(localStorage.getItem).toHaveBeenCalledWith('token')
       expect(store.getActions()).toEqual(expectedActions)
     })
@@ -74,7 +75,7 @@ describe('session thunks tests', () => {
       ]
       const store = mockStore({ ...new SessionState() })
 
-      await store.dispatch(authenticateThunk())
+      await store.dispatch(authenticateThunk() as unknown as AnyAction)
       expect(localStorage.getItem).toHaveBeenCalledWith('token')
       expect(store.getActions()).toEqual(expect.arrayContaining(expectedActions))
     })
@@ -101,7 +102,7 @@ describe('session thunks tests', () => {
       ]
       const store = mockStore({ ...new SessionState() })
 
-      await store.dispatch(loginThunk(loginRequestData))
+      await store.dispatch(loginThunk(loginRequestData) as unknown as AnyAction)
       expect(store.getActions()).toEqual(expectedActions)
     })
 
@@ -117,7 +118,7 @@ describe('session thunks tests', () => {
       ]
       const store = mockStore({ ...new SessionState() })
 
-      await store.dispatch(loginThunk(loginRequestData))
+      await store.dispatch(loginThunk(loginRequestData) as unknown as AnyAction)
       expect(store.getActions()).toEqual(expect.arrayContaining(expectedActions))
     })
   })
@@ -144,7 +145,7 @@ describe('session thunks tests', () => {
       ]
       const store = mockStore({ ...new SessionState() })
 
-      await store.dispatch(signUpThunk(signUpRequestData))
+      await store.dispatch(signUpThunk(signUpRequestData) as unknown as AnyAction)
       expect(store.getActions()).toEqual(expectedActions)
     })
 
@@ -160,7 +161,7 @@ describe('session thunks tests', () => {
       ]
       const store = mockStore({ ...new SessionState() })
 
-      await store.dispatch(signUpThunk(signUpRequestData))
+      await store.dispatch(signUpThunk(signUpRequestData) as unknown as AnyAction)
       expect(store.getActions()).toEqual(expect.arrayContaining(expectedActions))
     })
   })
@@ -173,7 +174,7 @@ describe('session thunks tests', () => {
     ]
     const store = mockStore({ todos: [] })
 
-    await store.dispatch(logOutThunk())
+    await store.dispatch(logOutThunk() as unknown as AnyAction)
     expect(localStorage.removeItem).toHaveBeenCalledWith('token')
     expect(store.getActions()).toEqual(expectedActions)
   })

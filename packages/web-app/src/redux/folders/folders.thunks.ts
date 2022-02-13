@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
 import { AddFolderRequest, UserFoldersResponse } from '@won/core'
+
 import { FetchingErrors, ReducerNames } from '../../consts'
 import { addFolder, getFolders } from '../../api/folders'
 import { errorThunk } from '../notifications/notifications.helpers'
@@ -31,7 +32,8 @@ export const addFolderThunk = createAsyncThunk(
       dispatch(notificationsActions.addSuccessNotification('Folder added successfully!'))
       return addFolderResponse
     } catch (e) {
-      errorThunk({ e, dispatch, defaultMessage: FetchingErrors.FetchError })
+      errorThunk({ e, dispatch, defaultMessage: FetchingErrors.SaveError })
+      throw e
     }
   },
 )
