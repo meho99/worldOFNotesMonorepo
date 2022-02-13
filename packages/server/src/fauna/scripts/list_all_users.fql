@@ -1,0 +1,4 @@
+Map(
+  Paginate(Documents(Collection('Users'))),
+  Lambda(x => Select(['data', 'email'], Get(x)))
+)

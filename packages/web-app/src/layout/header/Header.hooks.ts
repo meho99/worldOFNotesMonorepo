@@ -1,7 +1,10 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { sessionActions } from '../../redux/session/session.reducer'
-import { isAuthenticatedSelector, isDarkThemeSelector } from '../../redux/session/session.selectors'
+import {
+  isAuthenticatedSelector,
+  isDarkThemeSelector,
+} from '../../redux/session/session.selectors'
 import { logOutThunk } from '../../redux/session/session.thunks'
 
 export const useHeaderMenu = () => {
@@ -17,7 +20,7 @@ export const useHeaderMenu = () => {
   return {
     anchorEl,
     handleClick,
-    handleClose
+    handleClose,
   }
 }
 
@@ -38,6 +41,6 @@ export const useMenuOptions = () => {
     isDarkTheme,
     handleLogOut,
     isAuthenticated,
-    handleChangeThemeVariant
+    handleChangeThemeVariant,
   }
 }

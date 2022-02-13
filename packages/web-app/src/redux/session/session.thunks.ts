@@ -1,7 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { push } from 'connected-react-router'
 
-import { LoginRequest, LoginResponse, SignUpRequest, SingUpResponse, UserModel } from '@won/core'
+import {
+  LoginRequest,
+  LoginResponse,
+  SignUpRequest,
+  SingUpResponse,
+  UserModel,
+} from '@won/core'
 import { Urls, FetchingErrors } from '../../consts'
 import { ReducerNames } from '../../consts'
 import { authenticateUser } from '../../api/auth'
@@ -10,21 +16,21 @@ import { signUpUser } from '../../api/signUp'
 import { notificationsActions } from '../notifications/notifications.reducer'
 import { errorThunk } from '../notifications/notifications.helpers'
 
-export const authenticateThunk = createAsyncThunk<{ token: string; userData: UserModel }>(
-  `${ReducerNames.Session}/authenticateByToken`,
-  async (_, { dispatch }) => {
-    try {
-      const token = localStorage.getItem('token') as string
-      const userData = await authenticateUser(token)
+export const authenticateThunk = createAsyncThunk<{
+  token: string
+  userData: UserModel
+}>(`${ReducerNames.Session}/authenticateByToken`, async (_, { dispatch }) => {
+  try {
+    const token = localStorage.getItem('token') as string
+    const userData = await authenticateUser()
 
-      return { token, userData }
-    } catch (e) {
-      dispatch(push(Urls.Login))
-      dispatch(notificationsActions.addErrorNotification('Unauthorized'))
-      throw e
-    }
+    return { token, userData }
+  } catch (e) {
+    dispatch(push(Urls.Login))
+    dispatch(notificationsActions.addErrorNotification('Unauthorized'))
+    throw e
   }
-)
+})
 
 export const loginThunk = createAsyncThunk<LoginResponse, LoginRequest>(
   `${ReducerNames.Session}/loginUser`,
@@ -35,10 +41,10 @@ export const loginThunk = createAsyncThunk<LoginResponse, LoginRequest>(
 
       return loginResponse
     } catch (e) {
-      errorThunk({e, dispatch, defaultMessage: FetchingErrors.LoginError })
+      errorThunk({ e, dispatch, defaultMessage: FetchingErrors.LoginError })
       throw e
     }
-  }
+  },
 )
 
 export const signUpThunk = createAsyncThunk<SingUpResponse, SignUpRequest>(
@@ -50,10 +56,10 @@ export const signUpThunk = createAsyncThunk<SingUpResponse, SignUpRequest>(
 
       return signUpResponse
     } catch (e) {
-      errorThunk({e, dispatch, defaultMessage: FetchingErrors.SingUpError })
+      errorThunk({ e, dispatch, defaultMessage: FetchingErrors.SingUpError })
       throw e
     }
-  }
+  },
 )
 
 export const logOutThunk = createAsyncThunk<void>(
@@ -62,5 +68,5 @@ export const logOutThunk = createAsyncThunk<void>(
     localStorage.removeItem('token')
 
     dispatch(push(Urls.Login))
-  }
+  },
 )

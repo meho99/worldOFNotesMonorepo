@@ -7,8 +7,5 @@ import { rootReducer } from './rootReducer'
 
 export const store = configureStore({
   reducer: combineReducers(rootReducer),
-  middleware: [
-    thunkMiddleware,
-    routerMiddleware(historyProvider)
-  ]
+  middleware: [thunkMiddleware, routerMiddleware(historyProvider)],
 })

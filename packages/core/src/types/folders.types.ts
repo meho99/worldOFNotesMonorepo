@@ -1,9 +1,9 @@
 export type FolderModel = Record<'description' | 'name', string> & {
-  id: string;
+  id: string
 }
 
 export type UserFoldersResponse = {
-  folders: FolderModel[];
+  folders: FolderModel[]
 }
 
 export type AddFolderRequest = Omit<FolderModel, 'id'>
@@ -13,8 +13,8 @@ export type UpdateFolderRequest = FolderModel
 export type UpdateFolderResponse = FolderModel
 
 export type DeleteFolderRequest = {
-  id: string;
+  id: string
 }
 export type DeleteFolderResponse = {
-  id: string;
+  id: string
 }

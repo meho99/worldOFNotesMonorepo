@@ -8,11 +8,8 @@ import { PasswordInputProps } from './PasswordInput.types'
 import { usePasswordVisibility } from './PasswordInput.hooks'
 
 export const PasswordField: React.FC<PasswordInputProps> = (props) => {
-  const {
-    showPassword,
-    handleClickShowPassword,
-    handleMouseDownPassword
-  } = usePasswordVisibility()
+  const { showPassword, handleClickShowPassword, handleMouseDownPassword } =
+    usePasswordVisibility()
 
   return (
     <TextInput
@@ -24,20 +21,20 @@ export const PasswordField: React.FC<PasswordInputProps> = (props) => {
           </InputAdornment>
         ),
         endAdornment: (
-          <InputAdornment position="end">
+          <InputAdornment position='end'>
             <IconButton
               size='small'
               onClick={handleClickShowPassword}
               onMouseDown={handleMouseDownPassword}
             >
-              {
-                showPassword
-                  ? <VisibilityOff color='primary' fontSize='small' />
-                  : <Visibility color='primary' fontSize='small' />
-              }
+              {showPassword ? (
+                <VisibilityOff color='primary' fontSize='small' />
+              ) : (
+                <Visibility color='primary' fontSize='small' />
+              )}
             </IconButton>
           </InputAdornment>
-        )
+        ),
       }}
       type={showPassword ? 'text' : 'password'}
     />

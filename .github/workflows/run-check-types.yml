@@ -1,5 +1,5 @@
 name: run-check-types
-on: ["push"]
+on: ['push']
 jobs:
   check-bats-version:
     runs-on: ubuntu-latest
@@ -8,6 +8,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: lerna run build --scope @won/core 
+      - run: lerna run build --scope @won/core
       - run: npm run install-all
       - run: lerna run check-types

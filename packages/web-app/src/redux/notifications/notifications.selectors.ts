@@ -7,10 +7,11 @@ import { NotificationData } from './notifications.types'
 
 const notificationState = (state: ReducerState) => state[ReducerNames.Notifications]
 
-export const notificationAdapterSelectors = notificationsAdapter.getSelectors(notificationState)
+export const notificationAdapterSelectors =
+  notificationsAdapter.getSelectors(notificationState)
 
 /** returns most important notification(list is sorted due to 'sortCompare' function in notificationsAdapter) */
 export const getNotificationSelector = createSelector(
   notificationAdapterSelectors.selectAll,
-  (notifications): NotificationData | undefined => notifications[0]
+  (notifications): NotificationData | undefined => notifications[0],
 )

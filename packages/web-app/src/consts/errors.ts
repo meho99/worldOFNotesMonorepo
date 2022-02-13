@@ -4,11 +4,13 @@ export enum FieldsErrors {
   NameToShort = 'Name must have at least 3 characters',
   NameToLong = 'Name must have less than 25 characters',
   Required = 'Required field',
-  InvalidEmailFormat = 'Invalid email address'
+  InvalidEmailFormat = 'Invalid email address',
 }
 
 export enum FetchingErrors {
   LoginError = 'Unable to login. Please check your email and password and try again.',
   SingUpError = 'Unable to sign up. Please check your email and password and try again.',
-  Unauthorized = 'Unauthorized'
+  Unauthorized = 'Unauthorized',
+  FetchError = 'Error in fetching data. Please check your network connection and try again.',
+  SaveError = 'Unable to save data. Please check your network connection and try again.',
 }

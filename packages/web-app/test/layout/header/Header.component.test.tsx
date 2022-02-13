@@ -7,12 +7,14 @@ import { CreateProvider } from '../../../src/testUtils'
 
 describe('HeaderComponent test', () => {
   it('Snapshot test', () => {
-    expect(render(<HeaderComponent />, {
-      wrapper: CreateProvider({
-        session: {
-          authenticatingStatus: FiniteStates.Success
-        }
-      })
-    }).container).toMatchSnapshot()
+    expect(
+      render(<HeaderComponent />, {
+        wrapper: CreateProvider({
+          session: {
+            authenticatingStatus: FiniteStates.Success,
+          },
+        }),
+      }).container,
+    ).toMatchSnapshot()
   })
 })

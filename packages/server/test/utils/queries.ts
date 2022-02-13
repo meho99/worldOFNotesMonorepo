@@ -3,10 +3,7 @@ import { AddFolderRequest, SignUpRequest, UserModel } from '@won/core'
 import { FaunaQuery, FoldersData } from '../../src/types'
 
 export const addUser = async (dbClient: faunadb.Client, userData: SignUpRequest) => {
-  const {
-    Create,
-    Collection
-  } = faunadb.query
+  const { Create, Collection } = faunadb.query
 
   const { password, email, name } = userData
 
@@ -16,10 +13,7 @@ export const addUser = async (dbClient: faunadb.Client, userData: SignUpRequest)
   }
 
   const { ref, data } = await dbClient.query<FaunaQuery<UserModel>>(
-    Create(
-      Collection('Users'),
-      user
-    )
+    Create(Collection('Users'), user),
   )
 
   return { ref, data, id: ref.id }
@@ -27,13 +21,9 @@ export const addUser = async (dbClient: faunadb.Client, userData: SignUpRequest)
 
 export const addFolder = async (
   dbClient: faunadb.Client,
-  folderData: AddFolderRequest & { userId: string }
+  folderData: AddFolderRequest & { userId: string },
 ) => {
-  const {
-    Ref,
-    Create,
-    Collection
-  } = faunadb.query
+  const { Ref, Create, Collection } = faunadb.query
 
   const { name, description, userId } = folderData
 
@@ -41,12 +31,12 @@ export const addFolder = async (
     data: {
       name,
       description,
-      user: Ref(Collection('Users'), userId)
-    }
+      user: Ref(Collection('Users'), userId),
+    },
   }
 
   const { ref, data } = await dbClient.query<FoldersData>(
-    Create(Collection('Folders'), folder)
+    Create(Collection('Folders'), folder),
   )
 
   return { ref, data, id: ref.id }

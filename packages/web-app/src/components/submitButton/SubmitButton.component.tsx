@@ -1,32 +1,34 @@
 import React from 'react'
-import classNames from 'classnames'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { useStyles } from './SubmitButton.styles'
 import { SubmitButtonProps } from './SubmitButton.types'
 
-export const SubmitButton: React.FC<SubmitButtonProps> = ({ children, isLoading, className, ...buttonProps }) => {
-  const classes = useStyles()
-
+export const SubmitButton: React.FC<SubmitButtonProps> = ({
+  children,
+  isLoading,
+  className,
+  disabled,
+  ...buttonProps
+}) => {
   return (
     <Button
+      size='large'
       type='submit'
       color='primary'
       variant='contained'
-      disabled={isLoading}
-      size='large'
-      className={classNames(classes.button, className)}
+      sx={{ mt: 1 }}
+      disabled={disabled || isLoading}
       {...buttonProps}
     >
-      {
-        isLoading && <CircularProgress
+      {isLoading && (
+        <CircularProgress
           size={30}
           thickness={6}
           color='primary'
-          className={classes.circle}
+          sx={{ position: 'absolute' }}
         />
-      }
+      )}
       {children}
     </Button>
   )

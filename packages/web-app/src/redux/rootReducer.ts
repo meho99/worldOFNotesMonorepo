@@ -11,7 +11,7 @@ export const rootReducer = {
   [ReducerNames.Router]: connectRouter(historyProvider),
   [ReducerNames.Session]: sessionReducer,
   [ReducerNames.Folders]: foldersReducer,
-  [ReducerNames.Notifications]: notificationsReducer
+  [ReducerNames.Notifications]: notificationsReducer,
 }
 
 export type ReducerState = StateFromReducersMapObject<typeof rootReducer>

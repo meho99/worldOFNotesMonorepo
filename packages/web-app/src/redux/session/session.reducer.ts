@@ -5,12 +5,13 @@ import { ThemeTypes, ReducerNames, FiniteStates } from '../../consts'
 import { authenticateThunk, loginThunk, logOutThunk, signUpThunk } from './session.thunks'
 
 export class SessionState {
-  token: string | null = localStorage.getItem('token');
-  authenticatingStatus: FiniteStates = FiniteStates.Idle;
-  loginStatus: FiniteStates = FiniteStates.Idle;
-  signUpStatus: FiniteStates = FiniteStates.Idle;
-  user: Partial<UserModel> = {};
-  theme: ThemeTypes = localStorage.getItem('themeVariant') as ThemeTypes || ThemeTypes.Dark;
+  token: string | null = localStorage.getItem('token')
+  authenticatingStatus: FiniteStates = FiniteStates.Idle
+  loginStatus: FiniteStates = FiniteStates.Idle
+  signUpStatus: FiniteStates = FiniteStates.Idle
+  user: Partial<UserModel> = {}
+  theme: ThemeTypes =
+    (localStorage.getItem('themeVariant') as ThemeTypes) || ThemeTypes.Dark
 }
 
 const initialState = { ...new SessionState() }
@@ -20,22 +21,21 @@ const sessionSlice = createSlice({
   initialState,
   reducers: {
     changeThemeType: (state) => {
-      const newThemeVariant = state.theme === ThemeTypes.Light
-        ? ThemeTypes.Dark
-        : ThemeTypes.Light
+      const newThemeVariant =
+        state.theme === ThemeTypes.Light ? ThemeTypes.Dark : ThemeTypes.Light
 
       localStorage.setItem('themeVariant', newThemeVariant)
       state.theme = newThemeVariant
-    }
+    },
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     // -- LOGIN --
 
-    builder.addCase(loginThunk.pending, state => {
+    builder.addCase(loginThunk.pending, (state) => {
       state.loginStatus = FiniteStates.Loading
     })
 
-    builder.addCase(loginThunk.rejected, state => {
+    builder.addCase(loginThunk.rejected, (state) => {
       state.loginStatus = FiniteStates.Failure
     })
 
@@ -49,11 +49,11 @@ const sessionSlice = createSlice({
 
     // -- SIGNUP --
 
-    builder.addCase(signUpThunk.pending, state => {
+    builder.addCase(signUpThunk.pending, (state) => {
       state.signUpStatus = FiniteStates.Loading
     })
 
-    builder.addCase(signUpThunk.rejected, state => {
+    builder.addCase(signUpThunk.rejected, (state) => {
       state.signUpStatus = FiniteStates.Failure
     })
 
@@ -67,11 +67,11 @@ const sessionSlice = createSlice({
 
     // -- AUTHENTICATE --
 
-    builder.addCase(authenticateThunk.pending, state => {
+    builder.addCase(authenticateThunk.pending, (state) => {
       state.authenticatingStatus = FiniteStates.Loading
     })
 
-    builder.addCase(authenticateThunk.rejected, state => {
+    builder.addCase(authenticateThunk.rejected, (state) => {
       state.authenticatingStatus = FiniteStates.Failure
     })
 
@@ -85,14 +85,14 @@ const sessionSlice = createSlice({
 
     // -- LOGOUT --
 
-    builder.addCase(logOutThunk.fulfilled, state => {
+    builder.addCase(logOutThunk.fulfilled, (state) => {
       state.token = null
       state.signUpStatus = FiniteStates.Idle
       state.loginStatus = FiniteStates.Idle
       state.authenticatingStatus = FiniteStates.Idle
       state.user = {}
     })
-  }
+  },
 })
 
 export const sessionActions = sessionSlice.actions

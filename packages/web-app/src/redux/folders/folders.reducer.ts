@@ -1,10 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { FolderModel } from '@won/core'
 import { ReducerNames, FiniteStates } from '../../consts'
+import { addFolderThunk, fetchFoldersThunk } from './folders.thunks'
 
+type FoldersList = {
+  data: Array<FolderModel>
+  status: FiniteStates
+}
 export class FoldersState {
-  data: Array<FolderModel> = [];
-  status: FiniteStates = FiniteStates.Idle;
+  folders: FoldersList = {
+    data: [],
+    status: FiniteStates.Idle,
+  }
+  addFolderStatus: FiniteStates = FiniteStates.Idle
   currentFolder?: number = undefined
 }
 
@@ -14,21 +22,41 @@ const foldersSlice = createSlice({
   name: ReducerNames.Folders,
   initialState,
   reducers: {
-    setFolders: (state, { payload }: PayloadAction<Array<FolderModel>>) => {
-      state.data = payload
-      state.status = FiniteStates.Success
-    },
-    fetchFoldersFailure: (state) => {
-      state.status = FiniteStates.Failure
-    },
-    fetchFolders: (state) => {
-      state.data = []
-      state.status = FiniteStates.Loading
-    },
-    setCurrentFolder: (state, { payload }: PayloadAction<FoldersState['currentFolder']>) => {
+    setCurrentFolder: (
+      state,
+      { payload }: PayloadAction<FoldersState['currentFolder']>,
+    ) => {
       state.currentFolder = payload
-    }
-  }
+    },
+  },
+  extraReducers: (builder) => {
+    // -- GET FOLDERS --
+
+    builder.addCase(fetchFoldersThunk.pending, (state) => {
+      state.folders.status = FiniteStates.Loading
+    })
+    builder.addCase(fetchFoldersThunk.rejected, (state) => {
+      state.folders.status = FiniteStates.Failure
+    })
+    builder.addCase(fetchFoldersThunk.fulfilled, (state, { payload }) => {
+      const { folders } = payload
+
+      state.folders.data = folders
+      state.folders.status = FiniteStates.Success
+    })
+
+    // -- ADD FOLDER --
+
+    builder.addCase(addFolderThunk.pending, (state) => {
+      state.addFolderStatus = FiniteStates.Loading
+    })
+    builder.addCase(addFolderThunk.rejected, (state) => {
+      state.addFolderStatus = FiniteStates.Failure
+    })
+    builder.addCase(addFolderThunk.fulfilled, (state) => {
+      state.addFolderStatus = FiniteStates.Idle
+    })
+  },
 })
 
 export const foldersActions = foldersSlice.actions

@@ -1,19 +1,24 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 
+import Box from '@mui/material/Box'
+
 import { Urls } from './consts'
 import { HeaderComponent } from './layout/header/Header.component'
 import { LoginComponent } from './pages/login/Login.component'
 import { AuthenticatedPages } from './pages/AuthenticatedPages'
-import { useStyles } from './layout/BackgroundBody.style'
 import { SignUpComponent } from './pages/signUp/SignUp.component'
 import { NotificationsComponent } from './components/notifications/Notifications.component'
 
 export const App = () => {
-  const classes = useStyles()
-
   return (
-    <div className={classes.root}>
+    <Box
+      sx={{
+        width: '100%',
+        minHeight: '100vh',
+        backgroundColor: ({ palette }) => palette.background.default,
+      }}
+    >
       <HeaderComponent />
       <NotificationsComponent>
         <Switch>
@@ -22,7 +27,7 @@ export const App = () => {
           <Route exact path='*' component={AuthenticatedPages} />
         </Switch>
       </NotificationsComponent>
-    </div>
+    </Box>
   )
 }
 

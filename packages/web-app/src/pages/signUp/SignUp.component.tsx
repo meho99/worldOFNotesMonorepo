@@ -16,18 +16,20 @@ import { LinkComponent } from '../../components/link/Link.component'
 import { TextInput } from '../../components/textInput/TextInput.component'
 import { SubmitButton } from '../../components/submitButton/SubmitButton.component'
 import { PasswordField } from '../../components/passwordInput/PasswordInput.component'
-import { CenteredContainer } from '../../components/centeredContainer/CenteredContainer.component'
+import {
+  CenteredContainer,
+  CenteredFormContainer,
+} from '../../components/centeredContainer/CenteredContainer.component'
 
-import { useStyles } from './SignUp.styles'
 import { signUpFields, SignUpValues } from './SignUp.fields'
 
 export const SignUpComponent = () => {
-  const classes = useStyles()
   const dispatch = useDispatch()
 
-  const isLoading = useSelector(isSignUpLoadingSelector)
+  const { register, handleSubmit, errors, formState } = useForm<SignUpValues>()
 
-  const { register, handleSubmit, errors } = useForm<SignUpValues>()
+  const isLoading = useSelector(isSignUpLoadingSelector)
+  const disabled = formState.isSubmitted && !formState.isValid
 
   const onSubmit = (values: SignUpValues) => {
     dispatch(signUpThunk(values))
@@ -35,13 +37,13 @@ export const SignUpComponent = () => {
 
   return (
     <CenteredContainer>
-      <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
-        <Typography color='primary' variant='h1' className={classes.title}>
+      <CenteredFormContainer onSubmit={handleSubmit(onSubmit)}>
+        <Typography color='primary' variant='h1' sx={{ mb: 4 }}>
           Sign Up
         </Typography>
 
         <Grid container spacing={0}>
-          <Grid xs={12} margin={2}>
+          <Grid item xs={12} margin={2}>
             <TextInput
               {...signUpFields.name.fieldProps}
               autoFocus
@@ -57,7 +59,7 @@ export const SignUpComponent = () => {
             />
           </Grid>
 
-          <Grid xs={12} margin={2}>
+          <Grid item xs={12} margin={2}>
             <TextInput
               {...signUpFields.email.fieldProps}
               errors={errors}
@@ -67,12 +69,12 @@ export const SignUpComponent = () => {
                   <InputAdornment position='start'>
                     <MailIcon color='primary' />
                   </InputAdornment>
-                )
+                ),
               }}
             />
           </Grid>
 
-          <Grid xs={12} margin={2}>
+          <Grid item xs={12} margin={2}>
             <PasswordField
               {...signUpFields.password.fieldProps}
               errors={errors}
@@ -81,14 +83,12 @@ export const SignUpComponent = () => {
           </Grid>
         </Grid>
 
-        <SubmitButton isLoading={isLoading}>
+        <SubmitButton isLoading={isLoading} disabled={disabled}>
           Sign Up
         </SubmitButton>
 
-        <LinkComponent to={Urls.Login}>
-          Already have an account?
-        </LinkComponent>
-      </form>
-    </CenteredContainer >
+        <LinkComponent to={Urls.Login}>Already have an account?</LinkComponent>
+      </CenteredFormContainer>
+    </CenteredContainer>
   )
 }

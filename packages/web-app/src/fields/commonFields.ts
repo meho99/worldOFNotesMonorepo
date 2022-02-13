@@ -5,15 +5,15 @@ export const emailField = (name = 'email') => {
     fieldProps: {
       label: 'EMAIL ADDRESS',
       name,
-      placeholder: 'Type email'
+      placeholder: 'Type email',
     },
     validation: {
       required: FieldsErrors.Required,
       pattern: {
         value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-        message: FieldsErrors.InvalidEmailFormat
-      }
-    }
+        message: FieldsErrors.InvalidEmailFormat,
+      },
+    },
   }
 }
 
@@ -23,19 +23,19 @@ export const passwordField = (name = 'password') => {
       label: 'PASSWORD',
       name,
       type: 'password',
-      placeholder: 'Type password'
+      placeholder: 'Type password',
     },
     validation: {
       required: FieldsErrors.Required,
       minLength: {
         value: 8,
-        message: FieldsErrors.PasswordToShort
+        message: FieldsErrors.PasswordToShort,
       },
       maxLength: {
         value: 99,
-        message: FieldsErrors.PasswordToLong
-      }
-    }
+        message: FieldsErrors.PasswordToLong,
+      },
+    },
   }
 }
 
@@ -45,18 +45,18 @@ export const nameField = (name = 'name') => {
       label: 'USERNAME',
       name,
       type: 'text',
-      placeholder: 'Type name'
+      placeholder: 'Type name',
     },
     validation: {
       required: FieldsErrors.Required,
       minLength: {
         value: 3,
-        message: FieldsErrors.NameToShort
+        message: FieldsErrors.NameToShort,
       },
       maxLength: {
         value: 25,
-        message: FieldsErrors.NameToLong
-      }
-    }
+        message: FieldsErrors.NameToLong,
+      },
+    },
   }
 }

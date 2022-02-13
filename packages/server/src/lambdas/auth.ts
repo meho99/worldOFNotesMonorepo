@@ -15,11 +15,7 @@ import { createSuccessResponse } from '../helpers/responses'
 
 dotenv.config({ path: findEnv() })
 
-const {
-  Get,
-  Ref,
-  Collection
-} = faunadb.query
+const { Get, Ref, Collection } = faunadb.query
 
 const authHandler = async (event: APIGatewayEvent, context: Context) => {
   if (!isAuthenticated(event)) return
@@ -27,24 +23,19 @@ const authHandler = async (event: APIGatewayEvent, context: Context) => {
   const { httpMethod, user } = event
 
   if (httpMethod === 'GET') {
-    const faunaDBClient = getFaunaDBClient();
+    const faunaDBClient = getFaunaDBClient()
 
     const { data, ref } = await faunaDBClient.query<FaunaQuery<UserModel>>(
-      Get(
-        Ref(
-          Collection("Users"), user.id
-        )
-      )
+      Get(Ref(Collection('Users'), user.id)),
     )
 
     const response: AuthResponse = {
       ...data,
-      id: ref.id
+      id: ref.id,
     }
 
     return createSuccessResponse(response)
   }
 }
 
-export const handler = middy(authHandler)
-  .use(authMiddleware())
+export const handler = middy(authHandler).use(authMiddleware())

@@ -1,11 +1,18 @@
 import faunadb from 'faunadb'
 import lambdaTester from 'lambda-tester'
 import { APIGatewayProxyEvent } from 'aws-lambda'
-import { LoginRequest, LoginResponse, UserFoldersResponse, UpdateFolderRequest, UpdateFolderResponse, SignUpRequest } from '@won/core'
+import {
+  LoginRequest,
+  LoginResponse,
+  UserFoldersResponse,
+  UpdateFolderRequest,
+  UpdateFolderResponse,
+  SignUpRequest,
+} from '@won/core'
 
-import { handler as updateFolderHandler } from "../../src/lambdas/updateFolder"
-import { handler as getUserFoldersHandler } from "../../src/lambdas/getUserFolders"
-import { handler as loginHandler } from "../../src/lambdas/login"
+import { handler as updateFolderHandler } from '../../src/lambdas/updateFolder'
+import { handler as getUserFoldersHandler } from '../../src/lambdas/getUserFolders'
+import { handler as loginHandler } from '../../src/lambdas/login'
 
 import * as helpers from '../../src/helpers/fauna'
 import { LambdaResponse } from '../../src/helpers/responses'
@@ -19,40 +26,49 @@ jest.mock('../../src/helpers/fauna', () => {
 
   return {
     ...helpers,
-    getFaunaDBClient: jest.fn()
+    getFaunaDBClient: jest.fn(),
   }
 })
 
 let dbClient: faunadb.Client
 
 beforeEach(async () => {
-  const client = await setupTestDatabase();
-  if (client) dbClient = client;
-
-  (helpers.getFaunaDBClient as jest.Mock).mockImplementation(() => dbClient)
+  const client = await setupTestDatabase()
+  if (client) dbClient = client
+  ;(helpers.getFaunaDBClient as jest.Mock).mockImplementation(() => dbClient)
 })
 
 afterAll(() => {
   jest.clearAllMocks
 })
 
-describe("updateFolder", () => {
+describe('updateFolder', () => {
   let loggedUserToken: string
   let loggedUserId: string
 
   beforeEach(async () => {
     // -- add user and login --
-    const user1Data: SignUpRequest = { email: 'test2@email.com', name: 'Test User2', password: 'testPassword123' }
+    const user1Data: SignUpRequest = {
+      email: 'test2@email.com',
+      name: 'Test User2',
+      password: 'testPassword123',
+    }
 
     const { id, token } = await addAndloginUser(user1Data)
     loggedUserToken = token
     loggedUserId = id
   })
 
-  describe("data validation", () => {
-    it("missing name", async () => {
-      const requestData: UpdateFolderRequest = { description: 'test2', id: '123' } as UpdateFolderRequest
-      const request = createRequest(requestData, { httpMethod: 'POST', headers: createAuthHeaders(loggedUserToken) })
+  describe('data validation', () => {
+    it('missing name', async () => {
+      const requestData: UpdateFolderRequest = {
+        description: 'test2',
+        id: '123',
+      } as UpdateFolderRequest
+      const request = createRequest(requestData, {
+        httpMethod: 'POST',
+        headers: createAuthHeaders(loggedUserToken),
+      })
 
       await lambdaTester(updateFolderHandler)
         .event(request as APIGatewayProxyEvent)
@@ -60,14 +76,21 @@ describe("updateFolder", () => {
           const responseBody = JSON.parse(result.body)
 
           expect(result.statusCode).toBe(400)
-          expect(responseBody.message).toBe("Event object failed validation")
-          expect(responseBody.details[0].message).toBe("must have required property name")
+          expect(responseBody.message).toBe('Event object failed validation')
+          expect(responseBody.details[0].message).toBe('must have required property name')
         })
     })
 
-    it("invalid name", async () => {
-      const requestData: UpdateFolderRequest = { description: 'test2', id: '123', name: { test: true } } as unknown as UpdateFolderRequest
-      const request = createRequest(requestData, { httpMethod: 'POST', headers: createAuthHeaders(loggedUserToken) })
+    it('invalid name', async () => {
+      const requestData: UpdateFolderRequest = {
+        description: 'test2',
+        id: '123',
+        name: { test: true },
+      } as unknown as UpdateFolderRequest
+      const request = createRequest(requestData, {
+        httpMethod: 'POST',
+        headers: createAuthHeaders(loggedUserToken),
+      })
 
       await lambdaTester(updateFolderHandler)
         .event(request as APIGatewayProxyEvent)
@@ -75,14 +98,20 @@ describe("updateFolder", () => {
           const responseBody = JSON.parse(result.body)
 
           expect(result.statusCode).toBe(400)
-          expect(responseBody.message).toBe("Event object failed validation")
-          expect(responseBody.details[0].message).toBe("must be string")
+          expect(responseBody.message).toBe('Event object failed validation')
+          expect(responseBody.details[0].message).toBe('must be string')
         })
     })
 
-    it("missing description", async () => {
-      const requestData: UpdateFolderRequest = { name: 'test', id: '123' } as UpdateFolderRequest
-      const request = createRequest(requestData, { httpMethod: 'POST', headers: createAuthHeaders(loggedUserToken) })
+    it('missing description', async () => {
+      const requestData: UpdateFolderRequest = {
+        name: 'test',
+        id: '123',
+      } as UpdateFolderRequest
+      const request = createRequest(requestData, {
+        httpMethod: 'POST',
+        headers: createAuthHeaders(loggedUserToken),
+      })
 
       await lambdaTester(updateFolderHandler)
         .event(request as APIGatewayProxyEvent)
@@ -90,14 +119,22 @@ describe("updateFolder", () => {
           const responseBody = JSON.parse(result.body)
 
           expect(result.statusCode).toBe(400)
-          expect(responseBody.message).toBe("Event object failed validation")
-          expect(responseBody.details[0].message).toBe("must have required property description")
+          expect(responseBody.message).toBe('Event object failed validation')
+          expect(responseBody.details[0].message).toBe(
+            'must have required property description',
+          )
         })
     })
 
-    it("missing folder id", async () => {
-      const requestData: UpdateFolderRequest = { name: 'test', description: 'desc' } as UpdateFolderRequest
-      const request = createRequest(requestData, { httpMethod: 'POST', headers: createAuthHeaders(loggedUserToken) })
+    it('missing folder id', async () => {
+      const requestData: UpdateFolderRequest = {
+        name: 'test',
+        description: 'desc',
+      } as UpdateFolderRequest
+      const request = createRequest(requestData, {
+        httpMethod: 'POST',
+        headers: createAuthHeaders(loggedUserToken),
+      })
 
       await lambdaTester(updateFolderHandler)
         .event(request as APIGatewayProxyEvent)
@@ -105,14 +142,14 @@ describe("updateFolder", () => {
           const responseBody = JSON.parse(result.body)
 
           expect(result.statusCode).toBe(400)
-          expect(responseBody.message).toBe("Event object failed validation")
-          expect(responseBody.details[0].message).toBe("must have required property id")
+          expect(responseBody.message).toBe('Event object failed validation')
+          expect(responseBody.details[0].message).toBe('must have required property id')
         })
     })
   })
 
-  describe("should fail", () => {
-    it("when user is not authenticated", async () => {
+  describe('should fail', () => {
+    it('when user is not authenticated', async () => {
       const request = createRequest(undefined, { httpMethod: 'POST' })
 
       await lambdaTester(updateFolderHandler)
@@ -121,29 +158,40 @@ describe("updateFolder", () => {
           const responseBody = JSON.parse(result.body)
 
           expect(result.statusCode).toBe(401)
-          expect(responseBody.message).toBe("Missing token, authorization denied")
+          expect(responseBody.message).toBe('Missing token, authorization denied')
         })
     })
 
-    it("when folder is not owned by the user", async () => {
+    it('when folder is not owned by the user', async () => {
       // -- add folder --
 
       const { id } = await addFolder(dbClient, {
         userId: loggedUserId,
         name: 'folder',
-        description: 'desc'
+        description: 'desc',
       })
 
       const folderId = id
 
       // try to update folder data
 
-      const anotherUserData: SignUpRequest = { email: 'test3@email.com', name: 'Another User', password: 'testPassword123' }
+      const anotherUserData: SignUpRequest = {
+        email: 'test3@email.com',
+        name: 'Another User',
+        password: 'testPassword123',
+      }
 
       const { token } = await addAndloginUser(anotherUserData)
 
-      const requestData: UpdateFolderRequest = { name: 'folder_updated', description: 'desc_updated', id: folderId }
-      const request = createRequest(requestData, { httpMethod: 'POST', headers: createAuthHeaders(token) })
+      const requestData: UpdateFolderRequest = {
+        name: 'folder_updated',
+        description: 'desc_updated',
+        id: folderId,
+      }
+      const request = createRequest(requestData, {
+        httpMethod: 'POST',
+        headers: createAuthHeaders(token),
+      })
 
       await lambdaTester(updateFolderHandler)
         .event(request as APIGatewayProxyEvent)
@@ -151,27 +199,34 @@ describe("updateFolder", () => {
           const responseBody = JSON.parse(result.body)
 
           expect(result.statusCode).toBe(500)
-          expect(responseBody.message).toBe("instance not found")
+          expect(responseBody.message).toBe('instance not found')
         })
     })
   })
 
-  describe("should suceed", () => {
-    it("when all data is valid", async () => {
+  describe('should suceed', () => {
+    it('when all data is valid', async () => {
       // -- add folder --
 
       const { id } = await addFolder(dbClient, {
         userId: loggedUserId,
         name: 'folder',
-        description: 'desc'
+        description: 'desc',
       })
 
       const folderId = id
 
       // -- update folder data --
 
-      const requestData: UpdateFolderRequest = { name: 'folder_updated', description: 'desc_updated', id: folderId }
-      const request = createRequest(requestData, { httpMethod: 'POST', headers: createAuthHeaders(loggedUserToken) })
+      const requestData: UpdateFolderRequest = {
+        name: 'folder_updated',
+        description: 'desc_updated',
+        id: folderId,
+      }
+      const request = createRequest(requestData, {
+        httpMethod: 'POST',
+        headers: createAuthHeaders(loggedUserToken),
+      })
 
       await lambdaTester(updateFolderHandler)
         .event(request as APIGatewayProxyEvent)
@@ -186,14 +241,19 @@ describe("updateFolder", () => {
 
       // -- check if folder was properly updated --
 
-      const getFoldersRequest = createRequest(undefined, { httpMethod: 'GET', headers: createAuthHeaders(loggedUserToken) })
+      const getFoldersRequest = createRequest(undefined, {
+        httpMethod: 'GET',
+        headers: createAuthHeaders(loggedUserToken),
+      })
 
       await lambdaTester(getUserFoldersHandler)
         .event(getFoldersRequest as APIGatewayProxyEvent)
         .expectResult((result: LambdaResponse) => {
           const responseBody = JSON.parse(result.body) as UserFoldersResponse
 
-          const updatedFolder = responseBody.folders.find(folder => folder.id === folderId)
+          const updatedFolder = responseBody.folders.find(
+            (folder) => folder.id === folderId,
+          )
 
           expect(updatedFolder?.description).toBe(requestData.description)
           expect(updatedFolder?.name).toBe(requestData.name)
@@ -203,7 +263,10 @@ describe("updateFolder", () => {
 })
 
 const addAndloginUser = async (userData: SignUpRequest) => {
-  const requestData: LoginRequest = { email: userData.email, password: userData.password }
+  const requestData: LoginRequest = {
+    email: userData.email,
+    password: userData.password,
+  }
   const loginRequest = createRequest(requestData)
 
   let token: string
@@ -220,6 +283,6 @@ const addAndloginUser = async (userData: SignUpRequest) => {
   return {
     id,
     // @ts-ignore
-    token
+    token,
   }
 }

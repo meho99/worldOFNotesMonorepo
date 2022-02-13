@@ -1,1 +1,1 @@
-export const generateId = () => (new Date().getTime()).toString()
+export const generateId = () => new Date().getTime().toString()
