@@ -1,23 +1,29 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
+import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { FiniteStates, Urls } from '../consts'
 import { NotesComponent } from './notes/Notes.component'
 import { useAuthenticate } from './AuthenticatedPages.hooks'
-import { useAuthenticatedPagesStyles } from './AuthenticatedPages.styles'
 
 export const AuthenticatedPages: React.FC = () => {
-  const classes = useAuthenticatedPagesStyles()
   const authenticatingStatus = useAuthenticate()
-  console.log({ authenticatingStatus })
 
   if (authenticatingStatus !== FiniteStates.Success) {
     return (
-      <div className={classes.progressContainer}>
+      <Box
+        sx={{
+          height: '90vh',
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
         <CircularProgress size={30} thickness={6} color='primary' />
-      </div>
+      </Box>
     )
   }
 

@@ -10,7 +10,7 @@
 
   - node, npm and docker
   - lerna: `npm i -D lerna`
-  - netlify: `npm install netlify-cli -g`
+  - netlify: `npm install netlify-cli -g` // version 6.14.16
   - fauna-shell: `npm install -g fauna-shell`
   - project-dependencies: `npm run install-all`
 

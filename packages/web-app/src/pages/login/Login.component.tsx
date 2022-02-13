@@ -15,13 +15,14 @@ import { TextInput } from '../../components/textInput/TextInput.component'
 import { LinkComponent } from '../../components/link/Link.component'
 import { SubmitButton } from '../../components/submitButton/SubmitButton.component'
 import { PasswordField } from '../../components/passwordInput/PasswordInput.component'
-import { CenteredContainer } from '../../components/centeredContainer/CenteredContainer.component'
+import {
+  CenteredContainer,
+  CenteredFormContainer,
+} from '../../components/centeredContainer/CenteredContainer.component'
 
-import { useStyles } from './Login.styles'
 import { loginFields, LoginValues } from './Login.fields'
 
 export const LoginComponent = () => {
-  const classes = useStyles()
   const dispatch = useDispatch()
 
   const { register, handleSubmit, errors, formState } = useForm<LoginValues>()
@@ -35,14 +36,14 @@ export const LoginComponent = () => {
 
   return (
     <CenteredContainer>
-      <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
-        <Typography color='primary' variant='h1' className={classes.title}>
+      <CenteredFormContainer onSubmit={handleSubmit(onSubmit)}>
+        <Typography color='primary' variant='h1' sx={{ mb: 4 }}>
           {' '}
           User Login{' '}
         </Typography>
 
         <Grid container spacing={0}>
-          <Grid xs={12} margin={2}>
+          <Grid item xs={12} margin={2}>
             <TextInput
               {...loginFields.email.fieldProps}
               autoFocus
@@ -57,7 +58,7 @@ export const LoginComponent = () => {
               }}
             />
           </Grid>
-          <Grid xs={12} margin={2}>
+          <Grid item xs={12} margin={2}>
             <PasswordField
               {...loginFields.password.fieldProps}
               errors={errors}
@@ -71,7 +72,7 @@ export const LoginComponent = () => {
         </SubmitButton>
 
         <LinkComponent to={Urls.SignUp}>Don't have an account?</LinkComponent>
-      </form>
+      </CenteredFormContainer>
     </CenteredContainer>
   )
 }

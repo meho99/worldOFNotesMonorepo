@@ -1,21 +1,20 @@
 import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import {
+  alpha,
   createTheme,
   ThemeOptions,
   responsiveFontSizes,
   ThemeProvider as MuiThemeProvider,
   Theme,
 } from '@mui/material/styles'
-import { ThemeProvider as MuiThemeProvider2 } from '@mui/styles'
 
 import { ThemeTypes } from './consts'
 import { themeTypeSelector } from './redux/session/session.selectors'
 
-import '@mui/styles'
-
-declare module '@mui/styles/defaultTheme' {
-  interface DefaultTheme extends Theme {}
+declare module '@mui/material/styles/createPalette' {
+  interface Palette {}
+  interface PaletteOptions {}
 }
 
 const colors = {
@@ -43,6 +42,21 @@ const getThemeConfiguration = ({
         },
       },
     },
+    MuiLink: {
+      defaultProps: {
+        underline: 'none',
+      },
+      styleOverrides: {
+        root: {
+          padding: 8,
+          borderRadius: 20,
+          '&:focus, &:hover': {
+            backgroundColor: alpha(palette.action.active, palette.action.hoverOpacity),
+            color: 'red',
+          },
+        },
+      },
+    },
     MuiListItem: {
       styleOverrides: {
         root: {
@@ -61,6 +75,13 @@ const getThemeConfiguration = ({
         },
         notchedOutline: {
           borderRadius: '16px',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontWeight: 'bold',
         },
       },
     },
@@ -141,7 +162,7 @@ const baseConfig: ThemeOptions = {
     fontFamily: "'Nunito', sans-serif",
     fontSize: 16,
     h1: {
-      fontSize: '4rem !important',
+      fontSize: '4rem',
     },
   },
 }
@@ -210,7 +231,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, ...rest 
 
   return (
     <MuiThemeProvider theme={theme} {...rest}>
-      <MuiThemeProvider2 theme={theme}>{children}</MuiThemeProvider2>
+      {children}
     </MuiThemeProvider>
   )
 }

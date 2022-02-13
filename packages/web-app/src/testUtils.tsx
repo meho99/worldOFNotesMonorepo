@@ -6,7 +6,7 @@ import configureStore from 'redux-mock-store'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import { ReducerState } from './redux/rootReducer'
-import { ThemeProvider } from '@mui/styles'
+import { ThemeProvider } from '@mui/material/styles'
 import { createTheme } from '@mui/material/styles'
 
 const mockStore = configureStore()

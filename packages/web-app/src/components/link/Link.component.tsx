@@ -1,17 +1,15 @@
 import React from 'react'
-import Typography from '@mui/material/Typography'
 import { Link, LinkProps } from 'react-router-dom'
 
-import { useStyles } from './Link.styles'
+import MuiLink from '@mui/material/Link'
+import Typography from '@mui/material/Typography'
 
 type LinkComponentProps = Pick<LinkProps, 'to'>
 
 export const LinkComponent: React.FC<LinkComponentProps> = ({ children, to }) => {
-  const classes = useStyles()
-
   return (
-    <Link to={to} className={classes.link}>
+    <MuiLink to={to} component={Link} sx={{ mt: 2 }}>
       <Typography color='textPrimary'> {children} </Typography>
-    </Link>
+    </MuiLink>
   )
 }
